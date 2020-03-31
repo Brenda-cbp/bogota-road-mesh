@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Scanner;
 
+import model.logic.Comparendo;
 import model.logic.Modelo;
 import view.View;
 
@@ -21,5 +22,18 @@ public class Controller {
 	{
 		view = new View();
 		modelo = new Modelo();
+		correrPrograma();
+	}
+	public void correrPrograma()
+	{
+		view.imprimir("Cargando datos...");
+		Comparendo maxId = modelo.cargarDatos();
+		view.imprimir("Carga completa, cantidad comparendos en archivo:" + modelo.darCantidadComparendos());
+		view.imprimir("Comparendo con mayor ID registrado:");
+		view.imprimir(maxId);
+		while(true)
+		{
+			
+		}
 	}
 }
