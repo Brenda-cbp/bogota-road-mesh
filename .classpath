@@ -4,5 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/andre/Documents/Sistemas/Bibliotecas APIs/gson-2.8.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/andre/Documents/Sistemas/Bibliotecas APIs/stdlib-package.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
