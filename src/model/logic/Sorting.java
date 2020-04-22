@@ -197,7 +197,7 @@ public class Sorting<T> {
 	 * @param hi
 	 * @param arr
 	 */
-	private static void mergeSortCodigo(int low, int hi, Comparendo[] arr) {
+	private static void  (int low, int hi, Comparendo[] arr) {
 		if (low >= hi)
 			return;
 		int mid = (low + hi) / 2;

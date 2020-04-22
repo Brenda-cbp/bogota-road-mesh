@@ -15,14 +15,27 @@ public class View {
 
 	}
 
-	public void printMenu() {
-		System.out.println("1. Crear Arreglo Dinamico de Strings");
-		System.out.println("2. Agregar String");
-		System.out.println("3. Buscar String");
-		System.out.println("4. Eliminar String");
-		System.out.println("5. Imprimir el Arreglo");
-		System.out.println("6. Exit");
+	public int printMenu() {
+		System.out.println();
+		int rta=0;
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("1. Obtener los M comparendos con mayor gravedad");
+		System.out.println("2. Buscar los comparendos por mes y dia de la semana");
+		System.out.println("3. Buscar los comparendos que tienen una fecha-hora en un rango y que son de una localidad dada");
+		System.out.println("4. ");
+		System.out.println("5. ");
+		System.out.println("6. ");
+		System.out.println("7. Dar el número de comparendos en un rango de D dias. ");
+		System.out.println("8. Mostrar el costo de los tiempos de espera hoy en día sin implementar el nuevo sistema");
+		System.out.println("9. Mostrar el costo de los tiempos de espera usando el nuevo sistema"); 
 		System.out.println("Dar el numero de opcion a resolver, luego oprimir tecla Return: (e.g., 1):");
+		try {
+			rta= Integer.parseInt(bf.readLine());
+		}
+		catch(Exception e) {
+			rta= printMenu();
+		}
+		return rta;
 	}
 
 	public void printMessage(String mensaje) {

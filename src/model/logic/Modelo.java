@@ -38,6 +38,7 @@ public class Modelo {
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
 	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 	public final int TAMANIO_INICIAL = 2;
+	public final int N= 20;
 
 	//--------------------------------------------------------------------------
 	//Atributos
@@ -123,7 +124,12 @@ public class Modelo {
 		return null;
 	}
 	
-
+public MaxHeapCP<Comparendo> mayorGravedad(int tamañoComparendos) {
+	
+	
+	return heap;
+	
+}
 
 
 }
