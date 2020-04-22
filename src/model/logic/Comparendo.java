@@ -120,6 +120,12 @@ public class Comparendo implements Comparable<Comparendo> {
 			return 1;
 		return -1;
 	}
+	public int IntentoGravedad(Comparendo o)
+	{
+		if(tipo_servi.compareToIgnoreCase(o.darTipoServicio())==0) 
+			return compareCodigo(o);
+		else return tipo_servi.compareToIgnoreCase(o.darTipoServicio());
+	}
 	@Override
 	/**
 	 * Compara el comparendo actual con el que llega por parametro se compara

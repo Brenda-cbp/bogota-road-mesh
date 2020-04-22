@@ -28,7 +28,7 @@ import model.data_structures.TablaHashChaining;
  *
  */
 public class Modelo {
-	
+
 	//--------------------------------------------------------------------------
 	//Constantes
 	//--------------------------------------------------------------------------
@@ -43,8 +43,8 @@ public class Modelo {
 	//--------------------------------------------------------------------------
 	//Atributos
 	//--------------------------------------------------------------------------
-	
-	
+
+
 	private Lista<Comparendo> comparendos;
 	private MaxHeapCP<Comparendo> heap; 
 	private TablaHashChaining<Comparendo, String> tablaChain;
@@ -55,7 +55,7 @@ public class Modelo {
 	//--------------------------------------------------------------------------
 	//Metodos
 	//--------------------------------------------------------------------------
-	
+
 	/**
 	 * Constructor del modelo del mundo 
 	 */
@@ -64,7 +64,7 @@ public class Modelo {
 		comparendos = new Lista<>();
 		heap = new  MaxHeapCP<>();
 	}
-	
+
 	public void agregarMaxCola(Comparendo c)
 	{
 		heap.agregar(c);	
@@ -83,7 +83,7 @@ public class Modelo {
 			reader = new JsonReader(new FileReader(ar));
 			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
 			JsonArray e2 = elem.get("features").getAsJsonArray();
-			
+
 			int maxId = -1;
 			Comparendo maximo = null;
 			SimpleDateFormat parser=new SimpleDateFormat(FORMATO_DOCUMENTO);
@@ -123,13 +123,23 @@ public class Modelo {
 		}
 		return null;
 	}
-	
-public MaxHeapCP<Comparendo> mayorGravedad(int tamañoComparendos) {
-	
-	
-	return heap;
-	
-}
+	/**
+	 * 
+	 * @param maxheap
+	 */
+	public MaxHeapCP<Comparendo> ordenaGravedad( ) {
+		return heap;
 
 
+	}
+
+	public Lista<Comparendo> darMayorGravedad(int cantidad  )
+	{	
+		MaxHeapCP<Comparendo> heapMax= ordenaGravedad();
+		Lista<Comparendo> rta= new Lista<Comparendo>();
+		for (int i=0; i<cantidad; i++) {
+			rta.agregarElemento(heapMax.sacarMax());
+		}
+		return rta; 
+	}
 }

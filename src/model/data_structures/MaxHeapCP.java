@@ -50,7 +50,7 @@ public class MaxHeapCP<T extends Comparable <T>> {
 		}
 	}
 
-	private T sacarMax()
+	public T sacarMax()
 	{
 		T max = arreglo.darElemento(1);
 		arreglo.exchange(1, arreglo.darTamano()-1);
@@ -71,7 +71,7 @@ public class MaxHeapCP<T extends Comparable <T>> {
 	public boolean esVacia()
 	{
 		return arreglo.darTamano() == 1;
-	}
+	} 
 	public String toString()
 	{
 		return arreglo.toString();

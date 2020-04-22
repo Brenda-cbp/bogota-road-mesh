@@ -2,6 +2,8 @@ package controller;
 
 import java.util.Scanner;
 
+import model.data_structures.Lista;
+import model.data_structures.MaxHeapCP;
 import model.logic.Comparendo;
 import model.logic.Modelo;
 import view.View;
@@ -35,7 +37,11 @@ public class Controller {
 		{
 			int opcion= view.printMenu();
 			if(opcion==1) {
-				
+			int n= Integer.parseInt(view.pedir(" el tamano"));
+			Lista<Comparendo> rta= modelo.darMayorGravedad(n);
+				for (Comparendo comparendo : rta) {
+					view.printMessage(comparendo.toString());
+				}
 			}
 			if (opcion==2)
 			{
