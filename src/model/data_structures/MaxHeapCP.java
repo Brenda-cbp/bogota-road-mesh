@@ -11,7 +11,7 @@ public class MaxHeapCP<T extends Comparable <T>> {
 	 * Método construcctor del Heap
 	 */
 	public MaxHeapCP(){
-		arreglo=new ArregloDinamico<>(20); 
+		arreglo=new ArregloDinamico<>(100); 
 	}
 	/**
 	 * Retorna el número de elementos del Heap
@@ -26,7 +26,7 @@ public class MaxHeapCP<T extends Comparable <T>> {
 	 */
 	public void agregar(T elemento,  Comparator<T> comp) 
 	{
-		arreglo.agregar(elemento);
+		arreglo.agregar(elemento);  
 		swim(arreglo.darTamano()-1, comp);
 	}
 	public void swim(int n, Comparator<T> comp)

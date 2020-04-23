@@ -28,7 +28,6 @@ public class View {
 		System.out.println("7. Dar el número de comparendos en un rango de D dias. ");
 		System.out.println("8. Mostrar el costo de los tiempos de espera hoy en día sin implementar el nuevo sistema");
 		System.out.println("9. Mostrar el costo de los tiempos de espera usando el nuevo sistema"); 
-		System.out.println("Dar el numero de opcion a resolver, luego oprimir tecla Return: (e.g., 1):");
 		try {
 			rta= Integer.parseInt(bf.readLine());
 		}

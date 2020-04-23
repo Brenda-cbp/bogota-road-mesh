@@ -37,7 +37,7 @@ public class Controller {
 		{
 			int opcion= view.printMenu();
 			if(opcion==1) {
-			int n= Integer.parseInt(view.pedir(" el tamano"));
+			int n= Integer.parseInt(view.pedir("el tamano"));
 			Lista<Comparendo> rta= modelo.darMayorGravedad(n);
 				for (Comparendo comparendo : rta) {
 					view.printMessage(comparendo.toString());
@@ -71,4 +71,5 @@ public class Controller {
 			}
 		}
 	}
-}
+	}
+
