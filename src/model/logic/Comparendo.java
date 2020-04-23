@@ -2,6 +2,7 @@ package model.logic;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Comparendo implements Comparable<Comparendo> {
@@ -120,12 +121,6 @@ public class Comparendo implements Comparable<Comparendo> {
 			return 1;
 		return -1;
 	}
-	public int IntentoGravedad(Comparendo o)
-	{
-		if(tipo_servi.compareToIgnoreCase(o.darTipoServicio())==0) 
-			return compareCodigo(o);
-		else return tipo_servi.compareToIgnoreCase(o.darTipoServicio());
-	}
 	@Override
 	/**
 	 * Compara el comparendo actual con el que llega por parametro se compara
@@ -139,4 +134,20 @@ public class Comparendo implements Comparable<Comparendo> {
 			return 1;
 		return -1;
 	}
+	public static class ComparatorGravedad implements Comparator<Comparendo>
+	{
+		public int compare(Comparendo o1, Comparendo o2) {
+			if(o1.darTipoServicio().compareToIgnoreCase(o2.darTipoServicio())==0) 
+				return o1.compareCodigo(o2);
+			else return o1.darTipoServicio().compareToIgnoreCase(o2.darTipoServicio());
+				
+		}
+	}
+	public static class ComparatorFecha implements Comparator<Comparendo>{
+		public int compare(Comparendo o1, Comparendo o2) {
+			return o1.darfecha().compareTo(o2.darfecha());
+		}
+	}
+	
+
 }

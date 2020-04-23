@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 import com.google.gson.JsonArray;
@@ -67,7 +68,8 @@ public class Modelo {
 
 	public void agregarMaxCola(Comparendo c)
 	{
-		heap.agregar(c);	
+		Comparendo.ComparatorFecha cmpFecha= new Comparendo.ComparatorFecha();
+		heap.agregar(c, cmpFecha);	
 	}
 	public int darCantidadComparendos()
 	{
@@ -128,17 +130,20 @@ public class Modelo {
 	 * @param maxheap
 	 */
 	public MaxHeapCP<Comparendo> ordenaGravedad( ) {
-		return heap;
-
-
+		MaxHeapCP<Comparendo> copia= heap;
+		MaxHeapCP<Comparendo> rta= new MaxHeapCP<Comparendo>();
+		Comparendo.ComparatorGravedad compGravedad= new Comparendo.ComparatorGravedad();
+		while(copia.darNumElmentos()>0) {
+		rta.agregar(copia.sacarMax(compGravedad), compGravedad);
+		}return rta;
 	}
 
 	public Lista<Comparendo> darMayorGravedad(int cantidad  )
 	{	
-		MaxHeapCP<Comparendo> heapMax= ordenaGravedad();
+		Comparendo.ComparatorGravedad compGravedad= new Comparendo.ComparatorGravedad();
 		Lista<Comparendo> rta= new Lista<Comparendo>();
 		for (int i=0; i<cantidad; i++) {
-			rta.agregarElemento(heapMax.sacarMax());
+			rta.agregarElemento(ordenaGravedad().sacarMax(compGravedad));
 		}
 		return rta; 
 	}
