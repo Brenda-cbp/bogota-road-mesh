@@ -39,6 +39,7 @@ public class Controller {
 			if(opcion==1) {
 				try{
 					String s = view.pedir("El tamano");
+					//Si s es null significa que la persona escribio CANCELAR
 					if(s != null)
 					{
 						int n= Integer.parseInt(s);
@@ -48,6 +49,7 @@ public class Controller {
 						}
 					}
 				}
+				//SI ingresa una letra o algo raros
 				catch(Exception e)
 				{
 					view.imprimir("Numero no valido");
