@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -79,7 +78,6 @@ public class Modelo {
 		return heap.darNumElmentos();
 	}
 	public Comparendo cargarDatos() {
-		ArrayList<Comparendo> lista = new ArrayList<>();
 		//solucion publicada en la pagina del curso
 		//TODO Cambiar la clase del contenedor de datos por la Estructura de Datos propia adecuada para resolver el requerimiento 
 		JsonReader reader;
@@ -115,7 +113,7 @@ public class Modelo {
 						.get(1).getAsDouble();
 
 				c = new Comparendo(OBJECTID, FECHA_HORA, DES_INFRAC, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION, LOCALIDAD, MUNICIPIO, longitud, latitud);
-				lista.add(c);
+				agregarMaxHeap(c);
 				if(OBJECTID > maxId)
 				{
 					maxId = OBJECTID;
