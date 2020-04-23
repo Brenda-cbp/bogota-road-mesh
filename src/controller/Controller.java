@@ -12,10 +12,10 @@ public class Controller {
 
 	/* Instancia del Modelo*/
 	private Modelo modelo;
-	
+
 	/* Instancia de la Vista*/
 	private View view;
-	
+
 	/**
 	 * Crear la vista y el modelo del proyecto
 	 * @param capacidad tamaNo inicial del arreglo
@@ -37,39 +37,50 @@ public class Controller {
 		{
 			int opcion= view.printMenu();
 			if(opcion==1) {
-			int n= Integer.parseInt(view.pedir("el tamano"));
-			Lista<Comparendo> rta= modelo.darMayorGravedad(n);
-				for (Comparendo comparendo : rta) {
-					view.printMessage(comparendo.toString());
+				try{
+					String s = view.pedir("El tamano");
+					if(s != null)
+					{
+						int n= Integer.parseInt(s);
+						Lista<Comparendo> rta= modelo.darMayorGravedad(n);
+						for (Comparendo comparendo : rta) {
+							view.printMessage(comparendo.toString());
+						}
+					}
 				}
+				catch(Exception e)
+				{
+					view.imprimir("Numero no valido");
+				}
+
 			}
 			if (opcion==2)
 			{
-				
+
 			}
 			if (opcion==3)
 			{
-				
+
 			}if (opcion==4)
 			{
-				
+
 			}if (opcion==5)
 			{
-				
+
 			}if (opcion==6)
 			{
-				
+
 			}if (opcion==7)
 			{
-				
+
 			}if (opcion==8)
 			{
-				
+
 			}if (opcion==9)
 			{
-				
+
 			}
 		}
 	}
-	}
+}
 
