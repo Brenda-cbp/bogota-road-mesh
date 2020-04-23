@@ -33,7 +33,7 @@ public class Modelo {
 	//--------------------------------------------------------------------------
 	//Constantes
 	//--------------------------------------------------------------------------
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/reduccion2.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 	public final String SEPARADOR = ";;;";
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
@@ -112,15 +112,14 @@ public class Modelo {
 
 				c = new Comparendo(OBJECTID, FECHA_HORA, DES_INFRAC, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION, LOCALIDAD, MUNICIPIO, longitud, latitud);
 				agregarMaxCola(c);
-				System.out.println("mmm"+heap.darNumElmentos());
 				if(OBJECTID > maxId)
 				{
 					maxId = OBJECTID;
 					maximo = c;
 				}
-				return c;
 			}
 			ejemploFecha = c.darfecha() + "";
+			return c;
 		} catch (FileNotFoundException | ParseException e) {
 			e.printStackTrace();
 		}
