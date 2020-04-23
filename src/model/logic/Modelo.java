@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -33,14 +34,14 @@ public class Modelo {
 	//--------------------------------------------------------------------------
 	//Constantes
 	//--------------------------------------------------------------------------
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/reduccion2.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 	public final String SEPARADOR = ";;;";
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
 	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 	public final int TAMANIO_INICIAL = 2;
 	public final int N= 20;
-	
+
 	public final double LAT_POLICIA = 4.647586;
 	public final double LONG_POLICIA = 74.078122;
 	//--------------------------------------------------------------------------
@@ -119,7 +120,6 @@ public class Modelo {
 					maxId = OBJECTID;
 					maximo = c;
 				}
-				c = null;
 			}
 			ejemploFecha = c.darfecha() + "";
 			return maximo;
@@ -140,7 +140,7 @@ public class Modelo {
 		Comparendo.ComparatorFecha cmpFecha= new Comparendo.ComparatorFecha();
 		while(copia.darNumElmentos()>0) {
 			Comparendo prueba= copia.sacarMax(cmpFecha);
-		rta.agregar(prueba, compGravedad);
+			rta.agregar(prueba, compGravedad);
 		}return rta;
 	}
 
