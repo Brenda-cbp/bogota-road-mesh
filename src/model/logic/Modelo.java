@@ -41,7 +41,9 @@ public class Modelo {
 	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 	public final int TAMANIO_INICIAL = 2;
 	public final int N= 20;
-
+	
+	public final double LAT_POLICIA = 4.647586;
+	public final double LONG_POLICIA = 74.078122;
 	//--------------------------------------------------------------------------
 	//Atributos
 	//--------------------------------------------------------------------------
