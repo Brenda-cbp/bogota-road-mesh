@@ -14,7 +14,20 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 		ultimo = null;
 		tamaño = 0;
 	}
-
+	
+	public void agregarAlComienzo(T elemento)
+	{
+		if(cabeza == null)
+			crearLista(elemento);
+		else
+		{
+			Node<T> nueva = new Node<T>(elemento);
+			nueva.asignarSiguiente(cabeza);
+			cabeza = nueva;
+			tamaño++;
+		}
+	}
+	
 	public void agregarAlFinal(T elemento) {
 		if (cabeza == null)
 			crearLista(elemento);
@@ -37,26 +50,7 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 		tamaño = 1;
 	}
 
-	/**
-	 * Agrega el elemento dado por parametro al final de la lista
-	 */
-	public Node agregarElemento(T elemento) {
-		Node nuevo = new Node<T>(elemento);
-		if (cabeza == null)
-			crearLista(elemento);
-		else {
 
-			Node siguiente = cabeza.darSiguiente();
-			while (siguiente != null) {
-				actual = siguiente;
-				siguiente = actual.darSiguiente();
-			}
-			actual.asignarSiguiente(nuevo);
-			ultimo = actual.darSiguiente();
-			tamaño++;
-		}
-		return cabeza;
-	}
 
 	/**
 	 * Elimina al elemento dado por parametro, si este no existe no hace nada

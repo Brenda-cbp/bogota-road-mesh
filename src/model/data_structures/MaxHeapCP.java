@@ -63,6 +63,8 @@ public class MaxHeapCP<T extends Comparable<T>> implements Iterable<T>
 
 	public T sacarMax(Comparator<T> comp)
 	{
+		if(esVacia())
+			return null;
 		T max = arreglo.darElemento(1);
 		arreglo.exchange(1, arreglo.darTamano() - 1);
 		sink(1, comp);

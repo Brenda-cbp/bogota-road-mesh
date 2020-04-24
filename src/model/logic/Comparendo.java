@@ -52,7 +52,7 @@ public class Comparendo implements Comparable<Comparendo> {
 		return fecha_hora;
 	}
 
-	public String darTipoDetencion() {
+	public String darMedioDete() {
 		return medio_dete;
 	}
 
@@ -75,7 +75,7 @@ public class Comparendo implements Comparable<Comparendo> {
 	public String darDescripcion() {
 		return des_infrac;
 	}
-
+	
 	public String toString() {
 		return "OBJECTID=" + objectId + "\n" + "FECHA_HORA=" + fecha_hora + "\n" + "DES_INFRAC=" + des_infrac
 				+ "\n" + "MEDIO_DETE=" + medio_dete +  "\n" +"CLASE_VEHI=" + clase_vehi +  "\n" +"TIPO_SERVI=" + tipo_servi
@@ -148,6 +148,19 @@ public class Comparendo implements Comparable<Comparendo> {
 			return o1.darfecha().compareTo(o2.darfecha());
 		}
 	}
-	
+	/**
+	 * Compara dos comparendos por su cercania a la estacion de policia
+	 */
+	public static class ComparatorDistanciaPolicia implements Comparator<Comparendo>{
+		public int compare(Comparendo o1, Comparendo o2) {
+			double d1 = DistanciaHaversiana.distance(Modelo.LAT_POLICIA, Modelo.LONG_POLICIA, o1.darLatitud(), o1.darLongitud());
+			double d2 = DistanciaHaversiana.distance(Modelo.LAT_POLICIA, Modelo.LONG_POLICIA, o2.darLatitud(), o2.darLongitud());
+			if(d1 > d2)
+				return -1;
+			if(d2 > d1)
+				return 1;
+			return 0;
+		}
+	}
 
 }

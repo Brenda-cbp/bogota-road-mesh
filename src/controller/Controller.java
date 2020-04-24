@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Iterator;
 import java.util.Scanner;
 
 import model.data_structures.Lista;
@@ -75,11 +76,49 @@ public class Controller
 			}
 			if (opcion == 4)
 			{
-
+				String respuesta = view.pedir("Cantidad de comparendos");
+				if(respuesta != null)
+				{
+					try
+					{
+						int m = Integer.parseInt(respuesta);
+						Lista<Comparendo> lista = modelo.darMasCercanosEstacionPolicia(m);
+						Iterator<Comparendo> it = lista.iterator();
+						view.imprimir("Comparendos encontrados: " + lista.darTamaño() );
+						view.imprimir(modelo.LAT_POLICIA + "," + modelo.LONG_POLICIA);
+						while(it.hasNext())
+						{
+							view.imprimir(it.next());
+						}
+					}
+					catch(Exception e)
+					{
+						view.imprimir("Entrada invalida");
+						e.printStackTrace();
+					}
+					
+				}
 			}
 			if (opcion == 5)
 			{
-
+				String medioDete = view.pedir("medio de deteccion");
+				if(medioDete != null)
+				{
+					String vehi = view.pedir("Tipo de vehiculo");
+					if(vehi != null)
+					{
+						String localidad = view.pedir("la Localidad");
+						if(localidad != null)
+						{
+							Comparendo[] comparendos = modelo.darComprendosPorLLave(medioDete, vehi, localidad);
+							if(comparendos!= null)
+							for(Comparendo comparendo : comparendos)
+							{
+								view.imprimir(comparendo);
+							}
+						}
+					}
+				}
 			}
 			if (opcion == 6)
 			{

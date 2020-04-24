@@ -2,7 +2,7 @@ package model.data_structures;
 
 public interface ILista<T>
 {
-	public Node agregarElemento(T elem);
+	public void agregarAlFinal(T elem);
 	
 	public void eliminarElemento(T elem);
 	/**
