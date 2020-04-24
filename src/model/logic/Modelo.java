@@ -168,7 +168,6 @@ public class Modelo
 		return rta;
 	}
 
-
 	/**
 	 * Retorna un Max-heap con los comparendos usando la "cercania" a la
 	 * estacion de policia como criterio de comparacion
@@ -197,41 +196,49 @@ public class Modelo
 		}
 		return respuesta;
 	}
-	public Comparendo[] darComprendosPorLLave(String medioDete, String vehiculo, String localidad )
+
+	public Comparendo[] darComprendosPorLLave(String medioDete, String vehiculo, String localidad)
 	{
 		TablaHashChaining<Comparendo, String> tablaChain = new TablaHashChaining<>(2);
 		meterEnTabla(tablaChain);
-		Comparendo[] respuesta = darComparendosPorllaveChain(medioDete, vehiculo, localidad,tablaChain);
+		Comparendo[] respuesta = darComparendosPorllaveChain(medioDete, vehiculo, localidad, tablaChain);
 		tablaChain = null;
 		return respuesta;
 	}
+
 	/**
-	 * Copia los comparendos en la tabla de hash, la llave del comparendo es dada por:
-	 * medio deteccion, clase vehiculo, localidad
+	 * Copia los comparendos en la tabla de hash, la llave del comparendo es
+	 * dada por: medio deteccion, clase vehiculo, localidad
 	 */
 	public void meterEnTabla(TablaHashChaining<Comparendo, String> tablaChain)
 	{
 		Iterator<Comparendo> comparendos = heap.iterator();
 		while (comparendos.hasNext())
 		{
-			agregarTablaChaining(comparendos.next(),tablaChain);
+			agregarTablaChaining(comparendos.next(), tablaChain);
 		}
-		
+
 	}
+
 	/**
-	 * Retorna la identificador del comparendo que llega por parametro en el formato de la tabla
-	 * @param dato el Comparendo
+	 * Retorna la identificador del comparendo que llega por parametro en el
+	 * formato de la tabla
+	 * 
+	 * @param dato
+	 *            el Comparendo
 	 * @return llave
 	 */
 	public String darLlaveTablaChain(Comparendo dato)
 	{
 		return dato.darMedioDete() + SEPARADOR + dato.darclaseVehiculo() + SEPARADOR + dato.darLocalidad();
 	}
+
 	/**
 	 * Agrega un comparendo en la tabla de hash por chaining
+	 * 
 	 * @param dato
 	 */
-	public void agregarTablaChaining(Comparendo dato,TablaHashChaining<Comparendo, String> tablaChain)
+	public void agregarTablaChaining(Comparendo dato, TablaHashChaining<Comparendo, String> tablaChain)
 	{
 		try
 		{
@@ -243,14 +250,21 @@ public class Modelo
 			e.printStackTrace();
 		}
 	}
+
 	/**
-	 * Retrona los comparendos que cumplen  los siguientes parametros ordenados por fecha
-	 * @param medioDete el medio de deteccion 
-	 * @param vehiculo, el tipo de vehiculo
-	 * @param localidad, la localidad
+	 * Retrona los comparendos que cumplen los siguientes parametros ordenados
+	 * por fecha
+	 * 
+	 * @param medioDete
+	 *            el medio de deteccion
+	 * @param vehiculo,
+	 *            el tipo de vehiculo
+	 * @param localidad,
+	 *            la localidad
 	 * @return un arreglo con los comparendos ordenados
 	 */
-	public Comparendo[] darComparendosPorllaveChain(String medioDete, String vehiculo, String localidad, TablaHashChaining<Comparendo, String> tablaChain)
+	public Comparendo[] darComparendosPorllaveChain(String medioDete, String vehiculo, String localidad,
+			TablaHashChaining<Comparendo, String> tablaChain)
 	{
 		Lista<Comparendo> lista = tablaChain.get(medioDete + SEPARADOR + vehiculo + SEPARADOR + localidad);
 		if (lista == null)
@@ -258,13 +272,14 @@ public class Modelo
 		Comparendo[] comp = new Comparendo[lista.darTamaño()];
 		int i = 0;
 		Iterator<Comparendo> it = lista.iterator();
-		while(it.hasNext())
+		while (it.hasNext())
 		{
-			try{
-			comp[i] = it.next();
-			i++;
+			try
+			{
+				comp[i] = it.next();
+				i++;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				System.out.println(lista.darElementoActual());
 			}
@@ -272,23 +287,30 @@ public class Modelo
 		Sorting.quickSort(comp);
 		return comp;
 	}
-	public TablaHashChaining<Comparendo, String> ordenarTablaMesyDia() throws Exception{
+
+	public TablaHashChaining<Comparendo, String> ordenarTablaMesyDia() throws Exception
+	{
 		Iterator<Comparendo> comparendos = heap.iterator();
 		TablaHashChaining<Comparendo, String> rta = new TablaHashChaining<Comparendo, String>(58);
-		while (comparendos.hasNext()) {
-			rta.agregar(""+comparendos.next().darMes()+"-"+comparendos.next().darInicialSemana(), comparendos.next());
+		while (comparendos.hasNext())
+		{
+			rta.agregar("" + comparendos.next().darMes() + "-" + comparendos.next().darInicialSemana(),
+					comparendos.next());
 		}
 		return null;
 	}
-	public Lista<Comparendo> darComparendoMesyDia(int mes, String dia) throws Exception{
-		dia=dia.toLowerCase();
-		return ordenarTablaMesyDia().get(""+mes+"-"+dia);
+
+	public Lista<Comparendo> darComparendoMesyDia(int mes, String dia) throws Exception
+	{
+		dia = dia.toLowerCase();
+		return ordenarTablaMesyDia().get("" + mes + "-" + dia);
 	}
-	public ArbolRojoNegro<Comparendo, Double> meterEnRedBlack()
+
+	public ArbolRojoNegro<Comparendo, Double> meterEnRedBlackLatitud()
 	{
 		ArbolRojoNegro<Comparendo, Double> arbol = new ArbolRojoNegro<>();
 		Iterator<Comparendo> comparendos = heap.iterator();
-		while(comparendos.hasNext())
+		while (comparendos.hasNext())
 		{
 			Comparendo act = comparendos.next();
 			try
@@ -303,10 +325,11 @@ public class Modelo
 		}
 		return arbol;
 	}
+
 	public Iterator<Comparendo> darComparendosEnRangoLatitud(double lat1, double lat2)
 	{
-		return meterEnRedBlack().valuesInRange(lat1, lat2);
+		return meterEnRedBlackLatitud().valuesInRange(lat1, lat2);
 	}
-	
+
 
 }
