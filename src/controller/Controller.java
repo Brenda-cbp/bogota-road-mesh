@@ -76,7 +76,7 @@ public class Controller
 					if (mes != null && dia != null)
 					{
 						int Mes = Integer.parseInt(mes);
-						Lista<Comparendo> rta = modelo.darComparendoMesyDia(Mes, dia);
+						Lista<Comparendo> rta = modelo.darComparendoMesyDia(Mes-1, dia);
 						System.out.println("Controller comparendo" + rta.darTamaño());
 						for (Comparendo comparendo : rta)
 						{

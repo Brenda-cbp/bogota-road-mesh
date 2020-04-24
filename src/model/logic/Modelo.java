@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,7 +23,7 @@ import model.data_structures.Lista;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
 import model.data_structures.TablaHashChaining;
-import sun.font.LayoutPathImpl;
+//import sun.font.LayoutPathImpl;
 
 /**
  * Definicion del modelo del mundo
@@ -33,7 +35,7 @@ public class Modelo
 	// --------------------------------------------------------------------------
 	// Constantes
 	// --------------------------------------------------------------------------
-	public final String RUTA = "./data/reduccion2.geojson";
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 	public final String SEPARADOR = ";;;";
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
@@ -294,16 +296,25 @@ public class Modelo
 		TablaHashChaining<Comparendo, String> rta = new TablaHashChaining<Comparendo, String>(58);
 		while (comparendos.hasNext())
 		{
-			rta.agregar("" + comparendos.next().darMes() + "-" + comparendos.next().darInicialSemana(),
-					comparendos.next());
+			Comparendo c=comparendos.next();
+			rta.agregar("" + c.darNumeroMes() + "-" 
+			+ c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()					
+			+"-"+c.darNombreMes(c.darNumeroMes()),
+					c);
 		}
-		return null;
+		return rta;
 	}
 
 	public Lista<Comparendo> darComparendoMesyDia(int mes, String dia) throws Exception
 	{
-		dia = dia.toLowerCase();
-		return ordenarTablaMesyDia().get("" + mes + "-" + dia);
+		dia = dia.toUpperCase();
+		return ordenarTablaMesyDia().get("" + mes + "-" + dia+dia+dia+dia+"-"+darNombreMes(mes));
+	}
+	public String darNombreMes(int mes) {
+		Date fecha= new Date(120,mes,11);
+		Calendar calendario= Calendar.getInstance();
+		calendario.setTime(fecha);
+		return calendario.getDisplayName(Calendar.MONTH,Calendar.LONG_FORMAT,Locale.ENGLISH);
 	}
 
 	public ArbolRojoNegro<Comparendo, Double> meterEnRedBlackLatitud()

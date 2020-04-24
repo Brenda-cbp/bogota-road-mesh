@@ -117,8 +117,8 @@ public class TablaHashChaining<V, K extends Comparable<K>> implements Iterable<K
 	{
 		int i = hash(key);
 		for (HashNode<Lista<V>, K> actual = tabla[i]; actual != null; actual = actual.darSiguiente())
-			if (key.equals(actual.darLlave()))
-				return actual.darValor();
+		{	if (key.equals(actual.darLlave()))
+				return actual.darValor();}
 		return null;
 
 	}

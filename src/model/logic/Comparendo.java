@@ -78,19 +78,26 @@ public class Comparendo implements Comparable<Comparendo> {
 		return des_infrac;
 	}
 	
-	public int darMes() {
+	public int darNumeroMes() {
 		Calendar calendario= Calendar.getInstance();
 		calendario.setTime(fecha_hora);
 		return calendario.get(Calendar.MONTH);
+	}
+	public String darNombreMes(int mes) {
+		Date fecha= new Date(120,mes,11);
+		Calendar calendario= Calendar.getInstance();
+		calendario.setTime(fecha);
+		return calendario.getDisplayName(Calendar.MONTH,Calendar.LONG_FORMAT,Locale.ENGLISH);
 	}
 	public String darInicialSemana() {
 		Calendar calendario= Calendar.getInstance();
 		calendario.setTime(fecha_hora);
 		Locale espanol = new Locale("es", "ES");
 		String dia=calendario.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT_FORMAT, espanol);
-		return dia.substring(0, 1);
+		if (dia.equalsIgnoreCase("mié.")) 
+			return "I";
+		return dia.substring(0, 1).toUpperCase();
 	}
-
 	public String toString() {
 		return "OBJECTID=" + objectId + "\n" + "FECHA_HORA=" + fecha_hora + "\n" + "DES_INFRAC=" + des_infrac
 				+ "\n" + "MEDIO_DETE=" + medio_dete +  "\n" +"CLASE_VEHI=" + clase_vehi +  "\n" +"TIPO_SERVI=" + tipo_servi
