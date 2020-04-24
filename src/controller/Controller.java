@@ -17,6 +17,7 @@ public class Controller
 
 	/* Instancia de la Vista */
 	private View view;
+	public final int N= 20;
 
 	/**
 	 * Crear la vista y el modelo del proyecto
@@ -65,13 +66,36 @@ public class Controller
 					}
 
 				}
+				//SI ingresa una letra o algo raros
 			}
 			if (opcion == 2)
 			{
-
+				try{
+					String mes = view.pedir("nï¿½mero del mes");
+					String dia = view.pedir("el dï¿½a");
+					//Si s es null significa que la persona escribio CANCELAR
+					if(mes != null && dia!=null)
+					{
+						int Mes= Integer.parseInt(mes);
+						Lista<Comparendo> rta =modelo.darComparendoMesyDia(Mes, dia);
+						System.out.println("Controller comparendo"+rta.darTamaï¿½o());
+						for (Comparendo comparendo : rta) {
+							view.imprimir(comparendo.toString());
+							System.out.println("Controller comparendo"+rta.darTamaï¿½o());
+						}	
+					}
+				}
+				//SI ingresa una letra o algo raros
+				catch(Exception e)
+				{
+					view.imprimir(e.getMessage());
+					
+				}
+				
 			}
 			if (opcion == 3)
 			{
+				view.imprimir(modelo.prueba().darInicialSemana());
 
 			}
 			if (opcion == 4)
@@ -84,7 +108,7 @@ public class Controller
 						int m = Integer.parseInt(respuesta);
 						Lista<Comparendo> lista = modelo.darMasCercanosEstacionPolicia(m);
 						Iterator<Comparendo> it = lista.iterator();
-						view.imprimir("Comparendos encontrados: " + lista.darTamaño() );
+						view.imprimir("Comparendos encontrados: " + lista.darTamaï¿½o() );
 						view.imprimir(modelo.LAT_POLICIA + "," + modelo.LONG_POLICIA);
 						while(it.hasNext())
 						{

@@ -51,7 +51,7 @@ public class View {
 	 * @return la localidad solicitada o Null si desea cancelar
 	 */
 	public String pedir(String parametro) {
-		System.out.println("Favor inserte " + parametro + " buscada.");
+		System.out.println("Favor inserte " + parametro + " buscado.");
 		System.out.println("Escriba CANCELAR para volver al menu principal");
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		String respuesta = "";

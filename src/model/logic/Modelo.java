@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
@@ -28,10 +29,10 @@ import model.data_structures.TablaHashChaining;
 public class Modelo
 {
 
-	// --------------------------------------------------------------------------
-	// Constantes
-	// --------------------------------------------------------------------------
-	public final String RUTA = "./data/reduccion2.geojson";
+	//--------------------------------------------------------------------------
+	//Constantes
+	//--------------------------------------------------------------------------
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotï¿½_D.C.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 	public final String SEPARADOR = ";;;";
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
@@ -97,22 +98,15 @@ public class Modelo
 				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
 
 				String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();
-				Date FECHA_HORA = parser.parse(s);
+				Date FECHA_HORA = parser.parse(s); 
 
-				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETECCION")
-						.getAsString();
-				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHICULO")
-						.getAsString();
-				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVICIO")
-						.getAsString();
-				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION")
-						.getAsString();
-				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRACCION")
-						.getAsString();
-				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD")
-						.getAsString();
-				String MUNICIPIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("MUNICIPIO")
-						.getAsString();
+				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETECCION").getAsString();
+				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHICULO").getAsString();
+				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVICIO").getAsString();
+				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION").getAsString();
+				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRACCION").getAsString();	
+				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD").getAsString();
+				String MUNICIPIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("MUNICIPIO").getAsString();
 
 				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates")
 						.getAsJsonArray().get(0).getAsDouble();
@@ -143,15 +137,16 @@ public class Modelo
 	 * 
 	 * @param maxheap
 	 */
-	public MaxHeapCP<Comparendo> ordenaGravedad()
-	{
-		Iterator<Comparendo> comparendos = heap.iterator();
-		MaxHeapCP<Comparendo> copia = new MaxHeapCP<>();
-		while (comparendos.hasNext())
-		{
-			copia.agregar(comparendos.next(), new Comparendo.ComparatorGravedad());
-		}
-		return copia;
+	public MaxHeapCP<Comparendo> ordenaGravedad( ) {
+		MaxHeapCP<Comparendo> copia= heap;
+		MaxHeapCP<Comparendo> rta= new MaxHeapCP<Comparendo>();
+		int tamanoooo= copia.darNumElmentos();
+		Comparendo.ComparatorGravedad compGravedad= new Comparendo.ComparatorGravedad();
+		Comparendo.ComparatorFecha cmpFecha= new Comparendo.ComparatorFecha();
+		while(copia.darNumElmentos()>0) {
+			Comparendo prueba= copia.sacarMax(cmpFecha);
+		rta.agregar(prueba, compGravedad);
+		}return rta;
 	}
 
 	public Lista<Comparendo> darMayorGravedad(int cantidad)
@@ -165,116 +160,10 @@ public class Modelo
 		}
 		return rta;
 	}
-
 	public Lista<Comparendo> prueba()
 	{
-		Lista<Comparendo> rta = new Lista<Comparendo>();
-		Comparendo.ComparatorFecha cmpFecha = new Comparendo.ComparatorFecha();
+		Lista<Comparendo> rta= new Lista<Comparendo>();
+		Comparendo.ComparatorFecha cmpFecha= new Comparendo.ComparatorFecha();
 		return rta;
 	}
-
-	/**
-	 * Retorna un Max-heap con los comparendos usando la "cercania" a la
-	 * estacion de policia como criterio de comparacion
-	 * 
-	 * @return
-	 */
-	public MaxHeapCP<Comparendo> ordenarPorDistanciaEstacion()
-	{
-		Iterator<Comparendo> comparendos = heap.iterator();
-		MaxHeapCP<Comparendo> copia = new MaxHeapCP<>();
-		while (comparendos.hasNext())
-		{
-			copia.agregar(comparendos.next(), new Comparendo.ComparatorDistanciaPolicia());
-		}
-		return copia;
-	}
-
-	public Lista<Comparendo> darMasCercanosEstacionPolicia(int m)
-	{
-		MaxHeapCP<Comparendo> copia = ordenarPorDistanciaEstacion();
-		Lista<Comparendo> respuesta = new Lista<>();
-		while (m > 0 && copia.darNumElmentos() > 0)
-		{
-			respuesta.agregarAlFinal(copia.sacarMax(new Comparendo.ComparatorDistanciaPolicia()));
-			m--;
-		}
-		return respuesta;
-	}
-	public Comparendo[] darComprendosPorLLave(String medioDete, String vehiculo, String localidad )
-	{
-		TablaHashChaining<Comparendo, String> tablaChain = new TablaHashChaining<>(2);
-		meterEnTabla(tablaChain);
-		Comparendo[] respuesta = darComparendosPorllaveChain(medioDete, vehiculo, localidad,tablaChain);
-		tablaChain = null;
-		return respuesta;
-	}
-	/**
-	 * Copia los comparendos en la tabla de hash, la llave del comparendo es dada por:
-	 * medio deteccion, clase vehiculo, localidad
-	 */
-	public void meterEnTabla(TablaHashChaining<Comparendo, String> tablaChain)
-	{
-		Iterator<Comparendo> comparendos = heap.iterator();
-		while (comparendos.hasNext())
-		{
-			agregarTablaChaining(comparendos.next(),tablaChain);
-		}
-		
-	}
-	/**
-	 * Retorna la identificador del comparendo que llega por parametro en el formato de la tabla
-	 * @param dato el Comparendo
-	 * @return llave
-	 */
-	public String darLlaveTablaChain(Comparendo dato)
-	{
-		return dato.darMedioDete() + SEPARADOR + dato.darclaseVehiculo() + SEPARADOR + dato.darLocalidad();
-	}
-	/**
-	 * Agrega un comparendo en la tabla de hash por chaining
-	 * @param dato
-	 */
-	public void agregarTablaChaining(Comparendo dato,TablaHashChaining<Comparendo, String> tablaChain)
-	{
-		try
-		{
-			tablaChain.agregar(darLlaveTablaChain(dato), dato);
-		}
-		catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	/**
-	 * Retrona los comparendos que cumplen  los siguientes parametros ordenados por fecha
-	 * @param medioDete el medio de deteccion 
-	 * @param vehiculo, el tipo de vehiculo
-	 * @param localidad, la localidad
-	 * @return un arreglo con los comparendos ordenados
-	 */
-	public Comparendo[] darComparendosPorllaveChain(String medioDete, String vehiculo, String localidad, TablaHashChaining<Comparendo, String> tablaChain)
-	{
-		Lista<Comparendo> lista = tablaChain.get(medioDete + SEPARADOR + vehiculo + SEPARADOR + localidad);
-		if (lista == null)
-			return null;
-		Comparendo[] comp = new Comparendo[lista.darTamaño()];
-		int i = 0;
-		Iterator<Comparendo> it = lista.iterator();
-		while(it.hasNext())
-		{
-			try{
-			comp[i] = it.next();
-			i++;
-			}
-			catch(Exception e)
-			{
-				System.out.println(lista.darElementoActual());
-			}
-		}
-		Sorting.quickSort(comp);
-		return comp;
-	}
-
 }
