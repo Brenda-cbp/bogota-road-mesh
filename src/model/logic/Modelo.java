@@ -31,7 +31,7 @@ public class Modelo
 	// --------------------------------------------------------------------------
 	// Constantes
 	// --------------------------------------------------------------------------
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/reduccion2.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 	public final String SEPARADOR = ";;;";
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
@@ -252,7 +252,7 @@ public class Modelo
 	{
 		Lista<Comparendo> lista = tablaChain.get(medioDete + SEPARADOR + vehiculo + SEPARADOR + localidad);
 		if (lista == null)
-			return null;
+			return new Comparendo[0];
 		Comparendo[] comp = new Comparendo[lista.darTamaño()];
 		int i = 0;
 		Iterator<Comparendo> it = lista.iterator();

@@ -132,10 +132,12 @@ public class Controller
 						if(localidad != null)
 						{
 							Comparendo[] comparendos = modelo.darComprendosPorLLave(medioDete, vehi, localidad);
-							if(comparendos!= null)
-							for(Comparendo comparendo : comparendos)
+							view.imprimir("Comparendos encontrados: " + comparendos.length );
+							if(comparendos.length > modelo.N)
+								view.imprimir("Se imprimen los " + modelo.N + " primeros");
+							for(int i = 0; i < modelo.N && i < comparendos.length; i++)
 							{
-								view.imprimir(comparendo);
+								view.imprimir(comparendos[i]);
 							}
 						}
 					}

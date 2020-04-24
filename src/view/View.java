@@ -22,8 +22,8 @@ public class View {
 		System.out.println("1. Obtener los M comparendos con mayor gravedad");
 		System.out.println("2. Buscar los comparendos por mes y dia de la semana");
 		System.out.println("3. Buscar los comparendos que tienen una fecha-hora en un rango y que son de una localidad dada");
-		System.out.println("4. ");
-		System.out.println("5. ");
+		System.out.println("4. Dar los m comparendos mas cercanos a la estacion de policia del Campin ");
+		System.out.println("5. Dar los comparendos por: Medio deteccion, Tipo de vehiculo y Localidad");
 		System.out.println("6. ");
 		System.out.println("7. Dar el número de comparendos en un rango de D dias. ");
 		System.out.println("8. Mostrar el costo de los tiempos de espera hoy en día sin implementar el nuevo sistema");
