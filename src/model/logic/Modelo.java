@@ -47,7 +47,6 @@ public class Modelo
 
 	private Lista<Comparendo> comparendos;
 	private MaxHeapCP<Comparendo> heap;
-	private TablaHashChaining<Comparendo, String> tablaChain;
 
 	private String ejemploFecha;
 
@@ -204,9 +203,9 @@ public class Modelo
 	}
 	public Comparendo[] darComprendosPorLLave(String medioDete, String vehiculo, String localidad )
 	{
-		tablaChain = new TablaHashChaining<>(2);
-		meterEnTabla();
-		Comparendo[] respuesta = darComparendosPorllaveChain(medioDete, vehiculo, localidad);
+		TablaHashChaining<Comparendo, String> tablaChain = new TablaHashChaining<>(2);
+		meterEnTabla(tablaChain);
+		Comparendo[] respuesta = darComparendosPorllaveChain(medioDete, vehiculo, localidad,tablaChain);
 		tablaChain = null;
 		return respuesta;
 	}
@@ -214,13 +213,14 @@ public class Modelo
 	 * Copia los comparendos en la tabla de hash, la llave del comparendo es dada por:
 	 * medio deteccion, clase vehiculo, localidad
 	 */
-	public void meterEnTabla()
+	public void meterEnTabla(TablaHashChaining<Comparendo, String> tablaChain)
 	{
 		Iterator<Comparendo> comparendos = heap.iterator();
 		while (comparendos.hasNext())
 		{
-			agregarTablaChaining(comparendos.next());
+			agregarTablaChaining(comparendos.next(),tablaChain);
 		}
+		
 	}
 	/**
 	 * Retorna la identificador del comparendo que llega por parametro en el formato de la tabla
@@ -235,7 +235,7 @@ public class Modelo
 	 * Agrega un comparendo en la tabla de hash por chaining
 	 * @param dato
 	 */
-	public void agregarTablaChaining(Comparendo dato)
+	public void agregarTablaChaining(Comparendo dato,TablaHashChaining<Comparendo, String> tablaChain)
 	{
 		try
 		{
@@ -254,7 +254,7 @@ public class Modelo
 	 * @param localidad, la localidad
 	 * @return un arreglo con los comparendos ordenados
 	 */
-	public Comparendo[] darComparendosPorllaveChain(String medioDete, String vehiculo, String localidad)
+	public Comparendo[] darComparendosPorllaveChain(String medioDete, String vehiculo, String localidad, TablaHashChaining<Comparendo, String> tablaChain)
 	{
 		Lista<Comparendo> lista = tablaChain.get(medioDete + SEPARADOR + vehiculo + SEPARADOR + localidad);
 		if (lista == null)
