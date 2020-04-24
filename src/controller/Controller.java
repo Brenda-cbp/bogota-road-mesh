@@ -17,7 +17,6 @@ public class Controller
 
 	/* Instancia de la Vista */
 	private View view;
-	public final int N= 20;
 
 	/**
 	 * Crear la vista y el modelo del proyecto
@@ -66,7 +65,6 @@ public class Controller
 					}
 
 				}
-				//SI ingresa una letra o algo raros
 			}
 			if (opcion == 2)
 			{
@@ -78,10 +76,10 @@ public class Controller
 					{
 						int Mes= Integer.parseInt(mes);
 						Lista<Comparendo> rta =modelo.darComparendoMesyDia(Mes, dia);
-						System.out.println("Controller comparendo"+rta.darTamaï¿½o());
+						System.out.println("Controller comparendo"+rta.darTamaño());
 						for (Comparendo comparendo : rta) {
 							view.imprimir(comparendo.toString());
-							System.out.println("Controller comparendo"+rta.darTamaï¿½o());
+							System.out.println("Controller comparendo"+rta.darTamaño());
 						}	
 					}
 				}
@@ -95,7 +93,6 @@ public class Controller
 			}
 			if (opcion == 3)
 			{
-				view.imprimir(modelo.prueba().darInicialSemana());
 
 			}
 			if (opcion == 4)
@@ -108,7 +105,7 @@ public class Controller
 						int m = Integer.parseInt(respuesta);
 						Lista<Comparendo> lista = modelo.darMasCercanosEstacionPolicia(m);
 						Iterator<Comparendo> it = lista.iterator();
-						view.imprimir("Comparendos encontrados: " + lista.darTamaï¿½o() );
+						view.imprimir("Comparendos encontrados: " + lista.darTamaño() );
 						view.imprimir(modelo.LAT_POLICIA + "," + modelo.LONG_POLICIA);
 						while(it.hasNext())
 						{
