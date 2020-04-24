@@ -15,11 +15,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
+import model.data_structures.ArbolRojoNegro;
 import model.data_structures.ArregloDinamico;
 import model.data_structures.Lista;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
 import model.data_structures.TablaHashChaining;
+import sun.font.LayoutPathImpl;
 
 /**
  * Definicion del modelo del mundo
@@ -277,13 +279,34 @@ public class Modelo
 			rta.agregar(""+comparendos.next().darMes()+"-"+comparendos.next().darInicialSemana(), comparendos.next());
 		}
 		return null;
-		
 	}
 	public Lista<Comparendo> darComparendoMesyDia(int mes, String dia) throws Exception{
 		dia=dia.toLowerCase();
 		return ordenarTablaMesyDia().get(""+mes+"-"+dia);
 	}
-
+	public ArbolRojoNegro<Comparendo, Double> meterEnRedBlack()
+	{
+		ArbolRojoNegro<Comparendo, Double> arbol = new ArbolRojoNegro<>();
+		Iterator<Comparendo> comparendos = heap.iterator();
+		while(comparendos.hasNext())
+		{
+			Comparendo act = comparendos.next();
+			try
+			{
+				arbol.insertar(act.darLatitud(), act);
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return arbol;
+	}
+	public Iterator<Comparendo> darComparendosEnRangoLatitud(double lat1, double lat2)
+	{
+		return meterEnRedBlack().valuesInRange(lat1, lat2);
+	}
 	
 
 }

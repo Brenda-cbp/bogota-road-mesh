@@ -184,7 +184,7 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 			h.right = insertar(h.right, llave, valor);
 		else
 			h.val = valor;
-
+		
 		if (isRed(h.right) && !isRed(h.left))
 			h = rotateLeft(h);
 		if (isRed(h.left) && isRed(h.left.left))

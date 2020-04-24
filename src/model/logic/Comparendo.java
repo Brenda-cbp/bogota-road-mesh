@@ -173,21 +173,21 @@ public class Comparendo implements Comparable<Comparendo> {
 			return 0;
 		}
 	}
-	/**
-	 * Compara dos comparendos segun su Latitud, SOLO LATITUD
-	 * 
-	 */
-	public static class ComparatorLatitud implements Comparator<Comparendo>
-	{
-		public int compare(Comparendo o1, Comparendo o2)
-		{
-			double l1 = o1.darLatitud();
-			double l2 =o2.darLatitud();
-			if(l1 == l2)
-				return 0;
-			if(l1 > l2)
-				return 1;
-			return -1;
-		}
-	}
+//	/**
+//	 * Compara dos comparendos segun su Latitud, SOLO LATITUD
+//	 * 
+//	 */
+//	public static class ComparatorLatitud implements Comparator<Comparendo>
+//	{
+//		public int compare(Comparendo o1, Comparendo o2)
+//		{
+//			double l1 = o1.darLatitud();
+//			double l2 =o2.darLatitud();
+//			if(l1 == l2)
+//				return 0;
+//			if(l1 > l2)
+//				return 1;
+//			return -1;
+//		}
+//	}
 }
