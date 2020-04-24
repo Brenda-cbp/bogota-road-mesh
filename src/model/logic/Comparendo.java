@@ -128,11 +128,7 @@ public class Comparendo implements Comparable<Comparendo> {
 	 * actual es mayor al parametro, 0 si son iguales <0 de lo contario
 	 */
 	public int compareTo(Comparendo o) {
-		if(darLatitud() == o.darLatitud())
-			return 0;
-		else if(darLatitud() > o.darLatitud())
-			return 1;
-		return -1;
+		return fecha_hora.compareTo(o.darfecha());
 	}
 	public static class ComparatorGravedad implements Comparator<Comparendo>
 	{

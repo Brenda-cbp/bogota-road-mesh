@@ -260,13 +260,20 @@ public class Modelo
 		if (lista == null)
 			return null;
 		Comparendo[] comp = new Comparendo[lista.darTamaño()];
-		lista.reiniciarActual();
-		for (int i = 0; i < lista.darTamaño(); i++)
+		int i = 0;
+		Iterator<Comparendo> it = lista.iterator();
+		while(it.hasNext())
 		{
-			comp[i] = lista.darElementoActual();
-			lista.avanzarActual();
+			try{
+			comp[i] = it.next();
+			i++;
+			}
+			catch(Exception e)
+			{
+				System.out.println(lista.darElementoActual());
+			}
 		}
-		Sorting.IDquickSort(comp);
+		Sorting.quickSort(comp);
 		return comp;
 	}
 

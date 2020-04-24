@@ -89,7 +89,7 @@ public class TablaHashChaining<V, K extends Comparable<K>> implements Iterable<K
 		else
 		{
 			HashNode<Lista<V>, K> actual = tabla[pos];
-			while (actual != null && actual.darLlave() != key)
+			while (actual != null && !actual.darLlave().equals(key))
 			{
 				actual = actual.darSiguiente();
 			}
@@ -178,12 +178,17 @@ public class TablaHashChaining<V, K extends Comparable<K>> implements Iterable<K
 		tabla = new HashNode[M];
 		for (int i = 0; i < anterior.length; i++)
 		{
-			HashNode<V, K> actual = anterior[i];
+			HashNode<Lista<V>, K> actual = anterior[i];
 			while (actual != null)
 			{
 				try
 				{
-					agregar(actual.darLlave(), actual.darValor());
+					K key = actual.darLlave();
+					Iterator<V> it = actual.darValor().iterator();
+					while(it.hasNext())
+					{
+						agregar(key, it.next());
+					}
 					actual = actual.darSiguiente();
 				}
 				catch (Exception e)
