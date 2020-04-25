@@ -39,12 +39,14 @@ public class Modelo
 	// --------------------------------------------------------------------------
 	// Constantes
 	// --------------------------------------------------------------------------
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_50000_.geojson";
+	public final String RUTA = "./data/reduccion2.geojson";
+	
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 	public final String SEPARADOR = ";;;";
 	public final String FORMATO_INGRESO_FECHA="yyyy/MM/dd-HH:mm:ss";
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
 	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+	
 	public final int TAMANIO_INICIAL = 2;
 	public final int N = 20;
 	public final int COMPARENDOS_PROCESADOS_DIA= 1500;
