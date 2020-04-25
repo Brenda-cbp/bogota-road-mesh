@@ -8,13 +8,19 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 	private Node ultimo;
 	private int tamaño;
 
+	/**
+	 * Crea una nueva lista vacia
+	 */
 	public Lista() {
 		cabeza = null;
 		actual = null;
 		ultimo = null;
 		tamaño = 0;
 	}
-	
+	/**
+	 * Inserta un nodo con el elemento que llega por parametro al comienzo de la lista
+	 * @param elemento el elemento a insertar
+	 */
 	public void agregarAlComienzo(T elemento)
 	{
 		if(cabeza == null)
@@ -27,7 +33,9 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 			tamaño++;
 		}
 	}
-	
+	/**
+	 * Inserta un nuevo nodo con el elemento que llega por parametro al final de la lista
+	 */
 	public void agregarAlFinal(T elemento) {
 		if (cabeza == null)
 			crearLista(elemento);
@@ -71,11 +79,15 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 			tamaño--;
 		}
 	}
-
+	/**
+	 * Retorna la cantidad de elementos que tiene la lista
+	 */
 	public int darTamaño() {
 		return tamaño;
 	}
-
+	/**
+	 * Retorna el elemento en la posicion dada, comenzando desde 0
+	 */
 	public T darElementoPosicion(int pos)
 	{
 		Node act = cabeza;
