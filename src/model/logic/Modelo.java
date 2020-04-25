@@ -361,6 +361,14 @@ public class Modelo
 		}
 		return rta;
 	}
+	/**
+	 * Retorna una lista con los comparendos que se encuentren en el rango de fechas  y en la localidad especificados
+	 * @param limiteBajo la cota inferior
+	 * @param limiteAlto la cota superior
+	 * @param localidad la localidad buscada
+	 * @return Lista con los comparendos que cumplen las condiciones
+	 * @throws Exception
+	 */
 	public Lista<Comparendo> darComparendosEnRangodeFecha(String limiteBajo, String limiteAlto, String localidad) throws Exception {
 		SimpleDateFormat parser = new SimpleDateFormat(FORMATO_INGRESO_FECHA);
 		Iterator<Comparendo> iterador = insertarFechasEnArbol().valuesInRange(parser.parse(limiteBajo), parser.parse(limiteAlto)).iterator();
@@ -372,6 +380,13 @@ public class Modelo
 		}
 		return rta;
 	}
+	/**
+	 * Retorna una lista de String que representan los comparendos en el año con el siguiente formato: fecha1-fecha2--******
+	 * donde las fechas denotan un rango de tiempo, cada asterisco representa un comparendo en el rango
+	 * @param cantidadDias el numero de dias que tiene cada rango de fechas
+	 * @return
+	 * @throws Exception
+	 */
 	public Lista<String> darFechasYasteriscos(int cantidadDias) throws Exception{
 		ArbolRojoNegro<Comparendo, Date> arbolConFechas= insertarFechasEnArbol();
 		LocalDate fecha1 =LocalDate.parse("2018-01-01");
@@ -392,12 +407,13 @@ public class Modelo
 			cantidadAsteriscos=comparendosEnRango.darTamaño();
 			if(cantidadAsteriscos > maximosAsteriscos)
 				maximosAsteriscos =cantidadAsteriscos;
-			alaLista = fecha1+"-"+fecha2+"--"+cantidadAsteriscos + "--" + maximosAsteriscos;		
+			alaLista = fecha1+"-"+fecha2+"--"+cantidadAsteriscos;
 			rta.agregarAlFinal(alaLista);
 			//Actualiza las fechas 
 			fecha1 = fecha1.plus(Period.ofDays(cantidadDias));
 			fecha2=fecha1.plus(Period.ofDays(cantidadDias));	
 		}
+		rta.agregarAlComienzo("" + maximosAsteriscos);
 		return rta;
 	}
 }

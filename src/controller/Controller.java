@@ -196,13 +196,13 @@ public class Controller
 			{
 				String dia= view.pedir("numero de dias");
 				if (dia !=null) {
-	
-					int dias= Integer.parseInt(dia);
 					try {
+						int dias= Integer.parseInt(dia);
+						if(dias <= 0)
+							throw new Exception();
 						view.imprimirTablaAsci(modelo.darFechasYasteriscos(dias));
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						view.imprimir("Entrada invalida");
 					}
 				}
 			}
