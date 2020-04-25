@@ -3,6 +3,7 @@ package view;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import model.data_structures.Lista;
 import model.logic.Modelo;
 
 public class View {
@@ -76,5 +77,23 @@ public class View {
 		System.out.println();
 		System.out.println(cosa);
 		System.out.println();
+	}
+	public void imprimirTablaAsci(Lista<String> losDatos ) {
+		System.out.println("    Rango de fechas     |  Comparendos durante el año ");
+		System.out.println("--------------------------------------------------------");
+		for (String actual : losDatos) {
+			String[] partes = actual.split("--");
+			int numCaracteres= 24-partes[0].length();
+			String numeroEspacios="";
+			for (int i = 0; i < numCaracteres; i++) {
+				numeroEspacios+=" ";
+			}
+			String numeroAsteriscos="";
+			for (int i = 0; i < Integer.parseInt(partes[1]); i++) {
+				numeroAsteriscos+="*";	
+			}
+			System.out.println(partes[0]+numeroEspacios+"|"+numeroAsteriscos);
+		}
+		System.out.println("Cada * representa "+"50"+" comparendos");
 	}
 }

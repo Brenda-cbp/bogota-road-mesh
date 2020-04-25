@@ -1,5 +1,6 @@
 package controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -17,6 +18,8 @@ public class Controller
 
 	/* Instancia de la Vista */
 	private View view;
+
+	public final int N = 20;
 
 	/**
 	 * Crear la vista y el modelo del proyecto
@@ -70,19 +73,17 @@ public class Controller
 			{
 				try
 				{
-					String mes = view.pedir("nï¿½mero del mes");
-					String dia = view.pedir("el dï¿½a");
-					// Si s es null significa que la persona escribio CANCELAR
+					String mes = view.pedir("numero del mes");
+					String dia = view.pedir("el dia");
+					// Si alguno es null significa que la persona escribio CANCELAR
 					if (mes != null && dia != null)
 					{
 						int Mes = Integer.parseInt(mes);
 						Lista<Comparendo> rta = modelo.darComparendoMesyDia(Mes-1, dia);
-						System.out.println("Controller comparendo" + rta.darTamaño());
-						for (Comparendo comparendo : rta)
-						{
-							view.imprimir(comparendo.toString());
-							System.out.println("Controller comparendo" + rta.darTamaño());
+						for (int i = 0; i < N; i++) {
+							view.imprimir(rta.darElementoPosicion(i));
 						}
+
 					}
 				}
 				// SI ingresa una letra o algo raros
@@ -95,7 +96,24 @@ public class Controller
 			}
 			if (opcion == 3)
 			{
-
+				view.imprimir("Por favor ingrese las fechas en formato “YYYY/MM/DD-HH:MM:ss” ");
+				String limiteInferior = view.pedir("la fecha de inicio");
+				if (limiteInferior !=null) {
+					String limiteSuperior= view.pedir("la fecha final");
+					if(limiteSuperior!=null) {
+						String localidad= view.pedir("la localidad");
+						if(localidad!=null) {
+							try {
+								Lista<Comparendo>rta=modelo.darComparendosEnRangodeFecha(limiteInferior, limiteSuperior,localidad);
+								for (Comparendo comparendo : rta) 
+									view.imprimir(comparendo.toString());
+							}catch (Exception e) {
+								view.imprimir("Entrada no válida");
+								e.printStackTrace();
+							}
+						}
+						}
+				}
 			}
 			if (opcion == 4)
 			{
@@ -177,7 +195,17 @@ public class Controller
 			}
 			if (opcion == 7)
 			{
-
+				String dia= view.pedir("numero de dias");
+				if (dia !=null) {
+	
+					int dias= Integer.parseInt(dia);
+					try {
+						view.imprimirTablaAsci(modelo.darFechasYasteriscos(dias));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 			if (opcion == 8)
 			{

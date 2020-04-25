@@ -14,6 +14,7 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 	 * Representa el color negro
 	 */
 	private static final boolean BLACK = false;
+
 	/**
 	 * La raiz del arbol
 	 */
@@ -471,7 +472,7 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 	 *            limite superior si es null se asume que no hay cota superior
 	 * @return iterador de las llaves
 	 */
-	public Iterator<V> valuesInRange(K key1, K key2)
+	public Lista<V> valuesInRange(K key1, K key2)
 	{
 		Iterator<K> it = keysInrange(key1, key2);
 		Lista<V> lista = new Lista<>();
@@ -479,7 +480,7 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 		{
 			lista.agregarAlFinal(get(it.next()));
 		}
-		return lista.iterator();
+		return lista;
 	}
 
 	/**

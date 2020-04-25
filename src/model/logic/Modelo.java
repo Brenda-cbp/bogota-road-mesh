@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -16,6 +18,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+//import com.sun.tools.jdi.EventSetImpl.Itr;
 
 import model.data_structures.ArbolRojoNegro;
 import model.data_structures.ArregloDinamico;
@@ -24,6 +27,7 @@ import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
 import model.data_structures.TablaHashChaining;
 //import sun.font.LayoutPathImpl;
+//import sun.util.resources.LocaleData;
 
 /**
  * Definicion del modelo del mundo
@@ -35,13 +39,15 @@ public class Modelo
 	// --------------------------------------------------------------------------
 	// Constantes
 	// --------------------------------------------------------------------------
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_50000_.geojson";
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
 	public final String SEPARADOR = ";;;";
+	public final String FORMATO_INGRESO_FECHA="yyyy/MM/dd-HH:mm:ss";
 	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
 	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 	public final int TAMANIO_INICIAL = 2;
 	public final int N = 20;
+	public final int COMPARENDOS_PROCESADOS_DIA= 1500;
 
 	public final static double LAT_POLICIA = 4.647586;
 	public final static double LONG_POLICIA = -74.078122;
@@ -298,8 +304,8 @@ public class Modelo
 		{
 			Comparendo c=comparendos.next();
 			rta.agregar("" + c.darNumeroMes() + "-" 
-			+ c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()					
-			+"-"+c.darNombreMes(c.darNumeroMes()),
+					+ c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()					
+					+"-"+c.darNombreMes(c.darNumeroMes()),
 					c);
 		}
 		return rta;
@@ -308,6 +314,7 @@ public class Modelo
 	public Lista<Comparendo> darComparendoMesyDia(int mes, String dia) throws Exception
 	{
 		dia = dia.toUpperCase();
+		Lista<Comparendo> rta = null;
 		return ordenarTablaMesyDia().get("" + mes + "-" + dia+dia+dia+dia+"-"+darNombreMes(mes));
 	}
 	public String darNombreMes(int mes) {
@@ -339,8 +346,56 @@ public class Modelo
 
 	public Iterator<Comparendo> darComparendosEnRangoLatitud(double lat1, double lat2)
 	{
-		return meterEnRedBlackLatitud().valuesInRange(lat1, lat2);
+		return meterEnRedBlackLatitud().valuesInRange(lat1, lat2).iterator();
 	}
+	
+	public ArbolRojoNegro<Comparendo, Date> insertarFechasEnArbol() throws Exception {
+		Iterator<Comparendo> comparendos = heap.iterator();
+		ArbolRojoNegro<Comparendo, Date> rta= new ArbolRojoNegro<Comparendo, Date>();
+		while (comparendos.hasNext())
+		{
+			rta.insertar(comparendos.next().darfecha(),comparendos.next());
+		}
+		return rta;
+	}
+	public Lista<Comparendo> darComparendosEnRangodeFecha(String limiteBajo, String limiteAlto, String localidad) throws Exception {
+		SimpleDateFormat parser = new SimpleDateFormat(FORMATO_INGRESO_FECHA);
+		Iterator <Comparendo> iterador = insertarFechasEnArbol().valuesInRange(parser.parse(limiteBajo), parser.parse(limiteAlto)).iterator();
+		Lista <Comparendo> rta= new Lista<Comparendo>();
+		while(iterador.hasNext() && rta.darTamaño()<=N) {
+			if(iterador.next().darLocalidad().equalsIgnoreCase(localidad))
+				rta.agregarAlFinal(iterador.next());
+		}
+		return rta;
+	}
+	public Lista<String> darFechasYasteriscos(int cantidadDias) throws Exception{
+		ArbolRojoNegro<Comparendo, Date> arbolConFechas= insertarFechasEnArbol();
+		LocalDate fecha1 =LocalDate.parse("2018-01-01");
+		LocalDate fecha2= fecha1.plus(Period.ofDays(cantidadDias));
+		String alaLista="";
+		
+		Lista<String> rta= new Lista<String>() ;
 
-
+		while (fecha2.getYear()<2019) {
+			if(fecha2.getYear()==2019)
+				fecha2=LocalDate.parse("2018-12-31");
+			
+			int cantidadAsteriscos=0;
+			Date f1= java.sql.Date.valueOf(fecha1);
+			Date f2=  java.sql.Date.valueOf(fecha2);
+			Lista <Comparendo> comparendosEnRango =arbolConFechas.valuesInRange(f1, f2);
+			cantidadAsteriscos=comparendosEnRango.darTamaño()/50; 
+			if(comparendosEnRango.darTamaño()%50 !=1) {
+				cantidadAsteriscos++;
+			}
+			
+			alaLista = fecha1+"-"+fecha2+"--"+cantidadAsteriscos;		
+			rta.agregarAlFinal(alaLista);
+			//Actualiza las fechas 
+			fecha1 = fecha1.plus(Period.ofDays(1));
+			fecha2=fecha1.plus(Period.ofDays(cantidadDias));	
+		}
+		return rta;
+	}
 }
+
