@@ -356,17 +356,19 @@ public class Modelo
 		ArbolRojoNegro<Comparendo, Date> rta= new ArbolRojoNegro<Comparendo, Date>();
 		while (comparendos.hasNext())
 		{
-			rta.insertar(comparendos.next().darfecha(),comparendos.next());
+			Comparendo actual = comparendos.next();
+			rta.insertar(actual.darfecha(),actual);
 		}
 		return rta;
 	}
 	public Lista<Comparendo> darComparendosEnRangodeFecha(String limiteBajo, String limiteAlto, String localidad) throws Exception {
 		SimpleDateFormat parser = new SimpleDateFormat(FORMATO_INGRESO_FECHA);
-		Iterator <Comparendo> iterador = insertarFechasEnArbol().valuesInRange(parser.parse(limiteBajo), parser.parse(limiteAlto)).iterator();
+		Iterator<Comparendo> iterador = insertarFechasEnArbol().valuesInRange(parser.parse(limiteBajo), parser.parse(limiteAlto)).iterator();
 		Lista <Comparendo> rta= new Lista<Comparendo>();
 		while(iterador.hasNext() && rta.darTamaño()<=N) {
-			if(iterador.next().darLocalidad().equalsIgnoreCase(localidad))
-				rta.agregarAlFinal(iterador.next());
+			Comparendo actual = iterador.next();
+			if(actual.darLocalidad().equalsIgnoreCase(localidad))
+				rta.agregarAlFinal(actual);
 		}
 		return rta;
 	}

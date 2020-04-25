@@ -109,7 +109,6 @@ public class Controller
 									view.imprimir(comparendo.toString());
 							}catch (Exception e) {
 								view.imprimir("Entrada no válida");
-								e.printStackTrace();
 							}
 						}
 						}
