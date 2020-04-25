@@ -325,7 +325,11 @@ public class Modelo
 		calendario.setTime(fecha);
 		return calendario.getDisplayName(Calendar.MONTH,Calendar.LONG_FORMAT,Locale.ENGLISH);
 	}
-
+	
+	/**
+	 * Inserta los comparendos en un arbolo rojo negro con su latitud como la llave que los identifica
+	 * @return el arbol con los comparendos
+	 */
 	public ArbolRojoNegro<Comparendo, Double> meterEnRedBlackLatitud()
 	{
 		ArbolRojoNegro<Comparendo, Double> arbol = new ArbolRojoNegro<>();
@@ -350,7 +354,11 @@ public class Modelo
 	{
 		return meterEnRedBlackLatitud().valuesInRange(lat1, lat2).iterator();
 	}
-	
+	/**
+	 * Inserta los comparendos en un arbol rojo negro donde la llave esta dada por la fecha de cada comparendo
+	 * @return arbol con los comparendos
+	 * @throws Exception en caso de que algun comparendo enlistado sea nulo (Teoricamente no deberia ocurrir)
+	 */
 	public ArbolRojoNegro<Comparendo, Date> insertarFechasEnArbol() throws Exception {
 		Iterator<Comparendo> comparendos = heap.iterator();
 		ArbolRojoNegro<Comparendo, Date> rta= new ArbolRojoNegro<Comparendo, Date>();
