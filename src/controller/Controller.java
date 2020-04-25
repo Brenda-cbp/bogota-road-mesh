@@ -77,7 +77,7 @@ public class Controller
 				try
 				{
 					String mes = view.pedir("numero del mes");
-					String dia = view.pedir("el dia");
+					String dia = view.pedir("el dia (L,M,I,J,V,S,D)");
 					// Si alguno es null significa que la persona escribio CANCELAR
 					if (mes != null && dia != null)
 					{
