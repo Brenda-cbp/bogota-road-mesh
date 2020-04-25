@@ -39,18 +39,38 @@ public class Modelo
 	// --------------------------------------------------------------------------
 	// Constantes
 	// --------------------------------------------------------------------------
+	/**
+	 * Ruta en la que se encuentra el archivo con los comparendos
+	 */
 	public final String RUTA = "./data/reduccion2.geojson";
-	
+	/**
+	 * Mensaje que indica al usuario que no se encontro un comparendo con los requerimientos solicitados
+	 */
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
+	
 	public final String SEPARADOR = ";;;";
+	/***
+	 * Formato en el que se espera que el usuario ingrese las fechas
+	 */
 	public final String FORMATO_INGRESO_FECHA="yyyy/MM/dd-HH:mm:ss";
-	public final String FORMATO_ESPERADO = "yyyy-MM-dd HH:mm";
+	/**
+	 * Formato en el que se encuentran las fechas en el documento de entrada
+	 */
 	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 	
 	public final int TAMANIO_INICIAL = 2;
+	/**
+	 * Numero N, indica cuantos datos imprimir.
+	 */
 	public final int N = 20;
+	/**
+	 * Cantidad maxima de comparendos que puede procesar la policia
+	 */
 	public final int COMPARENDOS_PROCESADOS_DIA= 1500;
 
+	/**
+	 * Coordenadas de la estacion de policia del Campin
+	 */
 	public final static double LAT_POLICIA = 4.647586;
 	public final static double LONG_POLICIA = -74.078122;
 	// --------------------------------------------------------------------------
@@ -74,18 +94,28 @@ public class Modelo
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
 	}
-
+	/**
+	 * Agrega un comparendo a la estructura de datos Heap
+	 * @param c el comparendo a agregar
+	 */
 	public void agregarMaxHeap(Comparendo c)
 	{
 		Comparendo.ComparatorFecha cmpFecha = new Comparendo.ComparatorFecha();
 		heap.agregar(c, cmpFecha);
 	}
-
+	/**
+	 * Retorna la cantidad de comparendos almacenados en el heap
+	 * @return cnatidad de comparendos
+	 */
 	public int darCantidadComparendos()
 	{
 		return heap.darNumElmentos();
 	}
 
+	/**
+	 * Lee el archivo especificado por la constante RUTA y los almacena en un Heap, retorna el comparendo con mayor ID registrado
+	 * @return Comparendo con mayor ID
+	 */
 	public Comparendo cargarDatos()
 	{
 		// solucion publicada en la pagina del curso
@@ -194,7 +224,11 @@ public class Modelo
 		}
 		return copia;
 	}
-
+	/**
+	 * Retorna una lista con los  M comparendos mas cercanos a la estacion de policia del Campin
+	 * @param m la cantidad de comparendos buscada
+	 * @return la lista con los mas cercanos
+	 */
 	public Lista<Comparendo> darMasCercanosEstacionPolicia(int m)
 	{
 		MaxHeapCP<Comparendo> copia = ordenarPorDistanciaEstacion();
@@ -206,7 +240,13 @@ public class Modelo
 		}
 		return respuesta;
 	}
-
+	/**
+	 * Retorna un arreglo con los comparendos que cumplan los requisitos especificados
+	 * @param medioDete el medio de detencion buscado
+	 * @param vehiculo el vehiculo buscado
+	 * @param localidad la localidad buscada
+	 * @return
+	 */
 	public Comparendo[] darComprendosPorLLave(String medioDete, String vehiculo, String localidad)
 	{
 		TablaHashChaining<Comparendo, String> tablaChain = new TablaHashChaining<>(2);
@@ -425,5 +465,6 @@ public class Modelo
 		rta.agregarAlComienzo("" + maximosAsteriscos);
 		return rta;
 	}
+	
 }
 
