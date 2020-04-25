@@ -182,7 +182,7 @@ public class Modelo
 	}
 
 	/**
-	 * 
+	 * Retorna un maxHeap con la gravedad de cada comparendo como criterio de comparecion
 	 * @param maxheap
 	 */
 	public MaxHeapCP<Comparendo> ordenaGravedad()
@@ -194,8 +194,10 @@ public class Modelo
 			copia.agregar(comparendos.next(), new Comparendo.ComparatorGravedad());
 		}
 		return copia;
+		
 	}
 
+	
 	public Lista<Comparendo> darMayorGravedad(int cantidad)
 	{
 		Comparendo.ComparatorGravedad compGravedad = new Comparendo.ComparatorGravedad();
