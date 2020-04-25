@@ -83,7 +83,11 @@ public class Controller
 					{
 						int Mes = Integer.parseInt(mes);
 						Lista<Comparendo> rta = modelo.darComparendoMesyDia(Mes-1, dia);
-						for (int i = 0; i < N; i++) {
+						if(rta == null || rta.darTamaño() == 0)
+						{
+							view.imprimir(modelo.COMPARENDO_NO_ENCONTRADO);
+						}
+						for (int i = 0; i < N && i <rta.darTamaño(); i++) {
 							view.imprimir(rta.darElementoPosicion(i));
 						}
 
@@ -92,8 +96,7 @@ public class Controller
 				// SI ingresa una letra o algo raros
 				catch (Exception e)
 				{
-					view.imprimir(e.getMessage());
-
+					view.imprimir("Revise su entrada y vuelva a intentarlo");
 				}
 
 			}

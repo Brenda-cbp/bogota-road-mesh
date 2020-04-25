@@ -341,6 +341,8 @@ public class Modelo
 	public TablaHashChaining<Comparendo, String> ordenarTablaMesyDia() throws Exception
 	{
 		Iterator<Comparendo> comparendos = heap.iterator();
+		if(comparendos == null)
+			return new TablaHashChaining<>(2);
 		TablaHashChaining<Comparendo, String> rta = new TablaHashChaining<Comparendo, String>(58);
 		while (comparendos.hasNext())
 		{
