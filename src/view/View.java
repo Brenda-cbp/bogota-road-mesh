@@ -81,6 +81,7 @@ public class View {
 	public void imprimirTablaAsci(Lista<String> losDatos ) {
 		System.out.println("    Rango de fechas     |  Comparendos durante el año ");
 		System.out.println("--------------------------------------------------------");
+		int maximo = 0;
 		for (String actual : losDatos) {
 			String[] partes = actual.split("--");
 			int numCaracteres= 24-partes[0].length();
@@ -88,12 +89,16 @@ public class View {
 			for (int i = 0; i < numCaracteres; i++) {
 				numeroEspacios+=" ";
 			}
+			maximo = Integer.parseInt(partes[2]);
+			maximo = maximo / 30;
 			String numeroAsteriscos="";
-			for (int i = 0; i < Integer.parseInt(partes[1]); i++) {
+			if(Integer.parseInt(partes[1])/maximo == 0)
+				numeroAsteriscos = "*";
+			for (int i = 0; i < (Integer.parseInt(partes[1])/maximo); i++) {
 				numeroAsteriscos+="*";	
 			}
 			System.out.println(partes[0]+numeroEspacios+"|"+numeroAsteriscos);
 		}
-		System.out.println("Cada * representa "+"50"+" comparendos");
+		System.out.println("Cada * representa "+ maximo +" comparendos (o fraccion)");
 	}
 }

@@ -378,9 +378,10 @@ public class Modelo
 		LocalDate fecha2= fecha1.plus(Period.ofDays(cantidadDias));
 		String alaLista="";
 		
+		int maximosAsteriscos = 0;
 		Lista<String> rta= new Lista<String>() ;
-
-		while (fecha2.getYear()<2019) {
+		
+		while (fecha1.getYear()<2019) {
 			if(fecha2.getYear()==2019)
 				fecha2=LocalDate.parse("2018-12-31");
 			
@@ -388,15 +389,13 @@ public class Modelo
 			Date f1= java.sql.Date.valueOf(fecha1);
 			Date f2=  java.sql.Date.valueOf(fecha2);
 			Lista <Comparendo> comparendosEnRango =arbolConFechas.valuesInRange(f1, f2);
-			cantidadAsteriscos=comparendosEnRango.darTamaño()/50; 
-			if(comparendosEnRango.darTamaño()%50 !=1) {
-				cantidadAsteriscos++;
-			}
-			
-			alaLista = fecha1+"-"+fecha2+"--"+cantidadAsteriscos;		
+			cantidadAsteriscos=comparendosEnRango.darTamaño();
+			if(cantidadAsteriscos > maximosAsteriscos)
+				maximosAsteriscos =cantidadAsteriscos;
+			alaLista = fecha1+"-"+fecha2+"--"+cantidadAsteriscos + "--" + maximosAsteriscos;		
 			rta.agregarAlFinal(alaLista);
 			//Actualiza las fechas 
-			fecha1 = fecha1.plus(Period.ofDays(1));
+			fecha1 = fecha1.plus(Period.ofDays(cantidadDias));
 			fecha2=fecha1.plus(Period.ofDays(cantidadDias));	
 		}
 		return rta;
