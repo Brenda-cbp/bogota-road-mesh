@@ -78,6 +78,13 @@ public class View {
 		System.out.println(cosa);
 		System.out.println();
 	}
+	/**
+	 * Imprime una tabla de dos columnas que representa con asteriscos los comparendos en el año particionados por rangos
+	 * Ajusta automaticamente la cantidad de comparendos que representa cada asterisco
+	 * @param losDatos, lista la cantidad de comparendos por rango y debe tener en la primera posicion la cantidad maxima de comparendos que tiene un rango
+	 * 
+	 */
+	
 	public void imprimirTablaAsci(Lista<String> losDatos ) {
 		System.out.println("    Rango de fechas     |  Comparendos durante el año ");
 		System.out.println("--------------------------------------------------------");

@@ -381,8 +381,9 @@ public class Modelo
 		return rta;
 	}
 	/**
-	 * Retorna una lista de String que representan los comparendos en el año con el siguiente formato: fecha1-fecha2--******
-	 * donde las fechas denotan un rango de tiempo, cada asterisco representa un comparendo en el rango
+	 * Retorna una lista de String que representan los comparendos en el año con el siguiente formato: fecha1-fecha2--n, la primera posicion de la lista indica
+	 * la cantidad de comparendos en el rango con tamaño maximal
+	 * donde las fechas denotan un rango de tiempo, n es la  cantidad de comparendos en el rango
 	 * @param cantidadDias el numero de dias que tiene cada rango de fechas
 	 * @return
 	 * @throws Exception
