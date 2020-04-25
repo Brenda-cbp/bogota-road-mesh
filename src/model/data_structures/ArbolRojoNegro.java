@@ -33,7 +33,7 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 		/**
 		 * El valor que almacena el nodo
 		 */
-		V val;
+		Lista<V> val;
 		/**
 		 * El hijo izquierdo del nodo
 		 */
@@ -54,7 +54,8 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 		Node(K key, V val, int N, boolean color)
 		{
 			this.key = key;
-			this.val = val;
+			this.val = new Lista<V>();
+			this.val.agregarAlFinal(val);
 			this.N = N;
 			this.color = color;
 		}
@@ -184,7 +185,7 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 		else if (llave.compareTo(h.key) > 0)
 			h.right = insertar(h.right, llave, valor);
 		else
-			h.val = valor;
+			h.val.agregarAlFinal(valor);;
 		
 		if (isRed(h.right) && !isRed(h.left))
 			h = rotateLeft(h);
@@ -204,14 +205,14 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 	 *            llave buscada
 	 * @return valor asociado a la llave
 	 */
-	public V get(K key)
+	public Lista<V> get(K key)
 	{
 		if (key == null)
 			throw new IllegalArgumentException("argument to get() is null");
 		return get(raiz, key);
 	}
 
-	private V get(Node x, K key)
+	private Lista<V> get(Node x, K key)
 	{
 		while (x != null)
 		{
@@ -478,7 +479,9 @@ public class ArbolRojoNegro<V, K extends Comparable<K>> implements Iterable<K>
 		Lista<V> lista = new Lista<>();
 		while (it.hasNext())
 		{
-			lista.agregarAlFinal(get(it.next()));
+			Iterator<V> it2 = (get(it.next())).iterator();
+			while(it2.hasNext())
+				lista.agregarAlFinal(it2.next());
 		}
 		return lista;
 	}

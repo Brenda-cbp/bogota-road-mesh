@@ -182,13 +182,15 @@ public class Controller
 						{
 							double l2 = Double.parseDouble(latMax);
 							Iterator<Comparendo> it = modelo.darComparendosEnRangoLatitud(l1, l2);
-							view.imprimir("Se imprimen los primeros " + modelo.N + " encontrados");
+							view.imprimir("Se imprimiran los primeros " + modelo.N + " encontrados");
 							int i = 0;
 							while(it.hasNext() && i < modelo.N)
 							{
 								view.imprimir(it.next());
 								i++;
 							}
+							if(i == 0)
+								view.imprimir(modelo.COMPARENDO_NO_ENCONTRADO);
 						}
 					}
 					catch (Exception e)
