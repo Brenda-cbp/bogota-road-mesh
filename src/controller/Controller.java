@@ -34,6 +34,9 @@ public class Controller
 		correrPrograma();
 	}
 
+	/**
+	 * Inicializa el programa y recibe las instrucciones del usuario hasta que se deje de correr el programa
+	 */
 	public void correrPrograma()
 	{
 		view.imprimir("Cargando datos...");

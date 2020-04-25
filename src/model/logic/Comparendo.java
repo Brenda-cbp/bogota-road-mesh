@@ -8,19 +8,65 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Comparendo implements Comparable<Comparendo> {
+	/**
+	 * EL ID del comparendo
+	 */
 	private int objectId;
+	/**
+	 * La fecha y hora en la que se impuso el comparendo
+	 */
 	private Date fecha_hora;
+	/**
+	 * Descripcion de la infraccion cometida
+	 */
 	private String des_infrac;
+	/**
+	 * Medio de deteccion
+	 */
 	private String medio_dete;
+	/**
+	 * El tipo de vehiculo al que se impuso el comparendo
+	 */
 	private String clase_vehi;
+	/**
+	 * Tipo de seervicio que prestaba el vehiculo
+	 */
 	private String tipo_servi;
+	/**
+	 * El codigo de la infraccion cometida
+	 */
 	private String infraccion;
+	/**
+	 * Localidad en la que se impuso el comparendo
+	 */
 	private String localidad;
+	/**
+	 * Municipio en el que se cometio el comparendo
+	 */
 	private String municipio;
 
+	/**
+	 * La latitud geografica en donde se relaizo el comparendo
+	 */
 	private double latitud;
+	/**
+	 * La lingitud geografica en donde se impuso el comparendo
+	 */
 	private double longitud;
-
+	/**
+	 * Crea un nuevo comparendo
+	 * @param OBJECTID registrado
+	 * @param FECHA_HORA registrado
+	 * @param DES_INFRAC registrado
+	 * @param MEDIO_DETE registrado
+	 * @param CLASE_VEHI registrado
+	 * @param TIPO_SERVI registrado
+	 * @param INFRACCION registrado
+	 * @param LOCALIDAD registrado
+	 * @param MUNICIPIO registrado
+	 * @param longitudd registrado
+	 * @param latitudd registrado
+	 */
 	public Comparendo(int OBJECTID, Date FECHA_HORA, String DES_INFRAC, String MEDIO_DETE, String CLASE_VEHI,
 			String TIPO_SERVI, String INFRACCION, String LOCALIDAD, String MUNICIPIO, double longitudd,
 			double latitudd) {
@@ -38,10 +84,17 @@ public class Comparendo implements Comparable<Comparendo> {
 		latitud = latitudd;
 	}
 
+	/**
+	 * Retorna la latitud del comparendo
+	 * @return latitud 
+	 */
 	public double darLatitud() {
 		return latitud;
 	}
-
+	/**
+	 * Retorna la longitud del comparendo
+	 * @return
+	 */
 	public double darLongitud() {
 		return longitud;
 	}
@@ -98,6 +151,9 @@ public class Comparendo implements Comparable<Comparendo> {
 			return "I";
 		return dia.substring(0, 1).toUpperCase();
 	}
+	/**
+	 * Retorna un string con toda la informacion del comparendo
+	 */
 	public String toString() {
 		return "OBJECTID=" + objectId + "\n" + "FECHA_HORA=" + fecha_hora + "\n" + "DES_INFRAC=" + des_infrac
 				+ "\n" + "MEDIO_DETE=" + medio_dete +  "\n" +"CLASE_VEHI=" + clase_vehi +  "\n" +"TIPO_SERVI=" + tipo_servi

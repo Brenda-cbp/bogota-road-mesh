@@ -15,7 +15,10 @@ public class View {
 	public View() {
 
 	}
-
+	/**
+	 * Imprime el menu de opciones del programa en la consola
+	 * @return la opcion que escogio el usuario
+	 */
 	public int printMenu() {
 		System.out.println();
 		int rta=0;
