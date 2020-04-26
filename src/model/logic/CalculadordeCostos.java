@@ -6,7 +6,7 @@ import model.data_structures.Lista;
 
 public class CalculadordeCostos
 {
-	public static void darCostos(Lista<String> lista)
+	public static String darCostos(Lista<String> lista)
 	{
 	
 		int tiempoTotal4 = 0;
@@ -106,5 +106,6 @@ public class CalculadordeCostos
 		String respuesta = 0 + Modelo.SEPARADOR + tiempoMaximo400 + Modelo.SEPARADOR +  tiempoPromedio400 + Modelo.SEPARADOR +
 						tiempoMinimo40 + Modelo.SEPARADOR + tiempoMaximo40 + Modelo.SEPARADOR +  tiempoPromedio40 + Modelo.SEPARADOR +
 						tiempoMinimo4 + Modelo.SEPARADOR + tiempoMaximo4 + Modelo.SEPARADOR +  tiempoPromedio4 + Modelo.SEPARADOR;
+	return respuesta;
 	}
 }

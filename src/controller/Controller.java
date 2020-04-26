@@ -220,7 +220,15 @@ public class Controller
 			}
 			if (opcion == 9)
 			{
-
+				try
+				{
+					view.imprimir(modelo.darCostos());
+				}
+				catch (Exception e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

@@ -573,81 +573,8 @@ public class Modelo
 		}
 		return rta;
 	}
-
-	/**
-	 * Retorna un string con la informacion de costos
-	 * 
-	 * @return informacion de costos
-	 * @throws Exception
-	 */
 	public String darCostos() throws Exception
 	{
-		long costoTotal400 = 0;
-		long costoTotal40 = 0;
-		long costoTotal4 = 0;
-		int sinProcesar400 = 0;
-		int sinProcesar40 = 0;
-		int sinProcesar4 = 0;
-		int total400 = 0;
-		int total40 = 0;
-		int total4 = 0;
-		Lista<String> comparendosPorcosto = darComparendosDiasPrecios();
-		Iterator<String> it = comparendosPorcosto.iterator();
-		while (it.hasNext())
-		{
-			String[] cajita = it.next().split(SEPARADOR);
-			int costo400 = Integer.parseInt(cajita[0]) + sinProcesar400;
-			int costo40 = Integer.parseInt(cajita[1]) + sinProcesar40;
-			int costo4 = Integer.parseInt(cajita[2]) + sinProcesar4;
-
-			total400 += costo400;
-			total40 += costo40;
-			total4 += costo4;
-
-			int capacidad = 1500 - costo400;
-			if (capacidad > 0)
-			{
-				sinProcesar400 = 0;
-				capacidad -= costo40;
-				if (capacidad > 0)
-				{
-					sinProcesar40 = 0;
-					capacidad = capacidad - costo4;
-					if (capacidad < 0)
-					{
-						costoTotal4 = costoTotal4 - (4 * capacidad);
-						sinProcesar4 -= capacidad;
-					}
-					else
-					{
-						sinProcesar4 = 0;
-					}
-				}
-				else
-				{
-					costoTotal40 = costoTotal40 - (capacidad * 40);
-					costoTotal4 += (costo4 * 4);
-					sinProcesar40 -= capacidad;
-					sinProcesar4 = costo4;
-				}
-			}
-			else
-			{
-				costoTotal400 = costoTotal400 - (400 * capacidad);
-				costoTotal40 += (40 * costo40);
-				costoTotal4 += (4 * costo4);
-				sinProcesar400 -= capacidad;
-				sinProcesar40 = costo40;
-				sinProcesar4 = costo4;
-			}
-		}
-		costoTotal400 += ((int)(sinProcesar400/1500))*400*1500;
-		costoTotal400 += (sinProcesar400 % 1500)*400;
-		costoTotal40 += ((int)(sinProcesar400/1500) + (int)(sinProcesar40 / 1500))*40*1500;
-		costoTotal40 += (1500-(sinProcesar400%1500))*40 + (sinProcesar40%1500)*40;
-		
-		String s = total400 + SEPARADOR + total40 + SEPARADOR + total4 + SEPARADOR + costoTotal400 + SEPARADOR
-				+ costoTotal40 + SEPARADOR + costoTotal4 + SEPARADOR + sinProcesar400 + SEPARADOR + sinProcesar40 + SEPARADOR + sinProcesar4;
-		return s;
+		return CalculadordeCostos.darCostos(darComparendosDiasPrecios());
 	}
 }
