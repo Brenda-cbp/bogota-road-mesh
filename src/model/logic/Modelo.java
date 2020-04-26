@@ -6,7 +6,10 @@ import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -42,7 +45,8 @@ public class Modelo
 	/**
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
-	public final String RUTA = "./data/reduccion2.geojson";
+	//public final String RUTA = "./data/reduccion2.geojson";
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -368,7 +372,7 @@ public class Modelo
 		{
 			Comparendo c = comparendos.next();
 			rta.agregar("" + c.darNumeroMes() + "-" + c.darInicialSemana() + c.darInicialSemana() + c.darInicialSemana()
-					+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
+			+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
 		}
 		return rta;
 	}
@@ -481,37 +485,38 @@ public class Modelo
 	 * @return
 	 * @throws Exception
 	 */
-	public Lista<String> darFechasYasteriscos(int cantidadDias) throws Exception
-	{
-		ArbolRojoNegro<Comparendo, Date> arbolConFechas = insertarFechasEnArbol();
-		LocalDate fecha1 = LocalDate.parse("2018-01-01");
-		LocalDate fecha2 = fecha1.plus(Period.ofDays(cantidadDias));
-		String alaLista = "";
+	public Lista<String> darFechasYasteriscos(int cantidadDias) throws Exception{
+		ArbolRojoNegro<Comparendo, Date> arbolConFechas= insertarFechasEnArbol();
+		LocalDate fecha1 =LocalDate.parse("2018-01-01");
+		LocalDate fecha2= fecha1.plus(Period.ofDays(cantidadDias));
+		String alaLista="";
 
 		int maximosAsteriscos = 0;
-		Lista<String> rta = new Lista<String>();
+		Lista<String> rta= new Lista<String>() ;
 
-		while (fecha1.getYear() < 2019)
-		{
-			if (fecha2.getYear() == 2019)
-				fecha2 = LocalDate.parse("2018-12-31");
+		while (fecha1.getYear()<2019) {
+			if(fecha2.getYear()==2019)
+				fecha2=LocalDate.parse("2018-12-31");
 
-			int cantidadAsteriscos = 0;
-			Date f1 = java.sql.Date.valueOf(fecha1);
-			Date f2 = java.sql.Date.valueOf(fecha2);
-			Lista<Comparendo> comparendosEnRango = arbolConFechas.valuesInRange(f1, f2);
-			cantidadAsteriscos = comparendosEnRango.darTamaño();
-			if (cantidadAsteriscos > maximosAsteriscos)
-				maximosAsteriscos = cantidadAsteriscos;
-			alaLista = fecha1 + "-" + fecha2 + "--" + cantidadAsteriscos;
+			int cantidadAsteriscos=0;
+			Date f1= java.sql.Date.valueOf(fecha1);
+			Date f2=  java.sql.Date.valueOf(fecha2);
+			Lista <Comparendo> comparendosEnRango =arbolConFechas.valuesInRange(f1, f2);
+			cantidadAsteriscos=comparendosEnRango.darTamaño();
+			if(cantidadAsteriscos > maximosAsteriscos)
+				maximosAsteriscos =cantidadAsteriscos;
+			DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy/MM/dd");
+			alaLista = fecha1.getYear()+"/"+fecha1.getMonthValue()+"/"+fecha1.getDayOfMonth()+" - "+
+					fecha2.getYear()+"/"+fecha2.getMonthValue()+"/"+fecha2.getDayOfMonth()+"--"+cantidadAsteriscos;
 			rta.agregarAlFinal(alaLista);
-			// Actualiza las fechas
-			fecha1 = fecha1.plus(Period.ofDays(cantidadDias));
-			fecha2 = fecha1.plus(Period.ofDays(cantidadDias));
+			//Actualiza las fechas 
+			fecha1 = fecha1.plus(Period.ofDays(cantidadDias+1));
+			fecha2=fecha1.plus(Period.ofDays(cantidadDias));	
 		}
 		rta.agregarAlComienzo("" + maximosAsteriscos);
 		return rta;
 	}
+
 
 	// ___________________________________________________
 	/**
@@ -577,4 +582,47 @@ public class Modelo
 	{
 		return CalculadordeCostos.darCostos(darComparendosDiasPrecios());
 	}
+	public Lista<String> darHistogramaProcesadosyEsperando() throws Exception{
+		Lista<String> rta = new Lista<String>();
+		Lista<String > listafechayAsteriscos= darFechasYasteriscos(1);
+
+		ArbolRojoNegro<Comparendo, Date> arbolConFechas= insertarFechasEnArbol();
+		LocalDateTime fecha1 =LocalDateTime.of(2018, 01, 01, 00, 00, 00);
+		LocalDateTime fecha2 =LocalDateTime.of(2018, 01, 01, 23, 59, 59);
+
+		int costos=0;
+		int max=0;
+		int comparendosEnEspera=0;
+		while (fecha1.getYear()<2019) {
+
+			int cantidadComparendosEseDia=0;
+			int comparendosProcesados=0;
+
+			Date f1= Date.from(fecha1.atZone(ZoneId.systemDefault()).toInstant());
+			Date f2= Date.from(fecha2.atZone(ZoneId.systemDefault()).toInstant());
+
+			Lista <Comparendo> comparendosEnRango =arbolConFechas.valuesInRange(f1, f2);
+			cantidadComparendosEseDia=comparendosEnRango.darTamaño();
+
+			if(cantidadComparendosEseDia>COMPARENDOS_PROCESADOS_DIA) {
+				comparendosProcesados=COMPARENDOS_PROCESADOS_DIA;
+				for(int i=COMPARENDOS_PROCESADOS_DIA; i<cantidadComparendosEseDia;i++) {
+					costos+=calcularPrecios(comparendosEnRango.darElementoPosicion(i));
+					comparendosEnEspera++;
+				}
+			}
+			else
+				comparendosProcesados=cantidadComparendosEseDia; //...y comparendos en espera=0
+			if (comparendosEnEspera>max)///hallar el maximo
+				max=comparendosEnEspera;
+
+			rta.agregarAlFinal(""+fecha1.getYear()+"/"+fecha1.getMonthValue()+"/"+fecha1.getDayOfMonth()+"--"+comparendosProcesados+"--"+comparendosEnEspera);
+			fecha1 = fecha1.plusHours(24);
+			fecha2 =fecha2.plusHours(24);
+		}
+		rta.agregarAlComienzo(""+max);
+		rta.agregarAlComienzo(""+costos);
+		return rta;
+	}
+
 }

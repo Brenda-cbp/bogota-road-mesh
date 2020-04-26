@@ -111,4 +111,46 @@ public class View {
 		}
 		System.out.println("Cada * representa "+ maximo +" comparendos (o fraccion)");
 	}
+	public void imprimirHistogramaProcesadosYespera(Lista<String> losDatos ) {
+		int costos= Integer.parseInt(losDatos.darElementoPosicion(0));
+		System.out.println("Los costos a lo largo del año 2018 si no se implementa el nuevo sistema son: "+costos);
+		
+		System.out.println("Fecha        | Comparendos procesados            ***");
+		System.out.println("             | Comparendos que están en espera   ###");
+		System.out.println("---------------------------------------------------");
+		
+			int max= Integer.parseInt(losDatos.darElementoPosicion(1));
+		max=max/50;
+		losDatos.eliminarElemento(losDatos.darElementoPosicion(0));
+		losDatos.eliminarElemento(losDatos.darElementoPosicion(0));
+		for (String actual : losDatos) {
+			String[] partes = actual.split("--");
+			int numCaracteres= 12-partes[0].length();
+			String numeroEspacios="";
+			for (int i = 0; i < numCaracteres; i++) {
+				numeroEspacios+=" ";
+			}
+			String numeroAsteriscos="";
+			if(Integer.parseInt(partes[1])/max == 0)
+				numeroAsteriscos = "*";
+			for (int i = 0; i < (Integer.parseInt(partes[1])/max); i++) {
+				numeroAsteriscos+="*";	
+			}
+			String numeroNumerales="";
+			if(Integer.parseInt(partes[1])/max == 0)
+				numeroNumerales = "#";
+			for (int i = 0; i < (Integer.parseInt(partes[2])/max); i++) {
+				numeroNumerales+="#";	
+			}
+			System.out.println(partes[0]+numeroEspacios+"|"+numeroAsteriscos);
+			System.out.println("            "+"|"+numeroNumerales);
+			//System.out.println("---------------------------------------------------");
+		}
+		System.out.println("Cada * y # representa "+ max +" comparendos (o fraccion)");
+	}
+
+
+
+
+
 }

@@ -117,7 +117,7 @@ public class Controller
 								view.imprimir("Entrada no válida");
 							}
 						}
-						}
+					}
 				}
 			}
 			if (opcion == 4)
@@ -216,7 +216,12 @@ public class Controller
 			}
 			if (opcion == 8)
 			{
-
+				try {
+					view.imprimirHistogramaProcesadosYespera(modelo.darHistogramaProcesadosyEsperando());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if (opcion == 9)
 			{
