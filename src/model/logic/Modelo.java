@@ -44,20 +44,21 @@ public class Modelo
 	 */
 	public final String RUTA = "./data/reduccion2.geojson";
 	/**
-	 * Mensaje que indica al usuario que no se encontro un comparendo con los requerimientos solicitados
+	 * Mensaje que indica al usuario que no se encontro un comparendo con los
+	 * requerimientos solicitados
 	 */
 	public final String COMPARENDO_NO_ENCONTRADO = "No se encontro un comparendo con los requerimientos solicitados";
-	
-	public final String SEPARADOR = ";;;";
+
+	public final static String SEPARADOR = ";;;";
 	/***
 	 * Formato en el que se espera que el usuario ingrese las fechas
 	 */
-	public final String FORMATO_INGRESO_FECHA="yyyy/MM/dd-HH:mm:ss";
+	public final String FORMATO_INGRESO_FECHA = "yyyy/MM/dd-HH:mm:ss";
 	/**
 	 * Formato en el que se encuentran las fechas en el documento de entrada
 	 */
 	public final String FORMATO_DOCUMENTO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-	
+
 	public final int TAMANIO_INICIAL = 2;
 	/**
 	 * Numero N, indica cuantos datos imprimir.
@@ -66,7 +67,7 @@ public class Modelo
 	/**
 	 * Cantidad maxima de comparendos que puede procesar la policia
 	 */
-	public final int COMPARENDOS_PROCESADOS_DIA= 1500;
+	public final int COMPARENDOS_PROCESADOS_DIA = 1500;
 
 	/**
 	 * Coordenadas de la estacion de policia del Campin
@@ -94,17 +95,22 @@ public class Modelo
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
 	}
+
 	/**
 	 * Agrega un comparendo a la estructura de datos Heap
-	 * @param c el comparendo a agregar
+	 * 
+	 * @param c
+	 *            el comparendo a agregar
 	 */
 	public void agregarMaxHeap(Comparendo c)
 	{
 		Comparendo.ComparatorFecha cmpFecha = new Comparendo.ComparatorFecha();
 		heap.agregar(c, cmpFecha);
 	}
+
 	/**
 	 * Retorna la cantidad de comparendos almacenados en el heap
+	 * 
 	 * @return cnatidad de comparendos
 	 */
 	public int darCantidadComparendos()
@@ -113,7 +119,9 @@ public class Modelo
 	}
 
 	/**
-	 * Lee el archivo especificado por la constante RUTA y los almacena en un Heap, retorna el comparendo con mayor ID registrado
+	 * Lee el archivo especificado por la constante RUTA y los almacena en un
+	 * Heap, retorna el comparendo con mayor ID registrado
+	 * 
 	 * @return Comparendo con mayor ID
 	 */
 	public Comparendo cargarDatos()
@@ -155,7 +163,6 @@ public class Modelo
 						.getAsString();
 				String MUNICIPIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("MUNICIPIO")
 						.getAsString();
-
 				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates")
 						.getAsJsonArray().get(0).getAsDouble();
 
@@ -182,7 +189,9 @@ public class Modelo
 	}
 
 	/**
-	 * Retorna un maxHeap con la gravedad de cada comparendo como criterio de comparecion
+	 * Retorna un maxHeap con la gravedad de cada comparendo como criterio de
+	 * comparecion
+	 * 
 	 * @param maxheap
 	 */
 	public MaxHeapCP<Comparendo> ordenaGravedad()
@@ -194,10 +203,9 @@ public class Modelo
 			copia.agregar(comparendos.next(), new Comparendo.ComparatorGravedad());
 		}
 		return copia;
-		
+
 	}
 
-	
 	public Lista<Comparendo> darMayorGravedad(int cantidad)
 	{
 		Comparendo.ComparatorGravedad compGravedad = new Comparendo.ComparatorGravedad();
@@ -226,9 +234,13 @@ public class Modelo
 		}
 		return copia;
 	}
+
 	/**
-	 * Retorna una lista con los  M comparendos mas cercanos a la estacion de policia del Campin
-	 * @param m la cantidad de comparendos buscada
+	 * Retorna una lista con los M comparendos mas cercanos a la estacion de
+	 * policia del Campin
+	 * 
+	 * @param m
+	 *            la cantidad de comparendos buscada
 	 * @return la lista con los mas cercanos
 	 */
 	public Lista<Comparendo> darMasCercanosEstacionPolicia(int m)
@@ -242,11 +254,17 @@ public class Modelo
 		}
 		return respuesta;
 	}
+
 	/**
-	 * Retorna un arreglo con los comparendos que cumplan los requisitos especificados
-	 * @param medioDete el medio de detencion buscado
-	 * @param vehiculo el vehiculo buscado
-	 * @param localidad la localidad buscada
+	 * Retorna un arreglo con los comparendos que cumplan los requisitos
+	 * especificados
+	 * 
+	 * @param medioDete
+	 *            el medio de detencion buscado
+	 * @param vehiculo
+	 *            el vehiculo buscado
+	 * @param localidad
+	 *            la localidad buscada
 	 * @return
 	 */
 	public Comparendo[] darComprendosPorLLave(String medioDete, String vehiculo, String localidad)
@@ -343,16 +361,14 @@ public class Modelo
 	public TablaHashChaining<Comparendo, String> ordenarTablaMesyDia() throws Exception
 	{
 		Iterator<Comparendo> comparendos = heap.iterator();
-		if(comparendos == null)
+		if (comparendos == null)
 			return new TablaHashChaining<>(2);
 		TablaHashChaining<Comparendo, String> rta = new TablaHashChaining<Comparendo, String>(58);
 		while (comparendos.hasNext())
 		{
-			Comparendo c=comparendos.next();
-			rta.agregar("" + c.darNumeroMes() + "-" 
-					+ c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()+c.darInicialSemana()					
-					+"-"+c.darNombreMes(c.darNumeroMes()),
-					c);
+			Comparendo c = comparendos.next();
+			rta.agregar("" + c.darNumeroMes() + "-" + c.darInicialSemana() + c.darInicialSemana() + c.darInicialSemana()
+					+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
 		}
 		return rta;
 	}
@@ -361,17 +377,21 @@ public class Modelo
 	{
 		dia = dia.toUpperCase();
 		Lista<Comparendo> rta = null;
-		return ordenarTablaMesyDia().get("" + mes + "-" + dia+dia+dia+dia+"-"+darNombreMes(mes));
+		return ordenarTablaMesyDia().get("" + mes + "-" + dia + dia + dia + dia + "-" + darNombreMes(mes));
 	}
-	public String darNombreMes(int mes) {
-		Date fecha= new Date(120,mes,11);
-		Calendar calendario= Calendar.getInstance();
+
+	public String darNombreMes(int mes)
+	{
+		Date fecha = new Date(120, mes, 11);
+		Calendar calendario = Calendar.getInstance();
 		calendario.setTime(fecha);
-		return calendario.getDisplayName(Calendar.MONTH,Calendar.LONG_FORMAT,Locale.ENGLISH);
+		return calendario.getDisplayName(Calendar.MONTH, Calendar.LONG_FORMAT, Locale.ENGLISH);
 	}
-	
+
 	/**
-	 * Inserta los comparendos en un arbolo rojo negro con su latitud como la llave que los identifica
+	 * Inserta los comparendos en un arbolo rojo negro con su latitud como la
+	 * llave que los identifica
+	 * 
 	 * @return el arbol con los comparendos
 	 */
 	public ArbolRojoNegro<Comparendo, Double> meterEnRedBlackLatitud()
@@ -398,77 +418,236 @@ public class Modelo
 	{
 		return meterEnRedBlackLatitud().valuesInRange(lat1, lat2).iterator();
 	}
+
 	/**
-	 * Inserta los comparendos en un arbol rojo negro donde la llave esta dada por la fecha de cada comparendo
+	 * Inserta los comparendos en un arbol rojo negro donde la llave esta dada
+	 * por la fecha de cada comparendo
+	 * 
 	 * @return arbol con los comparendos
-	 * @throws Exception en caso de que algun comparendo enlistado sea nulo (Teoricamente no deberia ocurrir)
+	 * @throws Exception
+	 *             en caso de que algun comparendo enlistado sea nulo
+	 *             (Teoricamente no deberia ocurrir)
 	 */
-	public ArbolRojoNegro<Comparendo, Date> insertarFechasEnArbol() throws Exception {
+	public ArbolRojoNegro<Comparendo, Date> insertarFechasEnArbol() throws Exception
+	{
 		Iterator<Comparendo> comparendos = heap.iterator();
-		ArbolRojoNegro<Comparendo, Date> rta= new ArbolRojoNegro<Comparendo, Date>();
+		ArbolRojoNegro<Comparendo, Date> rta = new ArbolRojoNegro<Comparendo, Date>();
 		while (comparendos.hasNext())
 		{
 			Comparendo actual = comparendos.next();
-			rta.insertar(actual.darfecha(),actual);
+			rta.insertar(actual.darfecha(), actual);
 		}
 		return rta;
 	}
+
 	/**
-	 * Retorna una lista con los comparendos que se encuentren en el rango de fechas  y en la localidad especificados
-	 * @param limiteBajo la cota inferior
-	 * @param limiteAlto la cota superior
-	 * @param localidad la localidad buscada
+	 * Retorna una lista con los comparendos que se encuentren en el rango de
+	 * fechas y en la localidad especificados
+	 * 
+	 * @param limiteBajo
+	 *            la cota inferior
+	 * @param limiteAlto
+	 *            la cota superior
+	 * @param localidad
+	 *            la localidad buscada
 	 * @return Lista con los comparendos que cumplen las condiciones
 	 * @throws Exception
 	 */
-	public Lista<Comparendo> darComparendosEnRangodeFecha(String limiteBajo, String limiteAlto, String localidad) throws Exception {
+	public Lista<Comparendo> darComparendosEnRangodeFecha(String limiteBajo, String limiteAlto, String localidad)
+			throws Exception
+	{
 		SimpleDateFormat parser = new SimpleDateFormat(FORMATO_INGRESO_FECHA);
-		Iterator<Comparendo> iterador = insertarFechasEnArbol().valuesInRange(parser.parse(limiteBajo), parser.parse(limiteAlto)).iterator();
-		Lista <Comparendo> rta= new Lista<Comparendo>();
-		while(iterador.hasNext() && rta.darTamaño()<=N) {
+		Iterator<Comparendo> iterador = insertarFechasEnArbol()
+				.valuesInRange(parser.parse(limiteBajo), parser.parse(limiteAlto)).iterator();
+		Lista<Comparendo> rta = new Lista<Comparendo>();
+		while (iterador.hasNext() && rta.darTamaño() <= N)
+		{
 			Comparendo actual = iterador.next();
-			if(actual.darLocalidad().equalsIgnoreCase(localidad))
+			if (actual.darLocalidad().equalsIgnoreCase(localidad))
 				rta.agregarAlFinal(actual);
 		}
 		return rta;
 	}
+
 	/**
-	 * Retorna una lista de String que representan los comparendos en el año con el siguiente formato: fecha1-fecha2--n, la primera posicion de la lista indica
-	 * la cantidad de comparendos en el rango con tamaño maximal
-	 * donde las fechas denotan un rango de tiempo, n es la  cantidad de comparendos en el rango
-	 * @param cantidadDias el numero de dias que tiene cada rango de fechas
+	 * Retorna una lista de String que representan los comparendos en el año con
+	 * el siguiente formato: fecha1-fecha2--n, la primera posicion de la lista
+	 * indica la cantidad de comparendos en el rango con tamaño maximal donde
+	 * las fechas denotan un rango de tiempo, n es la cantidad de comparendos en
+	 * el rango
+	 * 
+	 * @param cantidadDias
+	 *            el numero de dias que tiene cada rango de fechas
 	 * @return
 	 * @throws Exception
 	 */
-	public Lista<String> darFechasYasteriscos(int cantidadDias) throws Exception{
-		ArbolRojoNegro<Comparendo, Date> arbolConFechas= insertarFechasEnArbol();
-		LocalDate fecha1 =LocalDate.parse("2018-01-01");
-		LocalDate fecha2= fecha1.plus(Period.ofDays(cantidadDias));
-		String alaLista="";
-		
+	public Lista<String> darFechasYasteriscos(int cantidadDias) throws Exception
+	{
+		ArbolRojoNegro<Comparendo, Date> arbolConFechas = insertarFechasEnArbol();
+		LocalDate fecha1 = LocalDate.parse("2018-01-01");
+		LocalDate fecha2 = fecha1.plus(Period.ofDays(cantidadDias));
+		String alaLista = "";
+
 		int maximosAsteriscos = 0;
-		Lista<String> rta= new Lista<String>() ;
-		
-		while (fecha1.getYear()<2019) {
-			if(fecha2.getYear()==2019)
-				fecha2=LocalDate.parse("2018-12-31");
-			
-			int cantidadAsteriscos=0;
-			Date f1= java.sql.Date.valueOf(fecha1);
-			Date f2=  java.sql.Date.valueOf(fecha2);
-			Lista <Comparendo> comparendosEnRango =arbolConFechas.valuesInRange(f1, f2);
-			cantidadAsteriscos=comparendosEnRango.darTamaño();
-			if(cantidadAsteriscos > maximosAsteriscos)
-				maximosAsteriscos =cantidadAsteriscos;
-			alaLista = fecha1+"-"+fecha2+"--"+cantidadAsteriscos;
+		Lista<String> rta = new Lista<String>();
+
+		while (fecha1.getYear() < 2019)
+		{
+			if (fecha2.getYear() == 2019)
+				fecha2 = LocalDate.parse("2018-12-31");
+
+			int cantidadAsteriscos = 0;
+			Date f1 = java.sql.Date.valueOf(fecha1);
+			Date f2 = java.sql.Date.valueOf(fecha2);
+			Lista<Comparendo> comparendosEnRango = arbolConFechas.valuesInRange(f1, f2);
+			cantidadAsteriscos = comparendosEnRango.darTamaño();
+			if (cantidadAsteriscos > maximosAsteriscos)
+				maximosAsteriscos = cantidadAsteriscos;
+			alaLista = fecha1 + "-" + fecha2 + "--" + cantidadAsteriscos;
 			rta.agregarAlFinal(alaLista);
-			//Actualiza las fechas 
+			// Actualiza las fechas
 			fecha1 = fecha1.plus(Period.ofDays(cantidadDias));
-			fecha2=fecha1.plus(Period.ofDays(cantidadDias));	
+			fecha2 = fecha1.plus(Period.ofDays(cantidadDias));
 		}
 		rta.agregarAlComienzo("" + maximosAsteriscos);
 		return rta;
 	}
-	
-}
 
+	// ___________________________________________________
+	/**
+	 * Calcula el costo por dia de retraso en publicar el comparendo
+	 * 
+	 * @param c
+	 *            comparendo a calcular costo
+	 * @return costo por dia de retraso en publicar el comparendo
+	 */
+	public int calcularPrecios(Comparendo c)
+	{
+		if (c.darDescripcion().contains("SERA INMOVILIZADO") || c.darDescripcion().contains("SERÁ INMOVILIZADO")
+				|| c.darDescripcion().contains(" VEHÃ?CULO SERÃ? INMOVILIZADO"))
+		{
+			return 400;
+		}
+		else if (c.darDescripcion().contains("LICENCIA DE CONDUCCIÓN")
+				|| c.darDescripcion().contains("LICENCIA DE CONDUCCIÃ“N"))
+		{
+			return 40;
+		}
+		return 4;
+	}
+
+	/**
+	 * Retorna una lista con la cantidad total de comparendos de cada precio que
+	 * se impuso en cada dia.
+	 * 
+	 * @return lista con costos por dia
+	 * @throws Exception
+	 */
+	public Lista<String> darComparendosDiasPrecios() throws Exception
+	{
+		ArbolRojoNegro<Comparendo, Date> arbolConFechas = insertarFechasEnArbol();
+		LocalDate fecha1 = LocalDate.parse("2018-01-01");
+		Lista<String> rta = new Lista<String>();
+
+		while (fecha1.getYear() < 2019)
+		{
+			int cantidad400 = 0;
+			int cantidad40 = 0;
+			int cantidad4 = 0;
+			Date f1 = java.sql.Date.valueOf(fecha1);
+			Lista<Comparendo> delDia = arbolConFechas.valuesInRange(f1, f1);
+			Iterator<Comparendo> it = delDia.iterator();
+			while (it.hasNext())
+			{
+				int precio = calcularPrecios(it.next());
+				if (precio == 400)
+					cantidad400++;
+				else if (precio == 40)
+					cantidad40++;
+				else
+					cantidad4++;
+			}
+			rta.agregarAlFinal(cantidad400 + SEPARADOR + cantidad40 + SEPARADOR + cantidad4);
+			// Actualiza las fechas
+			fecha1 = fecha1.plus(Period.ofDays(1));
+		}
+		return rta;
+	}
+
+	/**
+	 * Retorna un string con la informacion de costos
+	 * 
+	 * @return informacion de costos
+	 * @throws Exception
+	 */
+	public String darCostos() throws Exception
+	{
+		long costoTotal400 = 0;
+		long costoTotal40 = 0;
+		long costoTotal4 = 0;
+		int sinProcesar400 = 0;
+		int sinProcesar40 = 0;
+		int sinProcesar4 = 0;
+		int total400 = 0;
+		int total40 = 0;
+		int total4 = 0;
+		Lista<String> comparendosPorcosto = darComparendosDiasPrecios();
+		Iterator<String> it = comparendosPorcosto.iterator();
+		while (it.hasNext())
+		{
+			String[] cajita = it.next().split(SEPARADOR);
+			int costo400 = Integer.parseInt(cajita[0]) + sinProcesar400;
+			int costo40 = Integer.parseInt(cajita[1]) + sinProcesar40;
+			int costo4 = Integer.parseInt(cajita[2]) + sinProcesar4;
+
+			total400 += costo400;
+			total40 += costo40;
+			total4 += costo4;
+
+			int capacidad = 1500 - costo400;
+			if (capacidad > 0)
+			{
+				sinProcesar400 = 0;
+				capacidad -= costo40;
+				if (capacidad > 0)
+				{
+					sinProcesar40 = 0;
+					capacidad = capacidad - costo4;
+					if (capacidad < 0)
+					{
+						costoTotal4 = costoTotal4 - (4 * capacidad);
+						sinProcesar4 -= capacidad;
+					}
+					else
+					{
+						sinProcesar4 = 0;
+					}
+				}
+				else
+				{
+					costoTotal40 = costoTotal40 - (capacidad * 40);
+					costoTotal4 += (costo4 * 4);
+					sinProcesar40 -= capacidad;
+					sinProcesar4 = costo4;
+				}
+			}
+			else
+			{
+				costoTotal400 = costoTotal400 - (400 * capacidad);
+				costoTotal40 += (40 * costo40);
+				costoTotal4 += (4 * costo4);
+				sinProcesar400 -= capacidad;
+				sinProcesar40 = costo40;
+				sinProcesar4 = costo4;
+			}
+		}
+		costoTotal400 += ((int)(sinProcesar400/1500))*400*1500;
+		costoTotal400 += (sinProcesar400 % 1500)*400;
+		costoTotal40 += ((int)(sinProcesar400/1500) + (int)(sinProcesar40 / 1500))*40*1500;
+		costoTotal40 += (1500-(sinProcesar400%1500))*40 + (sinProcesar40%1500)*40;
+		
+		String s = total400 + SEPARADOR + total40 + SEPARADOR + total4 + SEPARADOR + costoTotal400 + SEPARADOR
+				+ costoTotal40 + SEPARADOR + costoTotal4 + SEPARADOR + sinProcesar400 + SEPARADOR + sinProcesar40 + SEPARADOR + sinProcesar4;
+		return s;
+	}
+}

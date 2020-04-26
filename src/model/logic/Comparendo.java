@@ -236,21 +236,33 @@ public class Comparendo implements Comparable<Comparendo> {
 			return 0;
 		}
 	}
-//	/**
-//	 * Compara dos comparendos segun su Latitud, SOLO LATITUD
-//	 * 
-//	 */
-//	public static class ComparatorLatitud implements Comparator<Comparendo>
-//	{
-//		public int compare(Comparendo o1, Comparendo o2)
-//		{
-//			double l1 = o1.darLatitud();
-//			double l2 =o2.darLatitud();
-//			if(l1 == l2)
-//				return 0;
-//			if(l1 > l2)
-//				return 1;
-//			return -1;
-//		}
-//	}
+	/**
+	 * Compara dos comparendos segun su Costo
+	 * 
+	 */
+	public static class ComparatorCosto implements Comparator<Comparendo>
+	{
+		public int calcularPrecios(Comparendo c)
+		{
+			if(c.darDescripcion().contains("SERA INMOVILIZADO") || c.darDescripcion().contains( "SERÁ INMOVILIZADO") || c.darDescripcion().contains(" VEHÃ?CULO SERÃ? INMOVILIZADO"))
+			{
+				return 400;
+			}
+			else if(c.darDescripcion().contains("LICENCIA DE CONDUCCIÓN")|| c.darDescripcion().contains("LICENCIA DE CONDUCCIÃ“N"))
+			{
+				return 40;
+			}
+			return 4;
+		}
+		public int compare(Comparendo o1, Comparendo o2)
+		{
+			int l1 = calcularPrecios(o1);
+			int l2 =calcularPrecios(o2);
+			if(l1 == l2)
+				return 0;
+			if(l1 > l2)
+				return 1;
+			return -1;
+		}
+	}
 }
