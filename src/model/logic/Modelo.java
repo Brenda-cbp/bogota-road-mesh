@@ -46,8 +46,7 @@ public class Modelo
 	/**
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
-	//public final String RUTA = "./data/reduccion2.geojson";
-	public final String RUTA = "./data/reduccion2.geojson";
+
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
