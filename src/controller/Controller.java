@@ -228,6 +228,22 @@ public class Controller
 				try
 				{
 					view.imprimir(modelo.darCostos());
+					String[] respuesta = modelo.darCostos().split(";;;");
+					int costoTotal = (400*Integer.parseInt(respuesta[2])*Integer.parseInt(respuesta[9])) + (40*Integer.parseInt(respuesta[5])*Integer.parseInt(respuesta[10])) + (4*Integer.parseInt(respuesta[8])*Integer.parseInt(respuesta[11]));					
+					String costoPromedio400 = respuesta[2];
+					String costoPromedio40 = respuesta[5];
+					String costoPromedio4 = respuesta[8];
+					String costoMaximo400 = respuesta[1];
+					String costoMaximo40 = respuesta[4];
+					String costoMaximo4 = respuesta[7];
+					String costoMimo400 = respuesta[0];
+					String costoMinimo40 = respuesta[3];
+					String costoMinimo4 = respuesta[6];
+					view.imprimir("Costo total: " + costoTotal);
+					view.imprimir("Tiempo minimo: " + "$400: " + costoMimo400 + " || "+ "$40: " + costoMinimo40 + " || " + "$4: " + costoMinimo4);
+					view.imprimir("Tiempo maximo: " + "$400: " + costoMaximo400 + " || "+ "$40: " + costoMaximo40 + " || " + "$4: " + costoMaximo4 );
+					view.imprimir("Tiempo promedio: "+ "$400: " + costoPromedio400 + " || "+ "$40: " + costoPromedio40 + " || " + "$4: " + costoPromedio4);
+					view.imprimirHistogramaProcesadosYespera(modelo.darHistogramaProcesadosyEsperando());
 				}
 				catch (Exception e)
 				{

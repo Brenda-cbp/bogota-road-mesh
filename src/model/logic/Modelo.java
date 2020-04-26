@@ -23,6 +23,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 //import com.sun.tools.jdi.EventSetImpl.Itr;
 
+import edu.princeton.cs.introcs.StdRandom;
 import model.data_structures.ArbolRojoNegro;
 import model.data_structures.ArregloDinamico;
 import model.data_structures.Lista;
@@ -46,7 +47,7 @@ public class Modelo
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
 	//public final String RUTA = "./data/reduccion2.geojson";
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/reduccion2.geojson";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -551,6 +552,7 @@ public class Modelo
 	public Lista<String> darComparendosDiasPrecios() throws Exception
 	{
 		ArbolRojoNegro<Comparendo, Date> arbolConFechas = insertarFechasEnArbol();
+
 		LocalDate fecha1 = LocalDate.parse("2018-01-01");
 		Lista<String> rta = new Lista<String>();
 
@@ -560,7 +562,8 @@ public class Modelo
 			int cantidad40 = 0;
 			int cantidad4 = 0;
 			Date f1 = java.sql.Date.valueOf(fecha1);
-			Lista<Comparendo> delDia = arbolConFechas.valuesInRange(f1, f1);
+			Date f2 = java.sql.Date.valueOf(fecha1.plus(Period.ofDays(1)));
+			Lista<Comparendo> delDia = arbolConFechas.valuesInRange(f1, f2);
 			Iterator<Comparendo> it = delDia.iterator();
 			while (it.hasNext())
 			{
