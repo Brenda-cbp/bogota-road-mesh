@@ -46,6 +46,7 @@ public class Modelo
 	/**
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
@@ -174,7 +175,7 @@ public class Modelo
 						.getAsJsonArray().get(1).getAsDouble();
 
 				c = new Comparendo(OBJECTID, FECHA_HORA, DES_INFRAC, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION,
-						LOCALIDAD, MUNICIPIO, longitud, latitud);
+						LOCALIDAD, MUNICIPIO, longitud, latitud, null);
 				agregarMaxHeap(c);
 				if (OBJECTID > maxId)
 				{

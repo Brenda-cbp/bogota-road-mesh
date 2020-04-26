@@ -53,7 +53,9 @@ public class Comparendo implements Comparable<Comparendo> {
 	 * La lingitud geografica en donde se impuso el comparendo
 	 */
 	private double longitud;
+	private Date fechaFinal;
 	/**
+	 * 
 	 * Crea un nuevo comparendo
 	 * @param OBJECTID registrado
 	 * @param FECHA_HORA registrado
@@ -69,7 +71,7 @@ public class Comparendo implements Comparable<Comparendo> {
 	 */
 	public Comparendo(int OBJECTID, Date FECHA_HORA, String DES_INFRAC, String MEDIO_DETE, String CLASE_VEHI,
 			String TIPO_SERVI, String INFRACCION, String LOCALIDAD, String MUNICIPIO, double longitudd,
-			double latitudd) {
+			double latitudd, Date fechafinal) {
 
 		objectId = OBJECTID;
 		fecha_hora = FECHA_HORA;
@@ -83,7 +85,9 @@ public class Comparendo implements Comparable<Comparendo> {
 		longitud = longitudd;
 		latitud = latitudd;
 	}
-
+	public void cambiarfechaFinal(Date fin) {
+		fechaFinal=fin;
+	}
 	/**
 	 * Retorna la latitud del comparendo
 	 * @return latitud 
@@ -130,7 +134,7 @@ public class Comparendo implements Comparable<Comparendo> {
 	public String darDescripcion() {
 		return des_infrac;
 	}
-	
+
 	public int darNumeroMes() {
 		Calendar calendario= Calendar.getInstance();
 		calendario.setTime(fecha_hora);
@@ -214,7 +218,7 @@ public class Comparendo implements Comparable<Comparendo> {
 			if(o1.darTipoServicio().compareToIgnoreCase(o2.darTipoServicio())==0) 
 				return o1.compareCodigo(o2);
 			else return o1.darTipoServicio().compareToIgnoreCase(o2.darTipoServicio());
-				
+
 		}
 	}
 	public static class ComparatorFecha implements Comparator<Comparendo>{
