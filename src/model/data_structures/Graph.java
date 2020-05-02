@@ -1,155 +1,123 @@
 package model.data_structures;
 // tomado de https://algs4.cs.princeton.edu/41graph/Graph.java.html
-public class Graph<K> {
+/**
+ * Clase que representa un grafo no dirigido
+ * @param <K> El tipo de dato que representa los identificadores de los vertices
+ */
+public class Graph<K extends Comparable<K>> 
+{
+	/**
+	 *Clase que reperesenta un enlace entre dos nods
+	 */
+	protected class Edges
 
-	protected class listaAdjacent{
+	{
 		/**
-		 * Capacidad maxima del arreglo
+		 * LLave nodo origen
 		 */
-		private int tamanoMax;
+		private K origen;
 		/**
-		 * Numero de elementos presentes en el arreglo (de forma compacta desde la posicion 0)
+		 * LLave nodo destino
 		 */
-		private int tamanoAct;
+		private K destino;
 		/**
-		 * Arreglo de elementos de tamaNo maximo
+		 * Costo del enlace
 		 */
-		private Lista<K> elementos;
-
+		private double costo;
 		/**
-		 * Construir un arreglo con la capacidad maxima inicial.
-		 * @param max Capacidad maxima inicial
+		 * Constructor de un enlace
+		 * @param orig llave nodo origen
+		 * @param dest llave nodo destino
+		 * @param cost costo
 		 */
-		public  listaAdjacent( int max )
+		public Edges(K orig, K dest, double cost)
 		{
-			elementos = new Lista<K>();
-
-			tamanoMax = max;
-			//El 0 siempre es vacio en el heap
-			tamanoAct = 1;
-		}
-
-		public void agregar( K dato )
-		{
-			if ( tamanoAct == tamanoMax )
-			{  // caso de arreglo lleno (aumentar tamaNo)
-				tamanoMax = 2 * tamanoMax;
-				Lista<K> copia = elementos;
-	            //elementos = new T [tamanoMax];
-	            elementos =new Lista<K>();
-	            for ( int i = 1; i < tamanoAct; i++)
-	            {
-	             	 elementos[i] = copia[i];
-	            } 
-	    	   // System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
-	       }	
-	       elementos[tamanoAct] = dato;
-	       tamanoAct++;
-		}
-		public int darCapacidad() {
-			return tamanoMax;
-		}
-
-		public int darTamano() {
-			return tamanoAct;
-		}
-
-		public K darElemento(int i) {
-			// TODO HECHO implementar
-			return (K) elementos[i];
-		}
-
-		public K buscar(K dato) {
-			// TODO HECHO implementar
-			// Recomendacion: Usar el criterio de comparacion natural (metodo compareTo()) definido en Strings.
-			for (int i =0; i<tamanoMax; i++)
-			{
-				if (elementos[i].compareTo(dato)==0)
-					return dato;
-			}
-			return null;
-		}
-
-		public K eliminar(K dato) {
-			// TODO HECHO implementar
-			// Recomendacion: Usar el criterio de comparacion natural (metodo compareTo()) definido en Strings.
-		K guardar=null;
-			boolean encontrado = false;
-			for (int i =0; i<tamanoMax && !encontrado; i++)
-			{
-				if (elementos[i].compareTo(dato)==0)
-				{
-					encontrado=true; 
-					guardar=elementos[i];	
-					for (int j=0; j<tamanoMax-1;j++)
-					{
-						elementos[i]=elementos[j];
-					}
-				}
-			}
-			return guardar;
-
+			origen = orig;
+			destino = dest;
+			costo = cost;
 		}
 		/**
-		 * Trate de eliminar solo el ultimo 
-		 * podria haber fallas
-		 * @param pos
-		 * @return eliminado
+		 * Retorna el costo del enlace
+		 * @return costo
 		 */
-		public K eliminarPosicion(int pos)
+		public double darCosto()
 		{
-			K guardar = elementos[pos];
-			elementos[pos] = null;
-			tamanoAct--;
-			return guardar;
-			
+			return costo;
 		}
-		public void exchange(int i, int j)
+		/**
+		 * Retorna la llave del nodo origen
+		 * @return llave origen
+		 */
+		public K darOrigen()
 		{
-			K t = elementos[i];
-			elementos[i] = elementos[j];
-			elementos[j] = t;
+			return origen;
 		}
-		public String toString()
+		/**
+		 * Retrona la llave del nodo destino
+		 * @return llave destino
+		 */
+		public K darDestino()
 		{
-			String respuesta = "";
-			for(int i = 1; i < tamanoAct; i++)
-			{
-				respuesta = respuesta + elementos[i] + "\n" + "\n";
-
-			}
-			return respuesta;
+			return destino;
 		}
-		
 	}
-	private final int V;
+
+	/**
+	 * Lista de adyacencias del grafo
+	 */
+	private TablaHashChaining<Edges, K> adj;
+	/**
+	 * Catnidad de enlaces en el grafo
+	 */
 	private int E;
-	private ArregloDinamico<Lista<K>> adj;
+	/**
+	 * Construye un nuevo grafo con capacidad para V vertices
+	 * @param n cantidad de vertices en el grafo
+	 * @throws Exception Si la catnidad de vertices es negativa
+	 */
+    public Graph(int n) throws Exception 
+    {
+        if (n < 0) throw new Exception("La cantidad de vartices debe ser mayor o igual a cero");
+        this.E = 0;
+        adj = new TablaHashChaining<>(n);
+    }
+    /**
+     * Retorna la cantidad de vertices en el grafo
+     * @return catnidad de vertices
+     */
+    public int V()
+    {
+    	return adj.darCantidadLLaves();
+    }
+    /**
+     * Retorna el numero de enlaces en el grafo
+     * @return numero enlaces
+     */
+    public int E()
+    {
+    	return E;
+    }
+    /**
+     * Agrega un nuevo enlace en el grafo NO dirigido
+     * @param idVertexIni identificador origen
+     * @param idVertexFin identificador final
+     * @param cost costo enlace
+     * @throws Exception si algun identificador es null
+     */
+    public void addEdge(K idVertexIni, K idVertexFin, double cost) throws Exception
+    {
+    	Edges e1 = new Edges(idVertexIni, idVertexFin, cost);
+    	Edges e2 = new Edges(idVertexFin, idVertexIni, cost);
+    	if(adj.get(idVertexIni).buscar(e1) != null)
+    		return;
+    	adj.agregar(idVertexIni, e1);
+    	adj.agregar(idVertexFin, e2);
+    	E++;
+    }
+     	
+    
 
-	public Graph(int V) {
-		if (V < 0) throw new IllegalArgumentException("El número de vértices no puede ser negativo");
-		this.V = V;
-		this.E = 0;
-		adj = (Lista<K>[]) new Lista[V];
-		for (int v = 0; v < V; v++) {
-			adj[v] = new Lista<K>();
-		}
-	}  
-	public int V() {
-		return V;
-	}
-	public int E() {
-		return E;
-	}
-	private void validarVertices(int v) throws Exception {
-		if (v < 0 || v >= V)
-			throw new Exception ("El vertice " + v + " no está entre cero y " + (V-1));
-	} 
-	public void addEdge(K idVertexIni, K idVertexFin, double cost) {
-		
-		E++;
-		adj[v].add(w);
-		adj[w].add(v);
+    
+    
 
-	}
 }

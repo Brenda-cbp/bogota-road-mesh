@@ -85,6 +85,19 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 	public int darTamaño() {
 		return tamaño;
 	}
+	public T buscar(T buscado)
+	{
+		Iterator<T> it = this.iterator();
+		while(it.hasNext())
+		{
+			T actual = it.next();
+			if(actual.equals(buscado))
+			{
+				return actual;
+			}
+		}
+		return null;
+	}
 	/**
 	 * Retorna el elemento en la posicion dada, comenzando desde 0
 	 */
