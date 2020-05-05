@@ -24,6 +24,11 @@ public class Graph<V,K extends Comparable<K>> {
 	private int E;
 	
 	/**
+	 * Numero de componentes conexas
+	 */
+	private int count;
+	
+	/**
 	 * Endge del dfs
 	 */
 	private Adyacencias<K, K> edgeTo;
@@ -42,6 +47,7 @@ public class Graph<V,K extends Comparable<K>> {
 		this.E = 0;
 		adj = new Adyacencias(n);
 		edgeTo = new Adyacencias<>(2);
+		count = -1;
 	}
 
 	/**
@@ -235,11 +241,48 @@ public class Graph<V,K extends Comparable<K>> {
 	 */
 	private void dfsAlgoritmo(K llave)throws Exception {
 		adj.get(llave).check();
-		//id.agregarVertice(v, count);
+		adj.get(llave).cambiarIdComponenteConexa(count);
 		for (K adyacente : (Iterable<K>) adj(llave))
 			if (!adj.get(adyacente).isChecked()) {
 				edgeTo.agregarVertice(llave, adyacente);
 				dfsAlgoritmo(adyacente);
 			}
 	}
+	/**
+	 * Calcula las componentes conexas, retorna el numero de componentes encontradas
+	 * @param G el grafo
+	 * @return el numero de componentes conexas en el grafo
+	 * @throws Exception 
+	 */
+	public int cc() throws Exception
+	{
+		count = 0;
+		uncheck();
+		Iterator<K> it = darNodos();
+		while(it.hasNext())
+		{
+			K actual = it.next();
+			if(!adj.get(actual).isChecked())
+			{
+				dfsLlamado(actual);
+				count++;
+			}
+		}
+		return count;
+	}
+	Iterable<K> getCC(K idVertex) throws Exception
+	{
+		cc();
+		Iterator<K> it = darNodos();
+		int id = adj.get(idVertex).darIdComponenteConexa();
+		Lista<K> respuesta = new Lista<>();
+		while(it.hasNext())
+		{
+			K actual = it.next();
+			if(adj.get(actual).darIdComponenteConexa() == id)
+				respuesta.agregarAlFinal(actual);
+		}
+		return respuesta;
+	}
+
 }

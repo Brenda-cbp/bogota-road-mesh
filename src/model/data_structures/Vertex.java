@@ -21,6 +21,11 @@ public class Vertex<V, K extends Comparable<K>>
 	private Lista<Edges> adyacentes;
 
 	/**
+	 * Indica la componente conexa a la cual pertenece el nodo
+	 */
+	private int idCompConexa;
+	
+	/**
 	 * Constructor del vertice
 	 * @param info
 	 * @param key
@@ -31,6 +36,7 @@ public class Vertex<V, K extends Comparable<K>>
 		infoVertex = info;
 		checked = false;
 		adyacentes = new Lista<>();
+		idCompConexa = -1;
 
 	}
 	/**
@@ -95,5 +101,21 @@ public class Vertex<V, K extends Comparable<K>>
 	{
 		return key;
 	}
-
+	/**
+	 * Retorna el id que indica a que componente conexa pertenece el nodo, 
+	 * retorna -1 si aun no se ha calculado
+	 * @return id de la componente, -1 si no se ha calculado 
+	 */
+	public int darIdComponenteConexa()
+	{
+		return idCompConexa;
+	}
+	/**
+	 * Fija el id de la cojmponente conexa del vertice en el valor que llega por parametro
+	 * @param id la componente conexa a la que pertenece el vertice
+	 */
+	public void cambiarIdComponenteConexa(int id)
+	{
+		idCompConexa = id;
+	}
 }
