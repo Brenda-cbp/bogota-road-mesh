@@ -22,6 +22,11 @@ public class Graph<V,K extends Comparable<K>> {
 	 * Catnidad de enlaces en el grafo
 	 */
 	private int E;
+	
+	/**
+	 * Endge del dfs
+	 */
+	private Adyacencias<K, K> edgeTo;
 
 	/**
 	 * Construye un nuevo grafo con capacidad para V vertices
@@ -36,6 +41,7 @@ public class Graph<V,K extends Comparable<K>> {
 			throw new Exception("La cantidad de vartices debe ser mayor o igual a cero");
 		this.E = 0;
 		adj = new Adyacencias(n);
+		edgeTo = new Adyacencias<>(2);
 	}
 
 	/**
@@ -73,7 +79,11 @@ public class Graph<V,K extends Comparable<K>> {
 			E++;
 		return;
 	}
-
+	/**
+	 * Retorna la informacion del vertice, infovertex
+	 * @param idVertex
+	 * @return
+	 */
 	public V getInfoVertex(K idVertex)
 	{
 		try
@@ -86,6 +96,11 @@ public class Graph<V,K extends Comparable<K>> {
 		}
 		return null;
 	}
+	/**
+	 * Sobrescribe la informacion del vertice
+	 * @param idVertex llave del vertice
+	 * @param infoVertex nueva informacions
+	 */
 	public void setInfoVertex(K idVertex,V infoVertex)
 	{
 		try
@@ -97,6 +112,13 @@ public class Graph<V,K extends Comparable<K>> {
 			
 		}
 	}
+	/**
+	 * Retorna el costo del arco entre dos vertices
+	 * @param idVertexIni vertice origen
+	 * @param idVertexFin vertice destino
+	 * @return costo del arco
+	 * @throws Exception si no existe un arco entre los vertices
+	 */
 	public double getCostArc(K idVertexIni, K idVertexFin)throws Exception
 	{
 		try
@@ -116,6 +138,13 @@ public class Graph<V,K extends Comparable<K>> {
 		}
 		
 	}
+	/**
+	 * Sobre escribe el costo del arco entre los vertices especificados
+	 * @param idVertexIni vertice inicia
+	 * @param idVertexFin vertice final
+	 * @param cost costo
+	 * @throws Exception si no existe dicho arco
+	 */
 	public void setCostArc(K idVertexIni, K idVertexFin, double cost)throws Exception
 	{
 		try
@@ -127,6 +156,13 @@ public class Graph<V,K extends Comparable<K>> {
 				if(actual.darDestino().equals(idVertexFin))
 					actual.cambiarCosto(cost);
 			}
+			Iterator<Edges> it2 = adj.get(idVertexFin).darAdyacentes().iterator();
+			while(it2.hasNext())
+			{
+				Edges actual = it.next();
+				if(actual.darDestino().equals(idVertexIni))
+					actual.cambiarCosto(cost);
+			}
 			throw new Exception();
 		}
 		catch(Exception e)
@@ -135,11 +171,22 @@ public class Graph<V,K extends Comparable<K>> {
 		}
 		
 	}
+	/**
+	 * Añade un vertice en el grafo
+	 * @param idVertex llave
+	 * @param infoVertex informacion del vertice
+	 * @throws Exception si alguno de los parametros es null
+	 */
 	public void addVertex(K idVertex, V infoVertex) throws Exception
 	{
 		Vertex<V, K> vertice = new Vertex<V, K>(infoVertex, idVertex);
 		adj.agregarVertice(idVertex, vertice);
 	}
+	/**
+	 * Retorna una lista con las llvaes de los nodos adyacentes al vertice dado
+	 * @param idVertex llave del vertice dado
+	 * @return lista iterable con llave de los adyacentes al vertice
+	 */
 	public Iterable <K> adj (K idVertex)
 	{
 		if(idVertex != null && adj.get(idVertex) != null)
@@ -154,12 +201,45 @@ public class Graph<V,K extends Comparable<K>> {
 		}
 		return null;
 	}
+	/**
+	 * Desmarca todos los nodos
+	 */
 	public void uncheck() 
 	{
 		adj.unCheck();
 	}
+	/**
+	 * Retorna la lista de los nodos en el grafo
+	 * @return el grafo
+	 */
 	public Iterator<K> darNodos()
 	{
 		return adj.iterator();
+	}
+	/**
+	 * Metodo para ejecutar dfs, demsarca todos los nodos primero y reinica el edgeTo
+	 * @param llave
+	 * @throws Exception 
+	 */
+	public void dfsLlamado(K llave) throws Exception
+	{
+		uncheck();
+		edgeTo = new Adyacencias<>(2);
+		dfsAlgoritmo(llave);
+	}
+	/**
+	 * Realiza dfs desde el vertice v
+	 * @param G grafo
+	 * @param llave vertice donde incia la busqueda
+	 * @throws Exception
+	 */
+	private void dfsAlgoritmo(K llave)throws Exception {
+		adj.get(llave).check();
+		//id.agregarVertice(v, count);
+		for (K adyacente : (Iterable<K>) adj(llave))
+			if (!adj.get(adyacente).isChecked()) {
+				edgeTo.agregarVertice(llave, adyacente);
+				dfsAlgoritmo(adyacente);
+			}
 	}
 }
