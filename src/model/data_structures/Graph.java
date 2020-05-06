@@ -13,7 +13,7 @@ import model.data_structures.TablaHashChaining.IteradorTabla;
  * @param <K>
  *            El tipo de dato que representa los identificadores de los vertices
  */
-public class Graph<V,K extends Comparable<K>> {
+public class Graph<V, K extends Comparable<K>> {
 	/**
 	 * Lista de adyacencias del grafo
 	 */
@@ -22,12 +22,12 @@ public class Graph<V,K extends Comparable<K>> {
 	 * Catnidad de enlaces en el grafo
 	 */
 	private int E;
-	
+
 	/**
 	 * Numero de componentes conexas
 	 */
 	private int count;
-	
+
 	/**
 	 * Endge del dfs
 	 */
@@ -50,7 +50,6 @@ public class Graph<V,K extends Comparable<K>> {
 		count = -1;
 	}
 
-	
 	/**
 	 * Retorna la cantidad de vertices en el grafo
 	 * 
@@ -82,166 +81,176 @@ public class Graph<V,K extends Comparable<K>> {
 	 *             si algun identificador es null
 	 */
 	public void addEdge(K idVertexIni, K idVertexFin, double cost) throws Exception {
-		if(adj.agregarEnlace(idVertexIni, idVertexFin, cost))
+		if (adj.agregarEnlace(idVertexIni, idVertexFin, cost))
 			E++;
 		return;
 	}
+
 	/**
 	 * Retorna la informacion del vertice, infovertex
+	 * 
 	 * @param idVertex
 	 * @return
 	 */
-	public V getInfoVertex(K idVertex)
-	{
-		try
-		{
+	public V getInfoVertex(K idVertex) {
+		try {
 			return (V) adj.get(idVertex).darInfo();
-		}
-		catch(Exception e)
-		{
-			
+		} catch (Exception e) {
+
 		}
 		return null;
 	}
+
 	/**
 	 * Sobrescribe la informacion del vertice
-	 * @param idVertex llave del vertice
-	 * @param infoVertex nueva informacions
+	 * 
+	 * @param idVertex
+	 *            llave del vertice
+	 * @param infoVertex
+	 *            nueva informacions
 	 */
-	public void setInfoVertex(K idVertex,V infoVertex)
-	{
-		try
-		{
+	public void setInfoVertex(K idVertex, V infoVertex) {
+		try {
 			adj.get(idVertex).setInfoVertex(infoVertex);
-		}
-		catch(Exception e)
-		{
-			
+		} catch (Exception e) {
+
 		}
 	}
+
 	/**
 	 * Retorna el costo del arco entre dos vertices
-	 * @param idVertexIni vertice origen
-	 * @param idVertexFin vertice destino
+	 * 
+	 * @param idVertexIni
+	 *            vertice origen
+	 * @param idVertexFin
+	 *            vertice destino
 	 * @return costo del arco
-	 * @throws Exception si no existe un arco entre los vertices
+	 * @throws Exception
+	 *             si no existe un arco entre los vertices
 	 */
-	public double getCostArc(K idVertexIni, K idVertexFin)throws Exception
-	{
-		try
-		{
-			Iterator<Edges> it = adj.get(idVertexIni).darAdyacentes().iterator();
-			while(it.hasNext())
-			{
-				Edges actual = it.next();
-				if(actual.darDestino().equals(idVertexFin))
-					return actual.darCosto();
-			}
-			return -1.0;
-		//	throw new Exception();
+	public double getCostArc(K idVertexIni, K idVertexFin) throws Exception {
+
+		Iterator<Edges> it = adj.get(idVertexIni).darAdyacentes().iterator();
+		while (it.hasNext()) {
+			Edges actual = it.next();
+			if (actual.darDestino().equals(idVertexFin))
+				return actual.darCosto();
 		}
-		catch(Exception e)
-		{
-			throw new Exception("No se encontro un enlace entre los nodos");
-		}
-		
+		throw new Exception();
 	}
+
 	/**
 	 * Sobre escribe el costo del arco entre los vertices especificados
-	 * @param idVertexIni vertice inicia
-	 * @param idVertexFin vertice final
-	 * @param cost costo
-	 * @throws Exception si no existe dicho arco
+	 * 
+	 * @param idVertexIni
+	 *            vertice inicia
+	 * @param idVertexFin
+	 *            vertice final
+	 * @param cost
+	 *            costo
+	 * @throws Exception
+	 *             si no existe dicho arco
 	 */
-	public void setCostArc(K idVertexIni, K idVertexFin, double cost)throws Exception
-	{
-		try
-		{
+	public void setCostArc(K idVertexIni, K idVertexFin, double cost) throws Exception {
+		try {
 			Iterator<Edges> it = adj.get(idVertexIni).darAdyacentes().iterator();
-			while(it.hasNext())
-			{
+			while (it.hasNext()) {
 				Edges actual = it.next();
-				if(actual.darDestino().equals(idVertexFin))
+				if (actual.darDestino().equals(idVertexFin)) {
 					actual.cambiarCosto(cost);
+				}
+
 			}
 			Iterator<Edges> it2 = adj.get(idVertexFin).darAdyacentes().iterator();
-			while(it2.hasNext())
-			{
-				Edges actual = it.next();
-				if(actual.darDestino().equals(idVertexIni))
+			while (it2.hasNext()) {
+				System.out.println("ss");
+				Edges actual = it2.next();
+				if (actual.darDestino().equals(idVertexIni)) {
+					System.out.println("ss");
 					actual.cambiarCosto(cost);
+					return;
+				}	
 			}
 			throw new Exception();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new Exception("No se encontro un enlace entre los nodos");
 		}
-		
+
 	}
+
 	/**
 	 * Añade un vertice en el grafo
-	 * @param idVertex llave
-	 * @param infoVertex informacion del vertice
-	 * @throws Exception si alguno de los parametros es null
+	 * 
+	 * @param idVertex
+	 *            llave
+	 * @param infoVertex
+	 *            informacion del vertice
+	 * @throws Exception
+	 *             si alguno de los parametros es null
 	 */
-	public void addVertex(K idVertex, V infoVertex) throws Exception
-	{
+	public void addVertex(K idVertex, V infoVertex) throws Exception {
 		Vertex<V, K> vertice = new Vertex<V, K>(infoVertex, idVertex);
 		adj.agregarVertice(idVertex, vertice);
 	}
+
 	/**
 	 * Retorna una lista con las llvaes de los nodos adyacentes al vertice dado
-	 * @param idVertex llave del vertice dado
+	 * 
+	 * @param idVertex
+	 *            llave del vertice dado
 	 * @return lista iterable con llave de los adyacentes al vertice
 	 */
-	public Iterable <K> adj (K idVertex)
-	{
-		if(idVertex != null && adj.get(idVertex) != null)
-		{
+	public Iterable<K> adj(K idVertex) {
+		if (idVertex != null && adj.get(idVertex) != null) {
 			Iterator<Edges> it = adj.get(idVertex).darAdyacentes().iterator();
 			Lista<K> respuesta = new Lista<>();
-			while(it.hasNext())
-			{
+			while (it.hasNext()) {
 				respuesta.agregarAlFinal((K) it.next().darDestino());
 			}
 			return respuesta;
 		}
 		return null;
 	}
+
 	/**
 	 * Desmarca todos los nodos
 	 */
-	public void uncheck() 
-	{
+	public void uncheck() {
 		adj.unCheck();
 	}
+
 	/**
 	 * Retorna la lista de los nodos en el grafo
+	 * 
 	 * @return el grafo
 	 */
-	public Iterator<K> darNodos()
-	{
+	public Iterator<K> darNodos() {
 		return adj.iterator();
 	}
+
 	/**
-	 * Metodo para ejecutar dfs, demsarca todos los nodos primero y reinica el edgeTo
+	 * Metodo para ejecutar dfs, demsarca todos los nodos primero y reinica el
+	 * edgeTo
+	 * 
 	 * @param llave
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public void dfsLlamado(K llave) throws Exception
-	{
+	public void dfsLlamado(K llave) throws Exception {
 		uncheck();
 		edgeTo = new Adyacencias<>(2);
 		dfsAlgoritmo(llave);
 	}
+
 	/**
 	 * Realiza dfs desde el vertice v
-	 * @param G grafo
-	 * @param llave vertice donde incia la busqueda
+	 * 
+	 * @param G
+	 *            grafo
+	 * @param llave
+	 *            vertice donde incia la busqueda
 	 * @throws Exception
 	 */
-	private void dfsAlgoritmo(K llave)throws Exception {
+	private void dfsAlgoritmo(K llave) throws Exception {
 		adj.get(llave).check();
 		adj.get(llave).cambiarIdComponenteConexa(count);
 		for (K adyacente : (Iterable<K>) adj(llave))
@@ -250,38 +259,38 @@ public class Graph<V,K extends Comparable<K>> {
 				dfsAlgoritmo(adyacente);
 			}
 	}
+
 	/**
-	 * Calcula las componentes conexas, retorna el numero de componentes encontradas
-	 * @param G el grafo
+	 * Calcula las componentes conexas, retorna el numero de componentes
+	 * encontradas
+	 * 
+	 * @param G
+	 *            el grafo
 	 * @return el numero de componentes conexas en el grafo
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public int cc() throws Exception
-	{
+	public int cc() throws Exception {
 		count = 0;
 		uncheck();
 		Iterator<K> it = darNodos();
-		while(it.hasNext())
-		{
+		while (it.hasNext()) {
 			K actual = it.next();
-			if(!adj.get(actual).isChecked())
-			{
+			if (!adj.get(actual).isChecked()) {
 				dfsLlamado(actual);
 				count++;
 			}
 		}
 		return count;
 	}
-	public Iterable<K> getCC(K idVertex) throws Exception
-	{
+
+	public Iterable<K> getCC(K idVertex) throws Exception {
 		cc();
 		Iterator<K> it = darNodos();
 		int id = adj.get(idVertex).darIdComponenteConexa();
 		Lista<K> respuesta = new Lista<>();
-		while(it.hasNext())
-		{
+		while (it.hasNext()) {
 			K actual = it.next();
-			if(adj.get(actual).darIdComponenteConexa() == id)
+			if (adj.get(actual).darIdComponenteConexa() == id)
 				respuesta.agregarAlFinal(actual);
 		}
 		return respuesta;

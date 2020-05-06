@@ -95,20 +95,30 @@ public class TestGraph {
 			fail("No debería ocurrir la excepción");
 		}
 	}
+	@Test
 	public void verificarCostos() {
 		try {
+			grafo.addVertex(3, 3);
+			grafo.addVertex(2, 2);
+			grafo.addVertex(15, 15);
+			grafo.addVertex(98, 98);
+			grafo.addVertex(67, 67);
+			
+			
 			grafo.addEdge(3, 2, 1);
 			grafo.addEdge(3, 15, 1);
-			grafo.addEdge(3, 98, 1);
+			grafo.addEdge(3, 98, 3);
 			grafo.addEdge(98, 67, 2);
-			assertEquals("No agregó el costo correctamente ", 1,grafo.getCostArc(3, 2));
-			assertEquals("No agregó el vértice correctamente", 3, grafo.getCostArc(3, 67));
+			assertEquals("Ese no es el costo",1,(int)grafo.getCostArc(3, 15));
+			assertEquals("No agregó el vértice correctamente", 3, (int)grafo.getCostArc(3, 98));
+			
 			grafo.setCostArc(3, 2, 5);
 			assertEquals("No agregó el costo correctamente ", 5,grafo.getCostArc(3, 2));
 		} catch (Exception e) {
 			fail("No debería ocurrir la excepción");
 		}
 	}
+	@Test
 	public void verificarVertex() {
 		setUp2();
 		assertEquals("la informacion del vértice no es correcta ", 5, (int) grafo.getInfoVertex(5));
@@ -116,10 +126,11 @@ public class TestGraph {
 		grafo.setInfoVertex(79, 777777);
 		assertEquals("la informacion del vértice no cambio ",777777, (int) grafo.getInfoVertex(79));
 	}
+	@Test
 	public void cc() {
 		setUp3();
 		try {
-			assertEquals("El numero de componentes conectados es incorrecto", 6, grafo.cc());
+			assertEquals("El numero de componentes conectados es incorrecto", 1, grafo.cc());
 		} catch (Exception e) {
 			fail("No debería ocurrir la excepción");
 		}
