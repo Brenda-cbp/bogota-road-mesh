@@ -2,7 +2,7 @@ package model.data_structures;
 
 import java.util.Iterator;
 
-import com.sun.javafx.geom.Edge;
+//import com.sun.javafx.geom.Edge;
 
 import model.data_structures.TablaHashChaining.IteradorTabla;
 
@@ -136,7 +136,8 @@ public class Graph<V,K extends Comparable<K>> {
 				if(actual.darDestino().equals(idVertexFin))
 					return actual.darCosto();
 			}
-			throw new Exception();
+			return -1.0;
+		//	throw new Exception();
 		}
 		catch(Exception e)
 		{
@@ -270,7 +271,7 @@ public class Graph<V,K extends Comparable<K>> {
 		}
 		return count;
 	}
-	Iterable<K> getCC(K idVertex) throws Exception
+	public Iterable<K> getCC(K idVertex) throws Exception
 	{
 		cc();
 		Iterator<K> it = darNodos();
