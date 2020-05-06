@@ -1,8 +1,11 @@
 package model.logic;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -26,6 +29,7 @@ import com.google.gson.stream.JsonReader;
 import edu.princeton.cs.introcs.StdRandom;
 import model.data_structures.ArbolRojoNegro;
 import model.data_structures.ArregloDinamico;
+import model.data_structures.Graph;
 import model.data_structures.Lista;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
@@ -48,6 +52,10 @@ public class Modelo
 	 */
 	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 
+	public final String RUTA_VERTICES = "";
+	 
+	public final String RUTA_ARCOS = "";
+	
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -85,7 +93,8 @@ public class Modelo
 
 	private Lista<Comparendo> comparendos;
 	private MaxHeapCP<Comparendo> heap;
-
+	private Graph<Esquina,Integer> grafo;
+	
 	private String ejemploFecha;
 
 	// --------------------------------------------------------------------------
@@ -94,11 +103,16 @@ public class Modelo
 
 	/**
 	 * Constructor del modelo del mundo
+	 * @throws  
 	 */
 	public Modelo()
 	{
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
+		try {
+			grafo = new Graph<>(2);
+		} catch (Exception e) {
+		}
 	}
 
 	/**
@@ -123,6 +137,76 @@ public class Modelo
 		return heap.darNumElmentos();
 	}
 
+	/**
+	 * Crea un nuevo grafo a partir de los archivos especificados en las rutas de vertices y arcos
+	 * @throws Exception si los archivos no estan en formato esperado o si occurre algun error en lectura
+	 */
+	public void crearGrafo() throws Exception
+	{
+		cargarNodos();
+		cargarArcos();
+	}
+	/**
+	 * Crea los vertices del grafo a partir del archivo de vertices
+	 * @throws Exception si los archivos no estan en formato esperado o si occurre algun error en lectura
+	 */
+	public void cargarNodos() throws Exception
+	{
+		try
+		{
+		BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_VERTICES)));
+		String v = bf.readLine();
+		while(v != null)
+		{
+			String[] vertice = v.split(",");
+			Esquina nueva = new Esquina(Integer.parseInt(vertice[0]), Double.parseDouble(vertice[2]), Double.parseDouble(vertice[1]));
+			grafo.addVertex(Integer.parseInt(vertice[0]), nueva);
+		}
+		}
+		catch(ArrayIndexOutOfBoundsException e)
+		{
+			throw new Exception("Error, El archivo de vertices no se encuentra en formato esperado");
+		}
+		catch(NumberFormatException e)
+		{
+			throw new Exception("Error, el archivo de vertices no se encuentra en formato esperado");
+		}
+		catch(Exception e)
+		{
+			throw new Exception("Ocurrio un error inesperado, favor vuelva a intentarlo");
+		}
+	}
+	/**
+	 * Crea los enlaces entre los nodos del grafo a partir del archiv de arcos
+	 * @throws Exception si los archivos no estan en formato esperado o si occurre algun error en lectura
+	 */
+	public void cargarArcos() throws Exception
+	{
+		try
+		{
+		BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_ARCOS)));
+		String v = bf.readLine();
+		while(v != null)
+		{
+			String[] vertice = v.split(" ");
+			int origen = Integer.parseInt(vertice[0]);
+			for(int i = 1; i < vertice.length; i++)
+			{
+				Esquina esqOrigen = grafo.getInfoVertex(origen);
+				Esquina esqDestino = grafo.getInfoVertex(Integer.parseInt(vertice[i]));
+				if(esqOrigen != null && esqDestino != null)
+				{
+					double costo = DistanciaHaversiana.distance(esqOrigen.darLatitud(), esqOrigen.darLongitud(), esqDestino.darLatitud(), esqDestino.darLongitud());
+					grafo.addEdge(origen, esqDestino.darId(), costo);	
+				}
+			}
+		}
+		}
+		catch(Exception e)
+		{
+			throw new Exception("Ocurrio un error inesperado, favor vuelva a intentarlo");
+		}
+	}
 	/**
 	 * Lee el archivo especificado por la constante RUTA y los almacena en un
 	 * Heap, retorna el comparendo con mayor ID registrado
