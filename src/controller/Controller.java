@@ -39,11 +39,13 @@ public class Controller
 	 */
 	public void correrPrograma()
 	{
-		view.imprimir("Cargando datos...");
-		Comparendo maxId = modelo.cargarDatos();
-		view.imprimir("Carga completa, cantidad comparendos en archivo:" + modelo.darCantidadComparendos());
-		view.imprimir("Comparendo con mayor ID registrado:");
-		view.imprimir(maxId);
+		try {
+			modelo.crearGrafo();
+		} catch (Exception e1) {
+			
+			e1.printStackTrace();
+		}
+		view.imprimir(modelo.darAristas() + " - "+ modelo.darVertices());
 		while (true)
 		{
 			int opcion = view.printMenu();

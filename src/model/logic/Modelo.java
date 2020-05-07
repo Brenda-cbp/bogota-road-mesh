@@ -115,6 +115,14 @@ public class Modelo
 		}
 	}
 
+	public int darVertices()
+	{
+		return grafo.V();
+	}
+	public int darAristas()
+	{
+		return grafo.E();
+	}
 	/**
 	 * Agrega un comparendo a la estructura de datos Heap
 	 * 
