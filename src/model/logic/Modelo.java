@@ -51,9 +51,9 @@ public class Modelo {
 	 */
 	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 
-	public final String RUTA_VERTICES = "./data/bogota_vertices";
+	public final String RUTA_VERTICES = "./data/bogota_vertices.txt";
 
-	public final String RUTA_ARCOS = "./data/bogota_arcos";
+	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
@@ -107,7 +107,7 @@ public class Modelo {
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
 		try {
-			grafo = new Graph<>(2);
+			grafo = new Graph<>(71283);
 		} catch (Exception e) {
 		}
 	}
@@ -164,11 +164,14 @@ public class Modelo {
 		try {
 			BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_VERTICES)));
 			String v = bf.readLine();
-			while (v != null) {
+			
+			while (v != null || v !="") {
+				if (v==null) break;
 				String[] vertice = v.split(",");
 				Esquina nueva = new Esquina(Integer.parseInt(vertice[0]), Double.parseDouble(vertice[2]),
 						Double.parseDouble(vertice[1]));
 				grafo.addVertex(Integer.parseInt(vertice[0]), nueva);
+				v = bf.readLine();
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new Exception("Error, El archivo de vertices no se encuentra en formato esperado");
@@ -181,7 +184,7 @@ public class Modelo {
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception("Ocurrio un error cargando los vertices, favor vuelva a intentarlo");
-			
+
 		}
 	}
 
@@ -196,6 +199,9 @@ public class Modelo {
 		try {
 			BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_ARCOS)));
 			String v = bf.readLine();
+			v = bf.readLine();
+			v = bf.readLine();
+			v = bf.readLine();
 			while (v != null) {
 				String[] vertice = v.split(" ");
 				int origen = Integer.parseInt(vertice[0]);
@@ -208,6 +214,7 @@ public class Modelo {
 						grafo.addEdge(origen, esqDestino.darId(), costo);
 					}
 				}
+				v = bf.readLine();
 			}
 		}
 		catch(FileNotFoundException e)
@@ -220,7 +227,7 @@ public class Modelo {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			 throw new Exception("Ocurrio un error cargando los arcos, favor vuelva a intentarlo");
+			throw new Exception("Ocurrio un error cargando los arcos, favor vuelva a intentarlo");
 		}
 	}
 
@@ -445,7 +452,7 @@ public class Modelo {
 		while (comparendos.hasNext()) {
 			Comparendo c = comparendos.next();
 			rta.agregar("" + c.darNumeroMes() + "-" + c.darInicialSemana() + c.darInicialSemana() + c.darInicialSemana()
-					+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
+			+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
 		}
 		return rta;
 	}
@@ -669,14 +676,14 @@ public class Modelo {
 				}
 			} else
 				comparendosProcesados = cantidadComparendosEseDia; // ...y
-																	// comparendos
-																	// en
-																	// espera=0
+			// comparendos
+			// en
+			// espera=0
 			if (comparendosEnEspera > max)/// hallar el maximo
 				max = comparendosEnEspera;
 
 			rta.agregarAlFinal("" + fecha1.getYear() + "/" + fecha1.getMonthValue() + "/" + fecha1.getDayOfMonth()
-					+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
+			+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
 			fecha1 = fecha1.plusHours(24);
 			fecha2 = fecha2.plusHours(24);
 		}
