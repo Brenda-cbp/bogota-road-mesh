@@ -52,9 +52,9 @@ public class Modelo
 	 */
 	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 
-	public final String RUTA_VERTICES = "";
+	public final String RUTA_VERTICES = "./data/bogota_vertices";
 	 
-	public final String RUTA_ARCOS = "";
+	public final String RUTA_ARCOS = "./data/bogota_arcos";
 	
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
