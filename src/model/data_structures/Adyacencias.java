@@ -102,7 +102,7 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 	protected boolean agregarEnlace(K idVertexIni, K idVertexFin, double cost)
 	{
 		Edges e1 = new Edges(idVertexIni, idVertexFin, cost);
-		Edges e2 = new Edges(idVertexIni, idVertexFin, cost);
+		Edges e2 = new Edges(idVertexFin, idVertexIni, cost);
 		if ((get(idVertexIni) == null || get(idVertexFin) == null || ((Vertex) get(idVertexIni)).darAdyacentes().buscar(e1) != null))
 			return false;
 		((Vertex) get(idVertexIni)).addEdge(e1);

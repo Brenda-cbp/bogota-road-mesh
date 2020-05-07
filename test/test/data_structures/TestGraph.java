@@ -113,7 +113,7 @@ public class TestGraph {
 			assertEquals("No agregó el vértice correctamente", 3, (int)grafo.getCostArc(3, 98));
 			
 			grafo.setCostArc(3, 2, 5);
-			assertEquals("No agregó el costo correctamente ", 5,grafo.getCostArc(3, 2));
+			assertEquals("No agregó el costo correctamente ", 5,(int) grafo.getCostArc(3, 2));
 		} catch (Exception e) {
 			fail("No debería ocurrir la excepción");
 		}
