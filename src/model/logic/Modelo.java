@@ -202,12 +202,15 @@ public class Modelo {
 			v = bf.readLine();
 			v = bf.readLine();
 			v = bf.readLine();
+			
 			while (v != null) {
 				String[] vertice = v.split(" ");
 				int origen = Integer.parseInt(vertice[0]);
+				
 				for (int i = 1; i < vertice.length; i++) {
 					Esquina esqOrigen = grafo.getInfoVertex(origen);
 					Esquina esqDestino = grafo.getInfoVertex(Integer.parseInt(vertice[i]));
+					
 					if (esqOrigen != null && esqDestino != null) {
 						double costo = DistanciaHaversiana.distance(esqOrigen.darLatitud(), esqOrigen.darLongitud(),
 								esqDestino.darLatitud(), esqDestino.darLongitud());
@@ -691,5 +694,4 @@ public class Modelo {
 		rta.agregarAlComienzo("" + costos);
 		return rta;
 	}
-
 }

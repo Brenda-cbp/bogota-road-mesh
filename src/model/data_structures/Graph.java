@@ -50,7 +50,9 @@ public class Graph<V, K extends Comparable<K>> {
 		count = -1;
 	}
 
-	/**
+	/**0
+	 * 
+	 * .
 	 * Retorna la cantidad de vertices en el grafo
 	 * 
 	 * @return catnidad de vertices
@@ -282,7 +284,12 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return count;
 	}
-
+/**
+ * Obtiene los vértices alcanzados a partir del vértice idVertex después de la ejecución de los metodos dfs(K) y cc(). 
+ * @param idVertex
+ * @return
+ * @throws Exception
+ */
 	public Iterable<K> getCC(K idVertex) throws Exception {
 		cc();
 		Iterator<K> it = darNodos();
@@ -295,5 +302,6 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return respuesta;
 	}
+	public Lista<K>
 
 }
