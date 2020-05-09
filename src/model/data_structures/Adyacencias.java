@@ -101,17 +101,19 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 	}
 	protected boolean agregarEnlace(K idVertexIni, K idVertexFin, double cost)
 	{
-		Edges e1 = new Edges(idVertexIni, idVertexFin, cost);
-		Edges e2 = new Edges(idVertexFin, idVertexIni, cost);
-		if ((get(idVertexIni) == null || get(idVertexFin) == null))  
-			return false;
-		if(e1.equals(((Vertex) get(idVertexIni)).darAdyacentes().buscar(e1)))
-			return false;
-		if(((Vertex) get(idVertexIni)).darAdyacentes().buscar(e2) != null)
-			return false;
-		((Vertex) get(idVertexIni)).addEdge(e1);
-		((Vertex) get(idVertexFin)).addEdge(e2);
-		return true;
+		Edges e2 = new Edges<K>(idVertexFin, idVertexIni, cost);
+		Edges e1 = new Edges<K>(idVertexIni, idVertexFin, cost);
+		if (idVertexIni != null && get(idVertexIni) != null) {
+			Iterator<Edges> it = (Iterator<Edges>) ((Vertex) get(idVertexIni)).darAdyacentes().iterator();
+			while (it.hasNext()) {
+				if(it.next().darDestino().equals(idVertexFin))
+					return false;
+			}
+			((Vertex) get(idVertexIni)).addEdge(e1);
+			((Vertex) get(idVertexFin)).addEdge(e2);
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * retorna el valor asociado a una llave;
