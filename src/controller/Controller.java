@@ -51,7 +51,8 @@ public class Controller
 			int opcion = view.printMenu();
 			if (opcion == 1)
 			{
-				String s = view.pedir("El tamano");
+				modelo.pruebaMapa();
+				/*String s = view.pedir("El tamano");
 				// Si s es null significa que la persona escribio CANCELAR
 				if (s != null)
 				{
@@ -72,7 +73,7 @@ public class Controller
 						e.printStackTrace();
 					}
 
-				}
+				}*/
 			}
 			if (opcion == 2)
 			{

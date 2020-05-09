@@ -62,7 +62,7 @@ public class Modelo {
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
-	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson";
+	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson.json";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -845,5 +845,9 @@ public class Modelo {
 			System.out.println("Eror " + e.getMessage());
 		}
 
+	}
+	
+	public void pruebaMapa() {
+		Mapa mapa = new Mapa ("prueba");
 	}
 }
