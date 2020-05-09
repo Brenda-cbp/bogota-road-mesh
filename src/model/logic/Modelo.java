@@ -765,7 +765,7 @@ public class Modelo {
 
 			JSONObject vertices = new JSONObject();
 			JSONObject adjacentes = new JSONObject();
-			JSONArray verticesAdjacentes = new JSONArray();
+			//JSONObject verticesAdjacentes = new JSONObject();
 
 			vertices.put("ID", esquinaActual.darId());
 			vertices.put("longitud", esquinaActual.darLongitud());
@@ -777,13 +777,16 @@ public class Modelo {
 
 			while (arcos.hasNext()) {
 				Edges arcoActual = arcos.next();
-				adjacentes.put("Costo", arcoActual.darCosto());
-				if (esquinaActual.darId() == (int) arcoActual.darOrigen())
-					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darDestino()).darId());
-				else
-					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
+				//adjacentes.put("Costo", arcoActual.darCosto());
+				if (esquinaActual.darId() == (int) arcoActual.darOrigen()) {
+					adjacentes.put("ajunta", grafo.getInfoVertex((Integer) arcoActual.darDestino()).darId());
+					adjacentes.put("Costo", arcoActual.darCosto());
+				}
+				else {
+					adjacentes.put("ajunta", grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
+					adjacentes.put("Costo", arcoActual.darCosto());
+				}
 			}
-			adjacentes.put("ajunta", verticesAdjacentes);
 			parteVertices.add(vertices);
 			parteArcos.add(adjacentes);
 			docCompleto.put("Esquinas", parteVertices);
