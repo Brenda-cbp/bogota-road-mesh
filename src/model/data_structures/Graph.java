@@ -318,17 +318,16 @@ public class Graph<V, K extends Comparable<K>> {
 	}
 	public Lista<Edges> darArcos(){
 		Lista<Edges> rta = new Lista<Edges>();
-		Iterator <K> it =darNodos();
-		Vertex actual = (Vertex) it.next();
-		while (it.hasNext()) {
-			actual = (Vertex) it.next();
-			Lista <Edges> adjacentes= actual.darAdyacentes();
-			for (int i=0; i<adjacentes.darTamaño(); i++) {
-				rta.agregarAlFinal(adjacentes.darElementoPosicion(i));
+		Iterator<Vertex> it = darVertices().iterator();
+		while(it.hasNext())
+		{
+			Iterator<Edges> actual = it.next().darAdyacentes().iterator();
+			while(actual.hasNext())
+			{
+				rta.agregarAlFinal(actual.next());
 			}
 		}
 		return rta;
-
 	}
 	public Lista<Vertex> darVertices(){
 		return adj.darValores();

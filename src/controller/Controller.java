@@ -107,22 +107,11 @@ public class Controller
 			
 			if (opcion == 3)
 			{
-				view.imprimir("Por favor ingrese las fechas en formato “YYYY/MM/DD-HH:MM:ss” ");
-				String limiteInferior = view.pedir("la fecha de inicio");
-				if (limiteInferior !=null) {
-					String limiteSuperior= view.pedir("la fecha final");
-					if(limiteSuperior!=null) {
-						String localidad= view.pedir("la localidad");
-						if(localidad!=null) {
-							try {
-								Lista<Comparendo>rta=modelo.darComparendosEnRangodeFecha(limiteInferior, limiteSuperior,localidad);
-								for (Comparendo comparendo : rta) 
-									view.imprimir(comparendo.toString());
-							}catch (Exception e) {
-								view.imprimir("Entrada no válida");
-							}
-						}
-					}
+				try {
+					modelo.cargarDatosGrafo();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			if (opcion == 4)

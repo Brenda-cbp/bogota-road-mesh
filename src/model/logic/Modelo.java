@@ -174,8 +174,9 @@ public class Modelo {
 			BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_VERTICES)));
 			String v = bf.readLine();
 
-			while (v != null || v !="") {
-				if (v==null) break;
+			while (v != null || v != "") {
+				if (v == null)
+					break;
 				String[] vertice = v.split(",");
 				Esquina nueva = new Esquina(Integer.parseInt(vertice[0]), Double.parseDouble(vertice[2]),
 						Double.parseDouble(vertice[1]));
@@ -186,11 +187,9 @@ public class Modelo {
 			throw new Exception("Error, El archivo de vertices no se encuentra en formato esperado");
 		} catch (NumberFormatException e) {
 			throw new Exception("Error, el archivo de vertices no se encuentra en formato esperado");
-		} 
-		catch(FileNotFoundException e)
-		{
+		} catch (FileNotFoundException e) {
 			throw new Exception("Archivo no encontrado");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception("Ocurrio un error cargando los vertices, favor vuelva a intentarlo");
 
@@ -228,16 +227,11 @@ public class Modelo {
 				}
 				v = bf.readLine();
 			}
-		}
-		catch(FileNotFoundException e)
-		{
+		} catch (FileNotFoundException e) {
 			throw new Exception("Archivo no encontrado");
-		}
-		catch(IOException e)
-		{
+		} catch (IOException e) {
 			throw new Exception("Error de lectura");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception("Ocurrio un error cargando los arcos, favor vuelva a intentarlo");
 		}
@@ -306,6 +300,56 @@ public class Modelo {
 		}
 		return null;
 	}
+
+	// ---------------------------------------------------------------------
+	public void cargarDatosGrafo() throws Exception {
+		Graph<Esquina, Integer>grafo2 = new Graph<>(40);
+		// solucion publicada en la pagina del curso
+		// TODO Cambiar la clase del contenedor de datos por la Estructura de
+		// Datos propia adecuada para resolver el requerimiento
+		JsonReader reader;
+		Esquina c = null;
+		try {
+			File ar = new File(RUTA_EXPORTAR);
+			reader = new JsonReader(new FileReader(ar));
+			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
+			JsonArray esquinas = elem.get("Esquinas").getAsJsonArray();
+
+			for (JsonElement e : esquinas) {
+				double longit = e.getAsJsonObject().get("longitud").getAsDouble();
+				double lat = e.getAsJsonObject().get("latitud").getAsDouble();
+				int id = e.getAsJsonObject().get("ID").getAsInt();
+
+				c = new Esquina(id, lat, longit);
+				grafo2.addVertex(id, c);
+			}
+			JsonArray arcos = elem.get("Arcos").getAsJsonArray();
+			int i = 0;
+			for (JsonElement e : arcos) {
+				int id = e.getAsJsonObject().get("ID").getAsInt();
+				JsonArray adjuntos = e.getAsJsonObject().get("ajunta").getAsJsonArray();
+				for (JsonElement actual : adjuntos) {
+					i++;
+					int destino = actual.getAsInt();
+					grafo2.addEdge(id, destino, 0);
+				}
+			}
+		System.out.println("" + i);
+		System.out.println("vertices = " + grafo2.V() + " arcos= " + grafo2.E());	
+		Lista<Edges> lista1 = grafo2.darArcos();
+		Iterator<Edges> lista = lista1.iterator();
+		while(lista.hasNext())
+		{
+			Edges actual = lista.next();
+			System.out.println("origen-" + actual.darOrigen() + " destino-" + actual.darDestino());
+		}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// ----------------------------------------------------------------------
 
 	/**
 	 * Retorna un maxHeap con la gravedad de cada comparendo como criterio de
@@ -703,36 +747,39 @@ public class Modelo {
 		rta.agregarAlComienzo("" + costos);
 		return rta;
 	}
+
 	public void generarJson() {
 
 		JSONArray parteVertices = new JSONArray();
 		JSONArray parteArcos = new JSONArray();
-		JSONObject docCompleto= new JSONObject();
+		JSONObject docCompleto = new JSONObject();
 
-		Iterator<Vertex> llaves =grafo.darVertices().iterator();//da las llaves del vertice
+		Iterator<Vertex> llaves = grafo.darVertices().iterator();// da las
+		// llaves
+		// del
+		// vertice
 
-		while(llaves.hasNext()) {
+		while (llaves.hasNext()) {
 			Vertex<Esquina, Integer> actual = llaves.next();
-			Esquina esquinaActual= actual.darInfo();
-			
-			JSONObject vertices = new JSONObject();
-			JSONObject adjacentes= new JSONObject();
-			JSONArray verticesAdjacentes= new JSONArray();
+			Esquina esquinaActual = actual.darInfo();
 
-			vertices.put("ID",esquinaActual.darId());
+			JSONObject vertices = new JSONObject();
+			JSONObject adjacentes = new JSONObject();
+			JSONArray verticesAdjacentes = new JSONArray();
+
+			vertices.put("ID", esquinaActual.darId());
 			vertices.put("longitud", esquinaActual.darLongitud());
 			vertices.put("latitud", esquinaActual.darLatitud());
-			
 
-			Iterator<Edges> arcos= grafo.getArcosVertex(actual.darLLave());
-			
+			Iterator<Edges> arcos = grafo.getArcosVertex(actual.darLLave());
+
 			adjacentes.put("ID", esquinaActual.darId());
-			
-			while(arcos.hasNext()) {
-				Edges arcoActual= arcos.next();
-				if(esquinaActual.darId() ==(int)arcoActual.darOrigen()) 
+
+			while (arcos.hasNext()) {
+				Edges arcoActual = arcos.next();
+				if (esquinaActual.darId() == (int) arcoActual.darOrigen())
 					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darDestino()).darId());
-				else 
+				else
 					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
 			}
 			adjacentes.put("ajunta", verticesAdjacentes);
@@ -741,18 +788,15 @@ public class Modelo {
 			docCompleto.put("Esquinas", parteVertices);
 			docCompleto.put("Arcos", parteArcos);
 		}
-	try {
-		FileWriter file = new FileWriter(RUTA_EXPORTAR);
-		file.write(docCompleto.toJSONString());
-		file.flush();
-	System.out.println("Logrado");
-	
-	}catch (IOException e) {
-	System.out.println("Eror "+ e.getMessage());
+		try {
+			FileWriter file = new FileWriter(RUTA_EXPORTAR);
+			file.write(docCompleto.toJSONString());
+			file.flush();
+			System.out.println("Logrado");
+
+		} catch (IOException e) {
+			System.out.println("Eror " + e.getMessage());
+		}
+
 	}
-
-
-
 }
-}
-

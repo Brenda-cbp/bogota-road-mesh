@@ -103,7 +103,7 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 	{
 		Edges e1 = new Edges(idVertexIni, idVertexFin, cost);
 		Edges e2 = new Edges(idVertexFin, idVertexIni, cost);
-		if ((get(idVertexIni) == null || get(idVertexFin) == null || ((Vertex) get(idVertexIni)).darAdyacentes().buscar(e1) != null))
+		if ((get(idVertexIni) == null || get(idVertexFin) == null || ((Vertex) get(idVertexIni)).darAdyacentes().buscar(e1) != null) ||((Vertex) get(idVertexFin)).darAdyacentes().buscar(e1) != null) 
 			return false;
 		((Vertex) get(idVertexIni)).addEdge(e1);
 		((Vertex) get(idVertexFin)).addEdge(e2);
