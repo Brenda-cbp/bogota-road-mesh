@@ -730,8 +730,8 @@ public class Modelo {
 			
 			while(arcos.hasNext()) {
 				Edges arcoActual= arcos.next();
-				if(esquinaActual==arcoActual.darOrigen()) 
-					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darDestino()));
+				if(esquinaActual.darId() ==(int)arcoActual.darOrigen()) 
+					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darDestino()).darId());
 				else 
 					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
 			}
@@ -745,7 +745,7 @@ public class Modelo {
 		FileWriter file = new FileWriter(RUTA_EXPORTAR);
 		file.write(docCompleto.toJSONString());
 		file.flush();
-	//	System.out.println("Logrado");
+	System.out.println("Logrado");
 	
 	}catch (IOException e) {
 	System.out.println("Eror "+ e.getMessage());
