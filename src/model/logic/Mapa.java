@@ -1,6 +1,7 @@
 package model.logic;
 
 import java.awt.BorderLayout;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 
@@ -46,14 +47,14 @@ public class Mapa extends MapView{
 	}
 	public void pintarGrafo(Graph<Esquina, Integer> grafoAPintar) {
 
-		Lista<Edges> listaArcos =grafoAPintar.darArcos();
-		for (int i =0; i<listaArcos.darTamaño(); i++) {
+		Iterator<Edges> listaArcos =grafoAPintar.darArcos().iterator();
+	while(listaArcos.hasNext()) {
 
-			Edges arco= listaArcos.darElementoPosicion(i);
+			Edges arco= listaArcos.next();
 			Esquina E1= grafoAPintar.getInfoVertex((Integer)arco.darOrigen());
 			Esquina E2= grafoAPintar.getInfoVertex((Integer)arco.darDestino());
 			if ( E1.darLatitud()<MAXLATITUD && E2.darLatitud()<MAXLATITUD && E1.darLongitud()<MAXLONGITUD && E2.darLongitud()<MAXLONGITUD && 
-					E1.darLongitud()>MINLONGITUD && E2.darLongitud()>MINLONGITUD && E1.darLatitud()<MAXLATITUD && E2.darLatitud()<MAXLATITUD) 
+					E1.darLongitud()>MINLONGITUD && E2.darLongitud()>MINLONGITUD && E1.darLatitud()>MINLATITUD && E2.darLatitud()>MINLATITUD) 
 			{
 				LatLng[] arcs= new LatLng[2];
 				LatLng paraEsquina1 = new LatLng (E1.darLatitud(),E1.darLongitud());
