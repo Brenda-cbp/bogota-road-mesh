@@ -709,11 +709,11 @@ public class Modelo {
 		JSONArray parteArcos = new JSONArray();
 		JSONObject docCompleto= new JSONObject();
 
-		Iterator <Integer> llaves =grafo.darVertices();//da las llaves del vertice
+		Iterator<Vertex> llaves =grafo.darVertices().iterator();//da las llaves del vertice
 
 		while(llaves.hasNext()) {
-			Integer llaveActual= llaves.next();
-			Esquina esquinaActual= grafo.getInfoVertex(llaveActual);
+			Vertex<Esquina, Integer> actual = llaves.next();
+			Esquina esquinaActual= actual.darInfo();
 			
 			JSONObject vertices = new JSONObject();
 			JSONObject adjacentes= new JSONObject();
@@ -724,7 +724,7 @@ public class Modelo {
 			vertices.put("latitud", esquinaActual.darLatitud());
 			
 
-			Iterator<Edges> arcos= grafo.getArcosVertex(llaveActual);
+			Iterator<Edges> arcos= grafo.getArcosVertex(actual.darLLave());
 			
 			adjacentes.put("ID", esquinaActual.darId());
 			
@@ -735,6 +735,7 @@ public class Modelo {
 				else 
 					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
 			}
+			adjacentes.put("ajunta", verticesAdjacentes);
 			parteVertices.add(vertices);
 			parteArcos.add(adjacentes);
 			docCompleto.put("Esquinas", parteVertices);

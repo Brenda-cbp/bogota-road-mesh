@@ -330,8 +330,8 @@ public class Graph<V, K extends Comparable<K>> {
 		return rta;
 
 	}
-	public Iterator<K> darVertices(){
-		return adj.darLlaves();
+	public Lista<Vertex> darVertices(){
+		return adj.darValores();
 	}
 
 }

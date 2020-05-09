@@ -168,7 +168,21 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 		}
 		return rta.iterator();
 	}
-
+	public Lista<W> darValores()
+	{
+		Lista<W> resp = new Lista<>();
+		for(HashNode<W, K> actual: tabla)
+		{
+			HashNode<W, K> actual2 = actual;
+			while(actual2 != null)
+			{
+				if(actual2 != null && actual.darValor() != null)
+					resp.agregarAlFinal(actual2.darValor());
+				actual2 = actual2.darSiguiente();
+			}
+		}
+		return resp;
+	}
 	/**
 	 * Cambia el tamaño de la lista segun sea necesario
 	 */
