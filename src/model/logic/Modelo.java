@@ -329,7 +329,7 @@ public class Modelo {
 				double cost = e.getAsJsonObject().get("Costo").getAsDouble();
 				int id = e.getAsJsonObject().get("ID").getAsInt();
 				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
-				grafo2.addEdge(id, 5, 5);
+				grafo2.addEdge(id, ajunta, cost);
 				
 			}
 		System.out.println("" + i);
@@ -761,7 +761,6 @@ public class Modelo {
 			Esquina esquinaActual = actual.darInfo();
 
 			JSONObject vertices = new JSONObject();
-			JSONObject adjacentes = new JSONObject();
 			//JSONObject verticesAdjacentes = new JSONObject();
 
 			vertices.put("ID", esquinaActual.darId());
@@ -770,9 +769,10 @@ public class Modelo {
 
 			Iterator<Edges> arcos = grafo.getArcosVertex(actual.darLLave());
 
-			adjacentes.put("ID", esquinaActual.darId());
 
 			while (arcos.hasNext()) {
+				JSONObject adjacentes = new JSONObject();
+				adjacentes.put("ID", esquinaActual.darId());
 				Edges arcoActual = arcos.next();
 				//adjacentes.put("Costo", arcoActual.darCosto());
 				if (esquinaActual.darId() == (int) arcoActual.darOrigen()) {
@@ -783,9 +783,9 @@ public class Modelo {
 					adjacentes.put("ajunta", grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
 					adjacentes.put("Costo", arcoActual.darCosto());
 				}
+				parteArcos.add(adjacentes);
 			}
 			parteVertices.add(vertices);
-			parteArcos.add(adjacentes);
 			docCompleto.put("Esquinas", parteVertices);
 			docCompleto.put("Arcos", parteArcos);
 		}
