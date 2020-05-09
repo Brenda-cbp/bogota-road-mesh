@@ -326,14 +326,11 @@ public class Modelo {
 			JsonArray arcos = elem.get("Arcos").getAsJsonArray();
 			int i = 0;
 			for (JsonElement e : arcos) {
+				double cost = e.getAsJsonObject().get("Costo").getAsDouble();
 				int id = e.getAsJsonObject().get("ID").getAsInt();
-				JsonArray adjuntos = e.getAsJsonObject().get("ajunta").getAsJsonArray();
-				int costo = e.getAsJsonObject().get("Costo").getAsInt();
-				for (JsonElement actual : adjuntos) {
-					i++;
-					int destino = actual.getAsInt();
-					grafo2.addEdge(id, destino, costo);
-				}
+				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
+				grafo2.addEdge(id, 5, 5);
+				
 			}
 		System.out.println("" + i);
 		System.out.println("vertices = " + grafo2.V() + " arcos= " + grafo2.E());	
