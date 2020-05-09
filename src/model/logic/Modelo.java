@@ -328,16 +328,16 @@ public class Modelo {
 			for (JsonElement e : arcos) {
 				int id = e.getAsJsonObject().get("ID").getAsInt();
 				JsonArray adjuntos = e.getAsJsonObject().get("ajunta").getAsJsonArray();
+				int costo = e.getAsJsonObject().get("Costo").getAsInt();
 				for (JsonElement actual : adjuntos) {
 					i++;
 					int destino = actual.getAsInt();
-					grafo2.addEdge(id, destino, 0);
+					grafo2.addEdge(id, destino, costo);
 				}
 			}
 		System.out.println("" + i);
 		System.out.println("vertices = " + grafo2.V() + " arcos= " + grafo2.E());	
-		Lista<Edges> lista1 = grafo2.darArcos();
-		Iterator<Edges> lista = lista1.iterator();
+		Iterator<Edges> lista = grafo2.darArcos().iterator();
 		while(lista.hasNext())
 		{
 			Edges actual = lista.next();
@@ -777,6 +777,7 @@ public class Modelo {
 
 			while (arcos.hasNext()) {
 				Edges arcoActual = arcos.next();
+				adjacentes.put("Costo", arcoActual.darCosto());
 				if (esquinaActual.darId() == (int) arcoActual.darOrigen())
 					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darDestino()).darId());
 				else

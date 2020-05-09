@@ -15,5 +15,7 @@
 	<classpathentry kind="lib" path="lib/gson-2.8.6.jar"/>
 	<classpathentry kind="lib" path="lib/stdlib-package.jar"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jxmaps-1.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/jxmaps-win-1.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
