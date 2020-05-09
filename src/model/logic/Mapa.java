@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 import com.teamdev.jxmaps.swing.MapView;
 
+import model.data_structures.ArbolRojoNegro;
 import model.data_structures.Edges;
 import model.data_structures.Graph;
 import model.data_structures.Lista;
@@ -48,7 +49,7 @@ public class Mapa extends MapView{
 	public void pintarGrafo(Graph<Esquina, Integer> grafoAPintar) {
 
 		Iterator<Edges> listaArcos =grafoAPintar.darArcos().iterator();
-	while(listaArcos.hasNext()) {
+		while(listaArcos.hasNext()) {
 
 			Edges arco= listaArcos.next();
 			Esquina E1= grafoAPintar.getInfoVertex((Integer)arco.darOrigen());
@@ -61,7 +62,7 @@ public class Mapa extends MapView{
 				LatLng paraEsquina2 = new LatLng (E2.darLatitud(),E2.darLongitud());
 				arcs[0]= paraEsquina1;
 				arcs[1]= paraEsquina2;
-				
+
 				/*
 				Marker mark = new Marker(map);
 				mark.setPosition(paraEsquina1);
@@ -70,7 +71,7 @@ public class Mapa extends MapView{
 				mark2.setPosition(paraEsquina1);
 				mark2.setVisible(true);
 				 */
-				
+
 				Circle vertice1 = new Circle (map);
 				vertice1.setCenter(paraEsquina1);
 				vertice1.setRadius(1);
@@ -79,12 +80,15 @@ public class Mapa extends MapView{
 				co1.setFillOpacity(0.35);
 				vertice1.setOptions(co1);
 				vertice1.setVisible(true);
-
+				
+				//#00FFFF
+				//#7F00FF
+				
 				Circle vertice2 = new Circle (map);
 				vertice2.setCenter(paraEsquina2);
 				vertice2.setRadius(1);
 				CircleOptions co2 = new  CircleOptions();
-				co2.setFillColor("#FF00");
+				co2.setFillColor("#FF0000");
 				co2.setFillOpacity(0.35);
 				vertice2.setOptions(co2);
 				vertice2.setVisible(true);
@@ -93,6 +97,27 @@ public class Mapa extends MapView{
 				w.setPath(arcs);
 				w.setVisible(true);
 			}
+		}
+	}
+	public void dibujarEstaciones(Lista<EstacionPolicia> estaciones) {
+		
+		
+		Iterator<EstacionPolicia> itEstaciones= estaciones.iterator();
+
+		while (itEstaciones.hasNext()) {
+			EstacionPolicia actual= itEstaciones.next();
+			LatLng puntoEstacion = new LatLng (actual.getEPOLATITUD(), actual.getEPOLONGITU());
+			
+			Circle vertice1 = new Circle (map);
+			vertice1.setCenter(puntoEstacion);
+			vertice1.setRadius(1);
+			CircleOptions co1 = new  CircleOptions();
+			co1.setFillColor("#8407B6");
+			co1.setFillOpacity(0.65);  //Si está muy feo, cambiar. 
+			vertice1.setOptions(co1);
+			vertice1.setVisible(true);
+			//#00FFFF
+			//#7F00FF
 		}
 	}
 }

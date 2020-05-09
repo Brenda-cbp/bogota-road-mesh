@@ -103,8 +103,8 @@ public class Modelo {
 	private Lista<Comparendo> comparendos;
 	private MaxHeapCP<Comparendo> heap;
 	private Graph<Esquina, Integer> grafo;
-	private ArbolRojoNegro<EstacionPolicia, Integer> estaciones;
-	
+	private Lista<EstacionPolicia> estaciones;
+	private Mapa mapa;
 	private String ejemploFecha;
 
 	// --------------------------------------------------------------------------
@@ -117,7 +117,7 @@ public class Modelo {
 	public Modelo() {
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
-		estaciones = new ArbolRojoNegro<>();
+		estaciones = new Lista<EstacionPolicia>();
 		try {
 			grafo = new Graph<>(71283);
 		} catch (Exception e) {
@@ -382,9 +382,9 @@ public class Modelo {
 				int EPOIULOCAL = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOIULOCAL").getAsInt();
 				c = new EstacionPolicia(OBJECTID, EPODESCRIP, EPODIR_SITIO, EPOSERVICIO, EPOHORARIO, EPOLATITUD,
 						EPOLONGITU, EPOTELEFON, EPOIULOCAL);
-				estaciones.insertar(OBJECTID, c);
+				estaciones.agregarAlFinal(c);
 			}
-			System.out.println("Si se cargan las estaciones: Total= " + estaciones.size());
+			System.out.println("Si se cargan las estaciones: Total= " + estaciones.darTamaño());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -844,9 +844,13 @@ public class Modelo {
 
 	}
 	
-	public void pruebaMapa() throws Exception {
-		Mapa mapa = new Mapa ("prueba");
+	public void dibujarMapa() throws Exception {
+		mapa = new Mapa ("prueba");
 		cargarDatosGrafo();
 		mapa.pintarGrafo(grafo);
+	}
+	public void dibujarEstacionesMapa() throws Exception {
+		dibujarMapa();
+		mapa.dibujarEstaciones(estaciones);
 	}
 }

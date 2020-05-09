@@ -52,7 +52,7 @@ public class Controller {
 			}
 			if (opcion == 2) {
 				try {
-					modelo.pruebaMapa();
+					modelo.dibujarMapa();
 				} catch (Exception e) {
 					view.imprimir("Error, Trate cargar el Json primero (opcion2)");
 					e.printStackTrace();
@@ -70,6 +70,15 @@ public class Controller {
 			if (opcion == 4) {
 				modelo.cargarPolicias();
 			}
+			if (opcion == 5) {
+				try {
+					modelo.dibujarEstacionesMapa();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 		}
 	}
 }

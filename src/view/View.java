@@ -27,6 +27,7 @@ public class View {
 		System.out.println("2. Dibujar mapa conforme al JSON");
 		System.out.println("3. Cargar grafo desde el JSON");
 		System.out.println("4. Cargar Estaciones policia");
+		System.out.println("5. Colocar las estaciones de policia en el mapa");
 		try {
 			rta= Integer.parseInt(bf.readLine());
 		}

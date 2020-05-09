@@ -18,12 +18,60 @@ public class EstacionPolicia
 		this.EPOTELEFON = EPOTELEFON;
 		this.OBJECTID = OBJECTID;
 	}
-	public int darId()
-	{
+	public String getEPODESCRIP() {
+		return EPODESCRIP;
+	}
+	public void setEPODESCRIP(String ePODESCRIP) {
+		EPODESCRIP = ePODESCRIP;
+	}
+	public String getEPODIR_SITIO() {
+		return EPODIR_SITIO;
+	}
+	public void setEPODIR_SITIO(String ePODIR_SITIO) {
+		EPODIR_SITIO = ePODIR_SITIO;
+	}
+	public String getEPOSERVICIO() {
+		return EPOSERVICIO;
+	}
+	public void setEPOSERVICIO(String ePOSERVICIO) {
+		EPOSERVICIO = ePOSERVICIO;
+	}
+	public String getEPOHORARIO() {
+		return EPOHORARIO;
+	}
+	public void setEPOHORARIO(String ePOHORARIO) {
+		EPOHORARIO = ePOHORARIO;
+	}
+	public double getEPOLATITUD() {
+		return EPOLATITUD;
+	}
+	public void setEPOLATITUD(double ePOLATITUD) {
+		EPOLATITUD = ePOLATITUD;
+	}
+	public double getEPOLONGITU() {
+		return EPOLONGITU;
+	}
+	public void setEPOLONGITU(double ePOLONGITU) {
+		EPOLONGITU = ePOLONGITU;
+	}
+	public int getOBJECTID() {
 		return OBJECTID;
 	}
-	public int darTelefono()
-	{
+	public void setOBJECTID(int oBJECTID) {
+		OBJECTID = oBJECTID;
+	}
+	public int getEPOTELEFON() {
 		return EPOTELEFON;
 	}
+	public void setEPOTELEFON(int ePOTELEFON) {
+		EPOTELEFON = ePOTELEFON;
+	}
+	public int getEPOIULOCAL() {
+		return EPOIULOCAL;
+	}
+	public void setEPOIULOCAL(int ePOIULOCAL) {
+		EPOIULOCAL = ePOIULOCAL;
+	}
+	
+	
 }
