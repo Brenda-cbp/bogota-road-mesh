@@ -76,9 +76,12 @@ public class Controller
 			}
 			if (opcion == 2)
 			{
-				try
+				modelo.generarJson();
+				
+			}
+				/*try
 				{
-					String mes = view.pedir("numero del mes");
+					/*String mes = view.pedir("numero del mes");
 					String dia = view.pedir("el dia (L,M,I,J,V,S,D)");
 					// Si alguno es null significa que la persona escribio CANCELAR
 					if (mes != null && dia != null)
@@ -100,8 +103,8 @@ public class Controller
 				{
 					view.imprimir("Revise su entrada y vuelva a intentarlo");
 				}
-
-			}
+*/
+			
 			if (opcion == 3)
 			{
 				view.imprimir("Por favor ingrese las fechas en formato “YYYY/MM/DD-HH:MM:ss” ");

@@ -24,7 +24,7 @@ public class View {
 		int rta=0;
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("1. Obtener los M comparendos con mayor gravedad");
-		System.out.println("2. Buscar los comparendos por mes y dia de la semana");
+		System.out.println("2. Escribir Json");
 		System.out.println("3. Buscar los comparendos que tienen una fecha-hora en un rango y que son de una localidad dada");
 		System.out.println("4. Dar los m comparendos mas cercanos a la estacion de policia del Campin ");
 		System.out.println("5. Dar los comparendos por: Medio deteccion, Tipo de vehiculo y Localidad");

@@ -1,6 +1,7 @@
 package model.data_structures;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Lista<T> implements ILista<T>, Iterable<T> {
 	private Node cabeza;
@@ -178,33 +179,25 @@ public class Lista<T> implements ILista<T>, Iterable<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		return new IteradorLista();
+		return new IteradorLista(cabeza);
 	}
 
-	protected class IteradorLista implements Iterator<T> {
-		public IteradorLista() {
-			if(cabeza == null)
-				return;
-			Node nuevo = new Node<T>((T) cabeza.darElemento());
-			nuevo.asignarSiguiente(cabeza);
-			actual = nuevo;
+	public class IteradorLista<T> implements Iterator<T> {
+		
+		private Node<T> actual;
+		
+		public IteradorLista(Node primero) {
+			actual= primero;
 		}
-
 		public boolean hasNext() {
-			if (actual == null || actual.darSiguiente() == null)
-				return false;
-			return actual.darSiguiente().darElemento() != null;
+			return actual!=null;
 		}
-
-		public T next() {
-			if (!hasNext())
-				return null;
-			actual = actual.darSiguiente();
-			return (T) actual.darElemento();
-		}
-
-		public void remove() {
-
+		public T next() throws NoSuchElementException{
+			if(actual==null)
+				throw new NoSuchElementException("Se ha alcanzado el final de la lista");
+			T valor = actual.darElemento();
+			actual= actual.darSiguiente();
+			return valor;
 		}
 	}
 }

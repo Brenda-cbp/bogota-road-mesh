@@ -155,6 +155,19 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 		}
 		return null;
 	}
+	public Iterator<K> darLlaves(){
+		Lista<K> rta= new Lista<K> ();
+		for (int i = 0; i < M-1; i++) {
+			
+			HashNode actual= tabla[i];
+			while (actual!=null)
+			{
+				rta.agregarAlFinal((K) actual.darLlave());
+				actual= actual.darSiguiente();
+			}
+		}
+		return rta.iterator();
+	}
 
 	/**
 	 * Cambia el tamaño de la lista segun sea necesario
@@ -191,6 +204,16 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 		}
 
 	}
+	public HashNode<W,K> nodoPorLlave (K key ){
+		if (key !=null) {
+			int i = hash(key);
+			for (HashNode<W, K> actual = tabla[i]; actual != null; actual = actual.darSiguiente()) {
+				if (key.equals(actual.darLlave()))
+					return actual;
+			}
+		}
+		return null;
+	}
 
 	public int hash(K key) {
 		return (key.hashCode() & 0x7fffffff) % M;
@@ -220,15 +243,12 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 		}
 
 		public boolean hasNext() {
-			if (nodoActual == null || darSiguienteLLave() == null)
-				return false;
-			return darSiguienteLLave() != null;
+			nodoActual=nodoPorLlave(darSiguienteLLave());
+			return nodoActual!=null;
 		}
 
 		public K next() {
-			if (!hasNext())
-				return null;
-			return darSiguienteLLave();
+			return nodoActual.darLlave();
 		}
 
 		public void remove() {
@@ -238,7 +258,7 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 			if (nodoActual != null && nodoActual.darSiguiente() != null) {
 				nodoActual = nodoActual.darSiguiente();
 				return nodoActual.darLlave();
-			} else {
+			} else if (indiceActual+1 < tabla.length) {
 				nodoActual = tabla[++indiceActual];
 				while (nodoActual == null && indiceActual < tabla.length) {
 					indiceActual++;
@@ -250,6 +270,8 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 				else
 					return nodoActual.darLlave();
 			}
+			else
+				return null;
 		}
 	}
 

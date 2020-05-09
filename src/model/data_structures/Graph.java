@@ -102,6 +102,20 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return null;
 	}
+	/**
+	 * Retorna un iterador con los arcos del vertice 
+	 * 
+	 * @param idVertex
+	 * @return
+	 */
+	public Iterator getArcosVertex(K idVertex) {
+		try {
+			return  adj.get(idVertex).darAdyacentes().iterator();
+		} catch (Exception e) {
+
+		}
+		return null;
+	}
 
 	/**
 	 * Sobrescribe la informacion del vertice
@@ -284,12 +298,12 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return count;
 	}
-/**
- * Obtiene los vértices alcanzados a partir del vértice idVertex después de la ejecución de los metodos dfs(K) y cc(). 
- * @param idVertex
- * @return
- * @throws Exception
- */
+	/**
+	 * Obtiene los vértices alcanzados a partir del vértice idVertex después de la ejecución de los metodos dfs(K) y cc(). 
+	 * @param idVertex
+	 * @return
+	 * @throws Exception
+	 */
 	public Iterable<K> getCC(K idVertex) throws Exception {
 		cc();
 		Iterator<K> it = darNodos();
@@ -302,6 +316,22 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return respuesta;
 	}
-	public Lista<K>
+	public Lista<Edges> darArcos(){
+		Lista<Edges> rta = new Lista<Edges>();
+		Iterator <K> it =darNodos();
+		Vertex actual = (Vertex) it.next();
+		while (it.hasNext()) {
+			actual = (Vertex) it.next();
+			Lista <Edges> adjacentes= actual.darAdyacentes();
+			for (int i=0; i<adjacentes.darTamaño(); i++) {
+				rta.agregarAlFinal(adjacentes.darElementoPosicion(i));
+			}
+		}
+		return rta;
+
+	}
+	public Iterator<K> darVertices(){
+		return adj.darLlaves();
+	}
 
 }

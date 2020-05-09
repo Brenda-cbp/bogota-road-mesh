@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -19,6 +21,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,11 +34,13 @@ import com.google.gson.stream.JsonReader;
 import edu.princeton.cs.introcs.StdRandom;
 import model.data_structures.ArbolRojoNegro;
 import model.data_structures.ArregloDinamico;
+import model.data_structures.Edges;
 import model.data_structures.Graph;
 import model.data_structures.Lista;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
 import model.data_structures.TablaHashChaining;
+import model.data_structures.Vertex;
 //import sun.font.LayoutPathImpl;
 //import sun.util.resources.LocaleData;
 
@@ -86,6 +93,8 @@ public class Modelo {
 	 */
 	public final static double LAT_POLICIA = 4.647586;
 	public final static double LONG_POLICIA = -74.078122;
+
+	public final String RUTA_EXPORTAR = "./data/grafo.json";
 	// --------------------------------------------------------------------------
 	// Atributos
 	// --------------------------------------------------------------------------
@@ -164,7 +173,7 @@ public class Modelo {
 		try {
 			BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_VERTICES)));
 			String v = bf.readLine();
-			
+
 			while (v != null || v !="") {
 				if (v==null) break;
 				String[] vertice = v.split(",");
@@ -202,15 +211,15 @@ public class Modelo {
 			v = bf.readLine();
 			v = bf.readLine();
 			v = bf.readLine();
-			
+
 			while (v != null) {
 				String[] vertice = v.split(" ");
 				int origen = Integer.parseInt(vertice[0]);
-				
+
 				for (int i = 1; i < vertice.length; i++) {
 					Esquina esqOrigen = grafo.getInfoVertex(origen);
 					Esquina esqDestino = grafo.getInfoVertex(Integer.parseInt(vertice[i]));
-					
+
 					if (esqOrigen != null && esqDestino != null) {
 						double costo = DistanciaHaversiana.distance(esqOrigen.darLatitud(), esqOrigen.darLongitud(),
 								esqDestino.darLatitud(), esqDestino.darLongitud());
@@ -694,4 +703,55 @@ public class Modelo {
 		rta.agregarAlComienzo("" + costos);
 		return rta;
 	}
+	public void generarJson() {
+
+		JSONArray parteVertices = new JSONArray();
+		JSONArray parteArcos = new JSONArray();
+		JSONObject docCompleto= new JSONObject();
+
+		Iterator <Integer> llaves =grafo.darVertices();//da las llaves del vertice
+
+		while(llaves.hasNext()) {
+			Integer llaveActual= llaves.next();
+			Esquina esquinaActual= grafo.getInfoVertex(llaveActual);
+			
+			JSONObject vertices = new JSONObject();
+			JSONObject adjacentes= new JSONObject();
+			JSONArray verticesAdjacentes= new JSONArray();
+
+			vertices.put("ID",esquinaActual.darId());
+			vertices.put("longitud", esquinaActual.darLongitud());
+			vertices.put("latitud", esquinaActual.darLatitud());
+			
+
+			Iterator<Edges> arcos= grafo.getArcosVertex(llaveActual);
+			
+			adjacentes.put("ID", esquinaActual.darId());
+			
+			while(arcos.hasNext()) {
+				Edges arcoActual= arcos.next();
+				if(esquinaActual==arcoActual.darOrigen()) 
+					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darDestino()));
+				else 
+					verticesAdjacentes.add(grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
+			}
+			parteVertices.add(vertices);
+			parteArcos.add(adjacentes);
+			docCompleto.put("Esquinas", parteVertices);
+			docCompleto.put("Arcos", parteArcos);
+		}
+	try {
+		FileWriter file = new FileWriter(RUTA_EXPORTAR);
+		file.write(docCompleto.toJSONString());
+		file.flush();
+	//	System.out.println("Logrado");
+	
+	}catch (IOException e) {
+	System.out.println("Eror "+ e.getMessage());
+	}
+
+
+
 }
+}
+
