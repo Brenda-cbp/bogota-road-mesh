@@ -62,6 +62,7 @@ public class Modelo {
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
+	public final String RUTA_POLICIA = "./data/esetacionpolicia.geojson";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -347,6 +348,52 @@ public class Modelo {
 	}
 
 	// ----------------------------------------------------------------------
+	
+	public void cargarPolicias() {
+		// solucion publicada en la pagina del curso
+		// TODO Cambiar la clase del contenedor de datos por la Estructura de
+		// Datos propia adecuada para resolver el requerimiento
+		JsonReader reader;
+		EstacionPolicia c = null;
+		try {
+			File ar = new File(RUTA_POLICIA);
+			reader = new JsonReader(new FileReader(ar));
+			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
+			JsonArray e2 = elem.get("features").getAsJsonArray();
+
+			int maxId = -1;
+			Comparendo maximo = null;
+			SimpleDateFormat parser = new SimpleDateFormat(FORMATO_DOCUMENTO);
+
+			for (JsonElement e : e2) {
+				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
+
+				String EPODESCRIP = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPODESCRIP")
+						.getAsString();
+				String EPOSERVICIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOSERVICIO")
+						.getAsString();
+				int EPOTELEFON = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOTELEFON")
+						.getAsInt();
+				String EPODIR_SITIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPODIR_SITIO")
+						.getAsString();
+				String EPOHORARIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOHORARIO")
+						.getAsString();
+				double EPOLONGITU = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOLONGITU")
+						.getAsDouble();
+				double EPOLATITUD = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOLATITUD")
+						.getAsDouble();
+				int EPOIULOCAL = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOIULOCAL").getAsInt();
+				c = new EstacionPolicia(OBJECTID, EPODESCRIP, EPODIR_SITIO, EPOSERVICIO, EPOHORARIO, EPOLATITUD, EPOLONGITU, EPOTELEFON, EPOIULOCAL);
+
+				}
+			}
+		} catch (FileNotFoundException | ParseException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	//______________________________________________________
 
 	/**
 	 * Retorna un maxHeap con la gravedad de cada comparendo como criterio de
