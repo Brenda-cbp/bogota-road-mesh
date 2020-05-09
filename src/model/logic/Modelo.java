@@ -62,7 +62,7 @@ public class Modelo {
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
-	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson.json";
+	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -306,7 +306,7 @@ public class Modelo {
 
 	// ---------------------------------------------------------------------
 	public void cargarDatosGrafo() throws Exception {
-		Graph<Esquina, Integer> grafo2 = new Graph<>(40);
+		grafo = new Graph<>(71283);
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
 		// Datos propia adecuada para resolver el requerimiento
@@ -324,7 +324,7 @@ public class Modelo {
 				int id = e.getAsJsonObject().get("ID").getAsInt();
 
 				c = new Esquina(id, lat, longit);
-				grafo2.addVertex(id, c);
+				grafo.addVertex(id, c);
 			}
 			JsonArray arcos = elem.get("Arcos").getAsJsonArray();
 			int i = 0;
@@ -332,15 +332,12 @@ public class Modelo {
 				double cost = e.getAsJsonObject().get("Costo").getAsDouble();
 				int id = e.getAsJsonObject().get("ID").getAsInt();
 				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
-				grafo2.addEdge(id, ajunta, cost);
+				grafo.addEdge(id, ajunta, cost);
 
 			}
-			System.out.println("" + i);
-			System.out.println("vertices = " + grafo2.V() + " arcos= " + grafo2.E());
-			Iterator<Edges> lista = grafo2.darArcos().iterator();
+			Iterator<Edges> lista = grafo.darArcos().iterator();
 			while (lista.hasNext()) {
 				Edges actual = lista.next();
-				System.out.println("origen-" + actual.darOrigen() + " destino-" + actual.darDestino());
 			}
 
 		} catch (Exception e) {
@@ -847,7 +844,9 @@ public class Modelo {
 
 	}
 	
-	public void pruebaMapa() {
+	public void pruebaMapa() throws Exception {
 		Mapa mapa = new Mapa ("prueba");
+		cargarDatosGrafo();
+		mapa.pintarGrafo(grafo);
 	}
 }
