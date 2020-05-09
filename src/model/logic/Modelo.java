@@ -62,7 +62,7 @@ public class Modelo {
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
-	public final String RUTA_POLICIA = "./data/esetacionpolicia.geojson";
+	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -103,7 +103,8 @@ public class Modelo {
 	private Lista<Comparendo> comparendos;
 	private MaxHeapCP<Comparendo> heap;
 	private Graph<Esquina, Integer> grafo;
-
+	private ArbolRojoNegro<EstacionPolicia, Integer> estaciones;
+	
 	private String ejemploFecha;
 
 	// --------------------------------------------------------------------------
@@ -116,6 +117,7 @@ public class Modelo {
 	public Modelo() {
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
+		estaciones = new ArbolRojoNegro<>();
 		try {
 			grafo = new Graph<>(71283);
 		} catch (Exception e) {
@@ -304,7 +306,7 @@ public class Modelo {
 
 	// ---------------------------------------------------------------------
 	public void cargarDatosGrafo() throws Exception {
-		Graph<Esquina, Integer>grafo2 = new Graph<>(40);
+		Graph<Esquina, Integer> grafo2 = new Graph<>(40);
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
 		// Datos propia adecuada para resolver el requerimiento
@@ -331,24 +333,23 @@ public class Modelo {
 				int id = e.getAsJsonObject().get("ID").getAsInt();
 				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
 				grafo2.addEdge(id, ajunta, cost);
-				
+
 			}
-		System.out.println("" + i);
-		System.out.println("vertices = " + grafo2.V() + " arcos= " + grafo2.E());	
-		Iterator<Edges> lista = grafo2.darArcos().iterator();
-		while(lista.hasNext())
-		{
-			Edges actual = lista.next();
-			System.out.println("origen-" + actual.darOrigen() + " destino-" + actual.darDestino());
-		}
-		
+			System.out.println("" + i);
+			System.out.println("vertices = " + grafo2.V() + " arcos= " + grafo2.E());
+			Iterator<Edges> lista = grafo2.darArcos().iterator();
+			while (lista.hasNext()) {
+				Edges actual = lista.next();
+				System.out.println("origen-" + actual.darOrigen() + " destino-" + actual.darDestino());
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	// ----------------------------------------------------------------------
-	
+
 	public void cargarPolicias() {
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
@@ -372,8 +373,7 @@ public class Modelo {
 						.getAsString();
 				String EPOSERVICIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOSERVICIO")
 						.getAsString();
-				int EPOTELEFON = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOTELEFON")
-						.getAsInt();
+				int EPOTELEFON = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOTELEFON").getAsInt();
 				String EPODIR_SITIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPODIR_SITIO")
 						.getAsString();
 				String EPOHORARIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOHORARIO")
@@ -383,17 +383,18 @@ public class Modelo {
 				double EPOLATITUD = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOLATITUD")
 						.getAsDouble();
 				int EPOIULOCAL = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOIULOCAL").getAsInt();
-				c = new EstacionPolicia(OBJECTID, EPODESCRIP, EPODIR_SITIO, EPOSERVICIO, EPOHORARIO, EPOLATITUD, EPOLONGITU, EPOTELEFON, EPOIULOCAL);
-
-				}
+				c = new EstacionPolicia(OBJECTID, EPODESCRIP, EPODIR_SITIO, EPOSERVICIO, EPOHORARIO, EPOLATITUD,
+						EPOLONGITU, EPOTELEFON, EPOIULOCAL);
+				estaciones.insertar(OBJECTID, c);
 			}
-		} catch (FileNotFoundException | ParseException e) {
+			System.out.println("Si se cargan las estaciones: Total= " + estaciones.size());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-	
-	//______________________________________________________
+
+	// ______________________________________________________
 
 	/**
 	 * Retorna un maxHeap con la gravedad de cada comparendo como criterio de
@@ -552,7 +553,7 @@ public class Modelo {
 		while (comparendos.hasNext()) {
 			Comparendo c = comparendos.next();
 			rta.agregar("" + c.darNumeroMes() + "-" + c.darInicialSemana() + c.darInicialSemana() + c.darInicialSemana()
-			+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
+					+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
 		}
 		return rta;
 	}
@@ -783,7 +784,7 @@ public class Modelo {
 				max = comparendosEnEspera;
 
 			rta.agregarAlFinal("" + fecha1.getYear() + "/" + fecha1.getMonthValue() + "/" + fecha1.getDayOfMonth()
-			+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
+					+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
 			fecha1 = fecha1.plusHours(24);
 			fecha2 = fecha2.plusHours(24);
 		}
@@ -808,7 +809,7 @@ public class Modelo {
 			Esquina esquinaActual = actual.darInfo();
 
 			JSONObject vertices = new JSONObject();
-			//JSONObject verticesAdjacentes = new JSONObject();
+			// JSONObject verticesAdjacentes = new JSONObject();
 
 			vertices.put("ID", esquinaActual.darId());
 			vertices.put("longitud", esquinaActual.darLongitud());
@@ -816,17 +817,15 @@ public class Modelo {
 
 			Iterator<Edges> arcos = grafo.getArcosVertex(actual.darLLave());
 
-
 			while (arcos.hasNext()) {
 				JSONObject adjacentes = new JSONObject();
 				adjacentes.put("ID", esquinaActual.darId());
 				Edges arcoActual = arcos.next();
-				//adjacentes.put("Costo", arcoActual.darCosto());
+				// adjacentes.put("Costo", arcoActual.darCosto());
 				if (esquinaActual.darId() == (int) arcoActual.darOrigen()) {
 					adjacentes.put("ajunta", grafo.getInfoVertex((Integer) arcoActual.darDestino()).darId());
 					adjacentes.put("Costo", arcoActual.darCosto());
-				}
-				else {
+				} else {
 					adjacentes.put("ajunta", grafo.getInfoVertex((Integer) arcoActual.darOrigen()).darId());
 					adjacentes.put("Costo", arcoActual.darCosto());
 				}

@@ -164,35 +164,7 @@ public class Controller
 			}
 			if (opcion == 6)
 			{
-				String latmin = view.pedir("Latitud minima");
-				if (latmin != null)
-				{
-					double l1 = Double.parseDouble(latmin);
-					try
-					{
-
-						String latMax = view.pedir("Latitud maxima");
-						if (latMax != null)
-						{
-							double l2 = Double.parseDouble(latMax);
-							Iterator<Comparendo> it = modelo.darComparendosEnRangoLatitud(l1, l2);
-							view.imprimir("Se imprimiran los primeros " + modelo.N + " encontrados");
-							int i = 0;
-							while(it.hasNext() && i < modelo.N)
-							{
-								view.imprimir(it.next());
-								i++;
-							}
-							if(i == 0)
-								view.imprimir(modelo.COMPARENDO_NO_ENCONTRADO);
-						}
-					}
-					catch (Exception e)
-					{
-						view.imprimir("Entrada invalida");
-						e.printStackTrace();
-					}
-				}
+				modelo.cargarPolicias();
 			}
 			if (opcion == 7)
 			{
