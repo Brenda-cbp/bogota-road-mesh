@@ -73,5 +73,4 @@ public class EstacionPolicia
 		EPOIULOCAL = ePOIULOCAL;
 	}
 	
-	
 }

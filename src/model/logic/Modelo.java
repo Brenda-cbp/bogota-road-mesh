@@ -347,7 +347,7 @@ public class Modelo {
 
 	// ----------------------------------------------------------------------
 
-	public void cargarPolicias() {
+	public Lista<EstacionPolicia> cargarPolicias() {
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
 		// Datos propia adecuada para resolver el requerimiento
@@ -388,8 +388,9 @@ public class Modelo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return estaciones;
 	}
+
 
 	// ______________________________________________________
 
@@ -843,14 +844,18 @@ public class Modelo {
 		}
 
 	}
-	
+
 	public void dibujarMapa() throws Exception {
-		mapa = new Mapa ("prueba");
+		mapa = new Mapa("prueba");
 		cargarDatosGrafo();
 		mapa.pintarGrafo(grafo);
 	}
+
 	public void dibujarEstacionesMapa() throws Exception {
-		dibujarMapa();
+		mapa = new Mapa("policia");
+		cargarDatosGrafo();
+		cargarPolicias();
 		mapa.dibujarEstaciones(estaciones);
+		mapa.pintarGrafo(grafo);
 	}
 }

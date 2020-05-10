@@ -69,6 +69,7 @@ public class Controller {
 			}
 			if (opcion == 4) {
 				modelo.cargarPolicias();
+				view.imprimir("De cada estacion se decidio cargar su respectiva: Descripcion, latitud, longitud, telefono,direccion,horario, iuLocal, servicio, id");
 			}
 			if (opcion == 5) {
 				try {
