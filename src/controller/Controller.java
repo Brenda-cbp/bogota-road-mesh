@@ -7,6 +7,7 @@ import java.util.Scanner;
 import model.data_structures.Lista;
 import model.data_structures.MaxHeapCP;
 import model.logic.Comparendo;
+import model.logic.EstacionPolicia;
 import model.logic.Modelo;
 import view.View;
 
@@ -68,8 +69,11 @@ public class Controller {
 				}
 			}
 			if (opcion == 4) {
-				modelo.cargarPolicias();
+				EstacionPolicia ejemplo =modelo.cargarPolicias().darElementoPosicion(0);
+				view.imprimir("Ejemplo Estacion:");
+				view.imprimir(ejemplo);
 				view.imprimir("De cada estacion se decidio cargar su respectiva: Descripcion, latitud, longitud, telefono,direccion,horario, iuLocal, servicio, id");
+			
 			}
 			if (opcion == 5) {
 				try {

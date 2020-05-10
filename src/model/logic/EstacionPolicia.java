@@ -72,5 +72,12 @@ public class EstacionPolicia
 	public void setEPOIULOCAL(int ePOIULOCAL) {
 		EPOIULOCAL = ePOIULOCAL;
 	}
+	@Override
+	public String toString() {
+		return "EstacionPolicia" + "\n" + "EPODESCRIP=" + EPODESCRIP +"\n"+ "EPODIR_SITIO=" + EPODIR_SITIO+"\n" + "EPOSERVICIO="
+				+ EPOSERVICIO +"\n"+ "EPOHORARIO=" + EPOHORARIO +"\n"+ "EPOLATITUD=" + EPOLATITUD +"\n"+ "EPOLONGITU="
+				+ EPOLONGITU +"\n"+ "OBJECTID=" + OBJECTID +"\n"+ "EPOTELEFON=" + EPOTELEFON +"\n"+ "EPOIULOCAL=" + EPOIULOCAL
+				+ "";
+	}
 	
 }
