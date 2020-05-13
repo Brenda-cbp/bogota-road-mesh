@@ -292,7 +292,7 @@ public class Graph<V, K extends Comparable<K>> {
 		while (it.hasNext()) {
 			K actual = it.next();
 			if (!adj.get(actual).isChecked()) {
-				dfsLlamado(actual);
+				dfsAlgoritmo(actual);
 				count++;
 			}
 		}
