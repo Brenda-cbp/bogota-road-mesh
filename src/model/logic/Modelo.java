@@ -173,43 +173,43 @@ public class Modelo {
 	{
 		cargarDatosGrafo();
 		cargarDatos();
-		Iterator<Vertex> it = grafo.darVertices().iterator();
-		//		int ceros = 0;
-		//		int total = 0;
-		//		while(it.hasNext())
-		//		{
-		//			Esquina act = (Esquina) it.next().darInfo();
-		//			if(act.darLista().darTamaño() == 0)
-		//				ceros++;
-		//			else
-		//			{
-		//				total += act.darLista().darTamaño();
-		//				act.imprimirMasdistancia();
-		//			}
-		//		}
-		//		System.out.println("ceros = " + ceros + " total = " +  total);
-		//		int[] indice = StdRandom.permutation(228000, 2000);
-		//		for(int i = 0; i< indice.length; i++)
-		//		{
-		//			System.out.println("Indice = " + indice[i] );
-		//			Esquina esquina = (Esquina)(grafo.darVertices().darElementoPosicion(indice[i]).darInfo());
-		//			Iterator<Comparendo> it = esquina.darLista().iterator();
-		//			System.out.println("Esq: " + esquina.darLatitud() + "," + esquina.darLongitud() + " Comparendos: " + esquina.darLista().darTamaño());
-		//			int cerca = 0;
-		//			int lejos = 0;
-		//			while(it.hasNext())
-		//			{
-		//				Comparendo actual = it.next();
-		//				double dist = DistanciaHaversiana.distance(esquina.darLatitud(), esquina.darLongitud(), actual.darLatitud(), actual.darLongitud());
-		//				if(dist<1)
-		//					cerca++;
-		//				else if(dist >3.5)
-		//					lejos++;	
-		//				if(dist >4.2)
-		//					System.out.println(dist);
-		//			}
-		//			System.out.println("cerca =  " + cerca + " lejos = " + lejos);
-		//		}
+//		Iterator<Vertex> it = grafo.darVertices().iterator();
+//				int ceros = 0;
+//				int total = 0;
+//				while(it.hasNext())
+//				{
+//					Esquina act = (Esquina) it.next().darInfo();
+//					if(act.darLista().darTamaño() == 0)
+//						ceros++;
+//					else
+//					{
+//						total += act.darLista().darTamaño();
+//						act.imprimirMasdistancia();
+//					}
+//				}
+//				System.out.println("ceros = " + ceros + " total = " +  total);
+				int[] indice = StdRandom.permutation(228000, 1);
+				for(int i = 0; i< indice.length; i++)
+				{
+					System.out.println("Indice = " + indice[i] );
+					Esquina esquina = (Esquina)(grafo.darVertices().darElementoPosicion(indice[i]).darInfo());
+					Iterator<Comparendo> it = esquina.darLista().iterator();
+					System.out.println("Esq: " + esquina.darLatitud() + "," + esquina.darLongitud() + " Comparendos: " + esquina.darLista().darTamaño());
+					int cerca = 0;
+					int lejos = 0;
+					while(it.hasNext())
+					{
+						Comparendo actual = it.next();
+						double dist = DistanciaHaversiana.distance(esquina.darLatitud(), esquina.darLongitud(), actual.darLatitud(), actual.darLongitud());
+						if(dist<1)
+							cerca++;
+						else if(dist >3.5)
+							lejos++;	
+						if(dist >4.2)
+							System.out.println(dist);
+					}
+					System.out.println("cerca =  " + cerca + " lejos = " + lejos);
+				}
 	}
 	/**
 	 * Lee el archivo especificado por la constante RUTA y los almacena en un
@@ -254,9 +254,6 @@ public class Modelo {
 						null, null, longitud, latitud, null);
 				Esquina masCerca = darMasCercana(latitud, longitud);
 				masCerca.agregarComparendo(c);		
-				if(i % 6000 == 0)
-					System.out.println(i);
-				i++;
 				if (OBJECTID > maxId) {
 					maxId = OBJECTID;
 					maximo = c;
@@ -305,10 +302,7 @@ public class Modelo {
 				grafo.addEdge(id, ajunta, cost);
 
 			}
-			Iterator<Edges> lista = grafo.darArcos().iterator();
-			while (lista.hasNext()) {
-				Edges actual = lista.next();
-			}
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -847,68 +841,45 @@ public class Modelo {
 	}
 	public Node<Lista<Esquina>>[] particionar()
 	{
-		Node<Lista<Esquina>>[] arreglo = new Node[374];
+		Node<Lista<Esquina>>[] arreglo = new Node[676];
 		Iterator<Vertex> it = grafo.darVertices().iterator();
 		while(it.hasNext())
 		{
 			Esquina actual = (Esquina) it.next().darInfo();
-			//calculo fila
-			double llaveLat = (actual.darLatitud() - MIN_LATITUD);
-			if(llaveLat < 0.5)
-				llaveLat = 0;
-			else
-			{
-				llaveLat =(int)(llaveLat*40);
-				llaveLat-=20;
-			}
-			//calculo columna
-			double llaveLong = MAX_LONGITUD - actual.darLongitud();
-			llaveLong= (int)(llaveLong*50);
-			if(llaveLong > 17)
-				llaveLong = 16;
-			//calculo el indice en el arreglo segun la fila y la columna
-			int llave = (int)(llaveLat)*17;
-			llave = llave + (int)(llaveLong);
+			int llave = darIndice(actual.darLatitud(), actual.darLongitud());
 			if(arreglo[llave] == null)
 				arreglo[llave] = new Node<Lista<Esquina>>((new Lista()));
 			arreglo[llave].darElemento().agregarAlFinal(actual);
-
-		}
-		for(int i = 0;i < 17; i++)
-		{
-			if(arreglo[i] != null)
-				System.out.println(arreglo[i].darElemento().darTamaño());
 		}
 		return arreglo;
 	}
 	public int darIndice(double lat, double longit)
 	{
-		double llaveLat = (lat - MIN_LATITUD);
-		if(llaveLat < 0.5)
+		int llaveLat = (int)((lat - MIN_LATITUD)*50);
+		if(llaveLat < 25)
 			llaveLat = 0;
 		else
-		{
-			llaveLat =(int)(llaveLat*40);
-			llaveLat-=20;
-		}
-		double llaveLong = (MAX_LONGITUD - longit);
-		llaveLong= (int)(llaveLong*50);
-		if(llaveLong > 16)
-			llaveLong = 16;
-		int llave = (int)(llaveLat)*17;
-		llave = llave + (int)(llaveLong);
-		return llave;
+			llaveLat-=25;
+		int llaveLong = (int)((MAX_LONGITUD - longit)*80);
+		if(llaveLong > 24)
+				llaveLong = 25;
+		return (llaveLat*26 + llaveLong);
 	}
 	public Esquina darMasCercana(double lat, double longit)
 	{
 		int llave = darIndice(lat, longit);
-		//El sector 68 esta vacio
-		//	if(sectores[llave] == null)
-		//		llave++;
 
-		if(sectores[llave] == null)
+		if(llave == 329 || llave == 483)
+			llave--;
+		else if(llave == 484)
+			llave -=2;
+		else if(llave == 331|| llave == 511)
+			llave -=3;
+		else if(llave == 362)
+			llave+=2;
+		if(sectores[llave]==null)
 		{
-			System.out.println("no hay nada en " + lat +","+ longit);
+			System.out.println("no hay nada en " + lat +","+ longit + " indice;" + llave);
 			return new Esquina(-1, -1, -1);
 		}
 		Iterator<Esquina> it = sectores[llave].darElemento().iterator();
@@ -926,7 +897,6 @@ public class Modelo {
 			}
 		}
 		return minima;
-
 	}
 
 }
