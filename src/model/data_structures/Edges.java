@@ -16,6 +16,8 @@ public class Edges<K extends Comparable <K>> {
 	 * Costo del enlace
 	 */
 	private double costo;
+	
+	private int costo2;
 
 	/**
 	 * Constructor de un enlace
@@ -27,12 +29,15 @@ public class Edges<K extends Comparable <K>> {
 	 * @param cost
 	 *            costo
 	 */
-	public Edges(K orig, K dest, double cost) {
+	public Edges(K orig, K dest, double cost, int costo2) {
 		origen = orig;
 		destino = dest;
 		costo = cost;
+		this.costo2 = costo2;
 	}
 
+	
+	
 	/**
 	 * Retorna el costo del enlace
 	 * 
@@ -62,5 +67,10 @@ public class Edges<K extends Comparable <K>> {
 	public void cambiarCosto(double cost)
 	{
 		costo = cost;
+	}
+	
+	public int darcosto2()
+	{
+		return costo2;
 	}
 }

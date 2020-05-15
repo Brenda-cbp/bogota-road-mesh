@@ -23,6 +23,11 @@ public class Esquina
 	private double longitud;
 	
 	private Lista<Comparendo> comparendos;
+	
+	
+	private Lista<EstacionPolicia> estacionesPolicia;
+	
+	
 	/**
 	 * Crea una nueva esquina con la informacion dada
 	 * @param id el identificador
@@ -35,8 +40,21 @@ public class Esquina
 		latitud = lat;
 		longitud = longit;
 		comparendos = new Lista<>();
+		estacionesPolicia = new Lista<>();
 	}
 	
+	public boolean tieneEstacion()
+	{
+		return estacionesPolicia.darTamaño() != 0;
+	}
+	public Lista<EstacionPolicia> darEstaciones()
+	{
+		return estacionesPolicia;
+	}
+	public void agregarEstacion(EstacionPolicia e)
+	{
+		estacionesPolicia.agregarAlFinal(e);
+	}
 	public int darId()
 	{
 		return ID;

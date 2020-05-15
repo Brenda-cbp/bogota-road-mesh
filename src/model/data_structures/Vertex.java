@@ -1,5 +1,7 @@
 package model.data_structures;
 
+import model.logic.EstacionPolicia;
+
 public class Vertex<V, K extends Comparable<K>>
 {
 	
@@ -24,6 +26,8 @@ public class Vertex<V, K extends Comparable<K>>
 	 * Indica la componente conexa a la cual pertenece el nodo
 	 */
 	private int idCompConexa;
+	
+
 	
 	/**
 	 * Constructor del vertice

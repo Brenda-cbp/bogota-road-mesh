@@ -58,7 +58,7 @@ public class Modelo {
 	/**
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_small_50000_sorted.geojson";
 
 	public final String RUTA_VERTICES = "./data/bogota_vertices.txt";
 
@@ -173,6 +173,7 @@ public class Modelo {
 	{
 		cargarDatosGrafo();
 		cargarDatos();
+		cargarPolicias();
 //		Iterator<Vertex> it = grafo.darVertices().iterator();
 //				int ceros = 0;
 //				int total = 0;
@@ -188,31 +189,31 @@ public class Modelo {
 //					}
 //				}
 //				System.out.println("ceros = " + ceros + " total = " +  total);
-				int[] indice = StdRandom.permutation(228000, 6000);
-				for(int i = 0; i< indice.length; i++)
-				{
-				//	System.out.println("Indice = " + indice[i] );
-					Esquina esquina = (Esquina)(grafo.darVertices().darElementoPosicion(indice[i]).darInfo());
-					Iterator<Comparendo> it = esquina.darLista().iterator();
-					int cerca = 0;
-					int lejos = 0;
-					while(it.hasNext())
-					{
-						Comparendo actual = it.next();
-						double dist = DistanciaHaversiana.distance(esquina.darLatitud(), esquina.darLongitud(), actual.darLatitud(), actual.darLongitud());
-						if(dist<1)
-							cerca++;
-						else if(dist >1)
-							lejos++;	
-						if(dist >2)
-							System.out.println(dist);
-					}
-					if(esquina.darLista().darTamaño() > 0 && lejos >0)
-					{
-					System.out.println("Esq: " + esquina.darLatitud() + "," + esquina.darLongitud() + " Comparendos: " + esquina.darLista().darTamaño());
-					System.out.println("cerca =  " + cerca + " lejos = " + lejos);
-					}
-				}
+//				int[] indice = StdRandom.permutation(228000, 6000);
+//				for(int i = 0; i< indice.length; i++)
+//				{
+//				//	System.out.println("Indice = " + indice[i] );
+//					Esquina esquina = (Esquina)(grafo.darVertices().darElementoPosicion(indice[i]).darInfo());
+//					Iterator<Comparendo> it = esquina.darLista().iterator();
+//					int cerca = 0;
+//					int lejos = 0;
+//					while(it.hasNext())
+//					{
+//						Comparendo actual = it.next();
+//						double dist = DistanciaHaversiana.distance(esquina.darLatitud(), esquina.darLongitud(), actual.darLatitud(), actual.darLongitud());
+//						if(dist<1)
+//							cerca++;
+//						else if(dist >1)
+//							lejos++;	
+//						if(dist >2)
+//							System.out.println(dist);
+//					}
+//					if(esquina.darLista().darTamaño() > 0 && lejos >0)
+//					{
+//					System.out.println("Esq: " + esquina.darLatitud() + "," + esquina.darLongitud() + " Comparendos: " + esquina.darLista().darTamaño());
+//					System.out.println("cerca =  " + cerca + " lejos = " + lejos);
+//					}
+//				}
 	}
 	/**
 	 * Lee el archivo especificado por la constante RUTA y los almacena en un
@@ -302,7 +303,8 @@ public class Modelo {
 				double cost = e.getAsJsonObject().get("Costo").getAsDouble();
 				int id = e.getAsJsonObject().get("ID").getAsInt();
 				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
-				grafo.addEdge(id, ajunta, cost);
+				int cost2 = grafo.getInfoVertex(id).darLista().darTamaño() + grafo.getInfoVertex(ajunta).darLista().darTamaño();
+				grafo.addEdge(id, ajunta, cost,cost2);
 
 			}
 
@@ -354,6 +356,7 @@ public class Modelo {
 				c = new EstacionPolicia(OBJECTID, EPODESCRIP, EPODIR_SITIO, EPOSERVICIO, EPOHORARIO, EPOLATITUD,
 						EPOLONGITU, EPOTELEFON, EPOIULOCAL);
 				estaciones.agregarAlFinal(c);
+				darMasCercana(EPOLATITUD, EPOLONGITU).agregarEstacion(c);
 			}
 			System.out.println("Si se cargan las estaciones: Total= " + estaciones.darTamaño());
 		} catch (Exception e) {
