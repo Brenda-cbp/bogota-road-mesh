@@ -238,9 +238,6 @@ public class Modelo {
 			for (JsonElement e : e2) {
 				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
 
-
-				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETECCION")
-						.getAsString();
 				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHICULO")
 						.getAsString();
 				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVICIO")
@@ -253,11 +250,11 @@ public class Modelo {
 				double latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates")
 						.getAsJsonArray().get(1).getAsDouble();
 
-				c = new Comparendo(OBJECTID, null, null, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION,
+				c = new Comparendo(OBJECTID, null, null, null, CLASE_VEHI, TIPO_SERVI, INFRACCION,
 						null, null, longitud, latitud, null);
 				Esquina masCerca = darMasCercana(latitud, longitud);
 				masCerca.agregarComparendo(c);		
-				if(i % 1000 == 0)
+				if(i % 6000 == 0)
 					System.out.println(i);
 				i++;
 				if (OBJECTID > maxId) {
@@ -850,8 +847,7 @@ public class Modelo {
 	}
 	public Node<Lista<Esquina>>[] particionar()
 	{
-		//12 filas y 8 columnas espacios
-		Node<Lista<Esquina>>[] arreglo = new Node[176];
+		Node<Lista<Esquina>>[] arreglo = new Node[374];
 		Iterator<Vertex> it = grafo.darVertices().iterator();
 		while(it.hasNext())
 		{
@@ -863,25 +859,25 @@ public class Modelo {
 			else
 			{
 				llaveLat =(int)(llaveLat*40);
-				llaveLat-=19;
+				llaveLat-=20;
 			}
 			//calculo columna
 			double llaveLong = MAX_LONGITUD - actual.darLongitud();
-			llaveLong= (int)(llaveLong*20);
-			if(llaveLong == 8)
-				llaveLong = 7;
+			llaveLong= (int)(llaveLong*50);
+			if(llaveLong > 17)
+				llaveLong = 16;
 			//calculo el indice en el arreglo segun la fila y la columna
-			int llave = (int)(llaveLat)*8;
+			int llave = (int)(llaveLat)*17;
 			llave = llave + (int)(llaveLong);
 			if(arreglo[llave] == null)
 				arreglo[llave] = new Node<Lista<Esquina>>((new Lista()));
 			arreglo[llave].darElemento().agregarAlFinal(actual);
 
 		}
-		for(int i = 0;i < arreglo.length; i++)
+		for(int i = 0;i < 17; i++)
 		{
-			if(arreglo[i] != null && arreglo[i].darElemento().darTamaño() > 8000)
-			System.out.println(arreglo[i].darElemento().darTamaño());
+			if(arreglo[i] != null)
+				System.out.println(arreglo[i].darElemento().darTamaño());
 		}
 		return arreglo;
 	}
@@ -893,13 +889,13 @@ public class Modelo {
 		else
 		{
 			llaveLat =(int)(llaveLat*40);
-			llaveLat-=19;
+			llaveLat-=20;
 		}
 		double llaveLong = (MAX_LONGITUD - longit);
-		llaveLong= (int)(llaveLong*20);
-		if(llaveLong == 8)
-			llaveLong = 7;
-		int llave = (int)(llaveLat)*8;
+		llaveLong= (int)(llaveLong*50);
+		if(llaveLong > 16)
+			llaveLong = 16;
+		int llave = (int)(llaveLat)*17;
 		llave = llave + (int)(llaveLong);
 		return llave;
 	}
@@ -907,8 +903,14 @@ public class Modelo {
 	{
 		int llave = darIndice(lat, longit);
 		//El sector 68 esta vacio
+		//	if(sectores[llave] == null)
+		//		llave++;
+
 		if(sectores[llave] == null)
-			llave++;
+		{
+			System.out.println("no hay nada en " + lat +","+ longit);
+			return new Esquina(-1, -1, -1);
+		}
 		Iterator<Esquina> it = sectores[llave].darElemento().iterator();
 		double distMin = Double.POSITIVE_INFINITY;
 		Esquina minima = null;
