@@ -188,13 +188,12 @@ public class Modelo {
 //					}
 //				}
 //				System.out.println("ceros = " + ceros + " total = " +  total);
-				int[] indice = StdRandom.permutation(228000, 1);
+				int[] indice = StdRandom.permutation(228000, 6000);
 				for(int i = 0; i< indice.length; i++)
 				{
-					System.out.println("Indice = " + indice[i] );
+				//	System.out.println("Indice = " + indice[i] );
 					Esquina esquina = (Esquina)(grafo.darVertices().darElementoPosicion(indice[i]).darInfo());
 					Iterator<Comparendo> it = esquina.darLista().iterator();
-					System.out.println("Esq: " + esquina.darLatitud() + "," + esquina.darLongitud() + " Comparendos: " + esquina.darLista().darTamaño());
 					int cerca = 0;
 					int lejos = 0;
 					while(it.hasNext())
@@ -203,12 +202,16 @@ public class Modelo {
 						double dist = DistanciaHaversiana.distance(esquina.darLatitud(), esquina.darLongitud(), actual.darLatitud(), actual.darLongitud());
 						if(dist<1)
 							cerca++;
-						else if(dist >3.5)
+						else if(dist >1)
 							lejos++;	
-						if(dist >4.2)
+						if(dist >2)
 							System.out.println(dist);
 					}
+					if(esquina.darLista().darTamaño() > 0 && lejos >0)
+					{
+					System.out.println("Esq: " + esquina.darLatitud() + "," + esquina.darLongitud() + " Comparendos: " + esquina.darLista().darTamaño());
 					System.out.println("cerca =  " + cerca + " lejos = " + lejos);
+					}
 				}
 	}
 	/**
