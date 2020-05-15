@@ -39,13 +39,13 @@ public class Controller {
 	 */
 	public void correrPrograma() {
 		try {
-			modelo.crearGrafo();
+			modelo.cargaDatosProyecto();
 		} catch (Exception e1) {
 
 			e1.printStackTrace();
 		}
 		view.imprimir("Se cargo el grafo a partir de los txt");
-		view.imprimir("Aristas totales:" + modelo.darAristas() + " Vertices totales:  " + modelo.darVertices());
+		view.imprimir("Aristas totales:" + modelo.darAristas() + " Vertices totales:  " + modelo.darNumVertices());
 		while (true) {
 			int opcion = view.printMenu();
 			if (opcion == 1) {
