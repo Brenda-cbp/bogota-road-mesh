@@ -63,6 +63,10 @@ public class Controller {
 		view.imprimir("Estacion con mayor ID:");
 		view.imprimir(policia);
 		
+		
+		view.imprimir("LOS REQUERIMIENTOS INICIALES SE REALIZAN JUNTO A LA CARGA DE DATOS");
+		view.imprimir("NO SE IMPRIME NADA EN CONSOLA SOBRE ESTO PUES NO SE SOLICITO");
+		view.imprimir("EL LISTADO DE LAS OPCIONES ES DEL TALLER PASADO");
 		while (true) {
 			int opcion = view.printMenu();
 			if (opcion == 1) {
