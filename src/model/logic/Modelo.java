@@ -100,10 +100,9 @@ public class Modelo {
 	 */
 	public final static double LONG_POLICIA = -74.078122;
 
-
 	public final double MAX_LATITUD = 4.836643219999985;
-	public final double MAX_LONGITUD =-73.99132694999997;
-	public final double MIN_LATITUD =3.819966340000008;
+	public final double MAX_LONGITUD = -73.99132694999997;
+	public final double MIN_LATITUD = 3.819966340000008;
 	public final double MIN_LONGITUD = -74.39470032000003;
 
 	public final String RUTA_EXPORTAR = "./data/grafo.json";
@@ -135,15 +134,19 @@ public class Modelo {
 		} catch (Exception e) {
 		}
 	}
+
 	/**
 	 * Retorna el numero de vertices en el grafo
+	 * 
 	 * @return numero de esquinas
 	 */
 	public int darNumVertices() {
 		return grafo.V();
 	}
+
 	/**
 	 * retorna el numero de aristas que tiene el grafo
+	 * 
 	 * @return numero de enlaces
 	 */
 	public int darAristas() {
@@ -169,52 +172,15 @@ public class Modelo {
 	public int darCantidadComparendos() {
 		return heap.darNumElmentos();
 	}
-	public void cargaDatosProyecto() throws Exception
-	{
-		cargarDatosGrafo();
-		cargarDatos();
-		cargarPolicias();
-//		Iterator<Vertex> it = grafo.darVertices().iterator();
-//				int ceros = 0;
-//				int total = 0;
-//				while(it.hasNext())
-//				{
-//					Esquina act = (Esquina) it.next().darInfo();
-//					if(act.darLista().darTamaño() == 0)
-//						ceros++;
-//					else
-//					{
-//						total += act.darLista().darTamaño();
-//						act.imprimirMasdistancia();
-//					}
-//				}
-//				System.out.println("ceros = " + ceros + " total = " +  total);
-//				int[] indice = StdRandom.permutation(228000, 6000);
-//				for(int i = 0; i< indice.length; i++)
-//				{
-//				//	System.out.println("Indice = " + indice[i] );
-//					Esquina esquina = (Esquina)(grafo.darVertices().darElementoPosicion(indice[i]).darInfo());
-//					Iterator<Comparendo> it = esquina.darLista().iterator();
-//					int cerca = 0;
-//					int lejos = 0;
-//					while(it.hasNext())
-//					{
-//						Comparendo actual = it.next();
-//						double dist = DistanciaHaversiana.distance(esquina.darLatitud(), esquina.darLongitud(), actual.darLatitud(), actual.darLongitud());
-//						if(dist<1)
-//							cerca++;
-//						else if(dist >1)
-//							lejos++;	
-//						if(dist >2)
-//							System.out.println(dist);
-//					}
-//					if(esquina.darLista().darTamaño() > 0 && lejos >0)
-//					{
-//					System.out.println("Esq: " + esquina.darLatitud() + "," + esquina.darLongitud() + " Comparendos: " + esquina.darLista().darTamaño());
-//					System.out.println("cerca =  " + cerca + " lejos = " + lejos);
-//					}
-//				}
+
+	public void cargaDatosProyecto() throws Exception {
+		Esquina esquina =cargarDatosGrafoVertices();
+		Comparendo comparendo = cargarDatos();
+		Edges edge = cargarDatosGrafoEdges();
+		EstacionPolicia estacion = cargarPolicias();
+
 	}
+
 	/**
 	 * Lee el archivo especificado por la constante RUTA y los almacena en un
 	 * Heap, retorna el comparendo con mayor ID registrado
@@ -254,10 +220,10 @@ public class Modelo {
 				double latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates")
 						.getAsJsonArray().get(1).getAsDouble();
 
-				c = new Comparendo(OBJECTID, null, null, null, CLASE_VEHI, TIPO_SERVI, INFRACCION,
-						null, null, longitud, latitud, null);
+				c = new Comparendo(OBJECTID, null, null, null, CLASE_VEHI, TIPO_SERVI, INFRACCION, null, null, longitud,
+						latitud, null);
 				Esquina masCerca = darMasCercana(latitud, longitud);
-				masCerca.agregarComparendo(c);		
+				masCerca.agregarComparendo(c);
 				if (OBJECTID > maxId) {
 					maxId = OBJECTID;
 					maximo = c;
@@ -272,16 +238,18 @@ public class Modelo {
 
 	// ---------------------------------------------------------------------
 	/**
-	 * Carga el grafo a partir del archivo geoJson 
+	 * Carga el grafo a partir del archivo geoJson
+	 * 
 	 * @throws Exception
 	 */
-	public void cargarDatosGrafo() throws Exception {
+	public Esquina cargarDatosGrafoVertices() throws Exception {
 		grafo = new Graph<>(71283);
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
 		// Datos propia adecuada para resolver el requerimiento
 		JsonReader reader;
-
+		Esquina maxima = null;
+		double idEsquinaMax = 0;
 		Esquina c = null;
 		try {
 			File ar = new File(RUTA_EXPORTAR);
@@ -293,48 +261,70 @@ public class Modelo {
 				double longit = e.getAsJsonObject().get("longitud").getAsDouble();
 				double lat = e.getAsJsonObject().get("latitud").getAsDouble();
 				int id = e.getAsJsonObject().get("ID").getAsInt();
-
 				c = new Esquina(id, lat, longit);
+				if (id > idEsquinaMax) {
+					idEsquinaMax = id;
+					maxima = c;
+				}
 				grafo.addVertex(id, c);
 			}
+			return maxima;
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Edges cargarDatosGrafoEdges() {
+		try {
+			JsonReader reader;
+			File ar = new File(RUTA_EXPORTAR);
+			reader = new JsonReader(new FileReader(ar));
+			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
+			int idArcoMaximo = 0;
+			Edges edgeMaxima = null;
 			JsonArray arcos = elem.get("Arcos").getAsJsonArray();
 			for (JsonElement e : arcos) {
 				double cost = e.getAsJsonObject().get("Costo").getAsDouble();
 				int id = e.getAsJsonObject().get("ID").getAsInt();
 				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
-				int cost2 = grafo.getInfoVertex(id).darLista().darTamaño() + grafo.getInfoVertex(ajunta).darLista().darTamaño();
-				grafo.addEdge(id, ajunta, cost,cost2);
-
+				int cost2 = grafo.getInfoVertex(id).darLista().darTamaño()
+						+ grafo.getInfoVertex(ajunta).darLista().darTamaño();
+				grafo.addEdge(id, ajunta, cost, cost2);
+				if (id > idArcoMaximo) {
+					idArcoMaximo = id;
+					edgeMaxima = new Edges<Integer>(id, ajunta, cost, cost2);
+				}
+				return edgeMaxima;
 			}
-
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	// ----------------------------------------------------------------------
 
 	/**
 	 * carga las estaciones de policia del archivo geojson
+	 * 
 	 * @return
 	 */
-	public Lista<EstacionPolicia> cargarPolicias() {
+	public EstacionPolicia cargarPolicias() {
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
 		// Datos propia adecuada para resolver el requerimiento
 		JsonReader reader;
 		EstacionPolicia c = null;
 		try {
+			EstacionPolicia maxima = null;
 			File ar = new File(RUTA_POLICIA);
 			reader = new JsonReader(new FileReader(ar));
 			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
 			JsonArray e2 = elem.get("features").getAsJsonArray();
 
 			int maxId = -1;
-			Comparendo maximo = null;
-			SimpleDateFormat parser = new SimpleDateFormat(FORMATO_DOCUMENTO);
 
 			for (JsonElement e : e2) {
 				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
@@ -357,14 +347,19 @@ public class Modelo {
 						EPOLONGITU, EPOTELEFON, EPOIULOCAL);
 				estaciones.agregarAlFinal(c);
 				darMasCercana(EPOLATITUD, EPOLONGITU).agregarEstacion(c);
+				if(OBJECTID > maxId)
+				{
+					maxId = OBJECTID;
+					maxima = c;
+				}
+				return maxima;
 			}
 			System.out.println("Si se cargan las estaciones: Total= " + estaciones.darTamaño());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return estaciones;
+		return null;
 	}
-
 
 	// ______________________________________________________
 
@@ -525,7 +520,7 @@ public class Modelo {
 		while (comparendos.hasNext()) {
 			Comparendo c = comparendos.next();
 			rta.agregar("" + c.darNumeroMes() + "-" + c.darInicialSemana() + c.darInicialSemana() + c.darInicialSemana()
-			+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
+					+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
 		}
 		return rta;
 	}
@@ -756,7 +751,7 @@ public class Modelo {
 				max = comparendosEnEspera;
 
 			rta.agregarAlFinal("" + fecha1.getYear() + "/" + fecha1.getMonthValue() + "/" + fecha1.getDayOfMonth()
-			+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
+					+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
 			fecha1 = fecha1.plusHours(24);
 			fecha2 = fecha2.plusHours(24);
 		}
@@ -821,83 +816,85 @@ public class Modelo {
 
 	public void dibujarMapa() throws Exception {
 		mapa = new Mapa("prueba");
-		cargarDatosGrafo();
+		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
 		mapa.pintarGrafo(grafo);
 	}
 
 	public void dibujarEstacionesMapa() throws Exception {
 		mapa = new Mapa("policia");
-		cargarDatosGrafo();
+		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
 		cargarPolicias();
 		mapa.dibujarEstaciones(estaciones);
 		mapa.pintarGrafo(grafo);
 	}
+
 	/**
 	 * Indica si el parametro esta en el intervalo [limInf,limSup)
-	 * @param parametro parametro a evaluar
-	 * @param limInf limite inferior (inclusivo)
-	 * @param limSup limite superior (exclusivo)
+	 * 
+	 * @param parametro
+	 *            parametro a evaluar
+	 * @param limInf
+	 *            limite inferior (inclusivo)
+	 * @param limSup
+	 *            limite superior (exclusivo)
 	 * @return true si esta entre los limites, false de lo contrario
 	 */
-	public boolean isBetween(double parametro,double limInf, double limSup)
-	{
-		if(parametro>= limInf && parametro < limSup)
+	public boolean isBetween(double parametro, double limInf, double limSup) {
+		if (parametro >= limInf && parametro < limSup)
 			return true;
 		return false;
 	}
-	public Node<Lista<Esquina>>[] particionar()
-	{
+
+	public Node<Lista<Esquina>>[] particionar() {
 		Node<Lista<Esquina>>[] arreglo = new Node[676];
 		Iterator<Vertex> it = grafo.darVertices().iterator();
-		while(it.hasNext())
-		{
+		while (it.hasNext()) {
 			Esquina actual = (Esquina) it.next().darInfo();
 			int llave = darIndice(actual.darLatitud(), actual.darLongitud());
-			if(arreglo[llave] == null)
+			if (arreglo[llave] == null)
 				arreglo[llave] = new Node<Lista<Esquina>>((new Lista()));
 			arreglo[llave].darElemento().agregarAlFinal(actual);
 		}
 		return arreglo;
 	}
-	public int darIndice(double lat, double longit)
-	{
-		int llaveLat = (int)((lat - MIN_LATITUD)*50);
-		if(llaveLat < 25)
+
+	public int darIndice(double lat, double longit) {
+		int llaveLat = (int) ((lat - MIN_LATITUD) * 50);
+		if (llaveLat < 25)
 			llaveLat = 0;
 		else
-			llaveLat-=25;
-		int llaveLong = (int)((MAX_LONGITUD - longit)*80);
-		if(llaveLong > 24)
-				llaveLong = 25;
-		return (llaveLat*26 + llaveLong);
+			llaveLat -= 25;
+		int llaveLong = (int) ((MAX_LONGITUD - longit) * 80);
+		if (llaveLong > 24)
+			llaveLong = 25;
+		return (llaveLat * 26 + llaveLong);
 	}
-	public Esquina darMasCercana(double lat, double longit)
-	{
+
+	public Esquina darMasCercana(double lat, double longit) {
 		int llave = darIndice(lat, longit);
 
-		if(llave == 329 || llave == 483)
+		if (llave == 329 || llave == 483)
 			llave--;
-		else if(llave == 484)
-			llave -=2;
-		else if(llave == 331|| llave == 511)
-			llave -=3;
-		else if(llave == 362)
-			llave+=2;
-		if(sectores[llave]==null)
-		{
-			System.out.println("no hay nada en " + lat +","+ longit + " indice;" + llave);
+		else if (llave == 484)
+			llave -= 2;
+		else if (llave == 331 || llave == 511)
+			llave -= 3;
+		else if (llave == 362)
+			llave += 2;
+		if (sectores[llave] == null) {
+			System.out.println("no hay nada en " + lat + "," + longit + " indice;" + llave);
 			return new Esquina(-1, -1, -1);
 		}
 		Iterator<Esquina> it = sectores[llave].darElemento().iterator();
 		double distMin = Double.POSITIVE_INFINITY;
 		Esquina minima = null;
 		Esquina act = null;
-		while(it.hasNext())
-		{
+		while (it.hasNext()) {
 			act = it.next();
 			double distAct = DistanciaHaversiana.distance(lat, longit, act.darLatitud(), act.darLongitud());
-			if(distAct < distMin)
-			{
+			if (distAct < distMin) {
 				minima = act;
 				distMin = distAct;
 			}
