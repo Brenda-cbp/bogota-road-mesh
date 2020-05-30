@@ -99,10 +99,10 @@ public class Adyacencias<W,K extends Comparable<K>> implements Iterable<K> {
 			}
 		}
 	}
-	protected boolean agregarEnlace(K idVertexIni, K idVertexFin, double cost)
+	protected boolean agregarEnlace(K idVertexIni, K idVertexFin, double cost, int costo2)
 	{
-		Edges e2 = new Edges<K>(idVertexFin, idVertexIni, cost);
-		Edges e1 = new Edges<K>(idVertexIni, idVertexFin, cost);
+		Edges e2 = new Edges<K>(idVertexFin, idVertexIni, cost, costo2);
+		Edges e1 = new Edges<K>(idVertexIni, idVertexFin, cost, costo2);
 		if (idVertexIni != null && get(idVertexIni) != null) {
 			Iterator<Edges> it = (Iterator<Edges>) ((Vertex) get(idVertexIni)).darAdyacentes().iterator();
 			while (it.hasNext()) {

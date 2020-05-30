@@ -41,14 +41,14 @@ public class TestGraph {
 			for (int j = 0; j < 6; j++) {
 				grafo.addVertex(j, j);
 			}
-			grafo.addEdge(0, 6, 1);
-			grafo.addEdge(6, 4, 1);
-			grafo.addEdge(4, 5, 1);
-			grafo.addEdge(5, 0, 1);
-			grafo.addEdge(4, 3, 1);
-			grafo.addEdge(3, 5, 1);
-			grafo.addEdge(0, 1, 1);
-			grafo.addEdge(0, 2, 1);
+			grafo.addEdge(0, 6, 1,0);
+			grafo.addEdge(6, 4, 1,0);
+			grafo.addEdge(4, 5, 1,0);
+			grafo.addEdge(5, 0, 1,0);
+			grafo.addEdge(4, 3, 1,0);
+			grafo.addEdge(3, 5, 1,0);
+			grafo.addEdge(0, 1, 1,0);
+			grafo.addEdge(0, 2, 1,0);
 		} catch (Exception e) {
 			fail("No debería ocurrir la excepción");
 		}	
@@ -78,10 +78,10 @@ public class TestGraph {
 	public void agregarArcos() {
 		setUp2();
 		try {
-			grafo.addEdge(3, 2, 1);
-			grafo.addEdge(3, 15, 1);
-			grafo.addEdge(3, 98, 1);
-			grafo.addEdge(98, 67, 1);
+			grafo.addEdge(3, 2, 1,0);
+			grafo.addEdge(3, 15, 1,0);
+			grafo.addEdge(3, 98, 1,0);
+			grafo.addEdge(98, 67, 1,0);
 			Iterator<Integer> it =grafo.adj(3).iterator();
 			int rta=it.next();
 			assertEquals("No agregó el vértice correctamente", 2, rta);
@@ -105,10 +105,10 @@ public class TestGraph {
 			grafo.addVertex(67, 67);
 			
 			
-			grafo.addEdge(3, 2, 1);
-			grafo.addEdge(3, 15, 1);
-			grafo.addEdge(3, 98, 3);
-			grafo.addEdge(98, 67, 2);
+			grafo.addEdge(3, 2, 1,0);
+			grafo.addEdge(3, 15, 1,0);
+			grafo.addEdge(3, 98, 3,0);
+			grafo.addEdge(98, 67, 2,0);
 			assertEquals("Ese no es el costo",1,(int)grafo.getCostArc(3, 15));
 			assertEquals("No agregó el vértice correctamente", 3, (int)grafo.getCostArc(3, 98));
 			

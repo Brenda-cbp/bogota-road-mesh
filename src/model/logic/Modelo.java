@@ -36,9 +36,11 @@ import model.data_structures.ArbolRojoNegro;
 import model.data_structures.ArregloDinamico;
 import model.data_structures.Edges;
 import model.data_structures.Graph;
+import model.data_structures.HashNode;
 import model.data_structures.Lista;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
+import model.data_structures.Node;
 import model.data_structures.TablaHashChaining;
 import model.data_structures.Vertex;
 //import sun.font.LayoutPathImpl;
@@ -56,7 +58,7 @@ public class Modelo {
 	/**
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_small_50000_sorted.geojson";
 
 	public final String RUTA_VERTICES = "./data/bogota_vertices.txt";
 
@@ -93,7 +95,15 @@ public class Modelo {
 	 * Coordenadas de la estacion de policia del Campin
 	 */
 	public final static double LAT_POLICIA = 4.647586;
+	/**
+	 * Coordenadas de la estacion de policia del Campin
+	 */
 	public final static double LONG_POLICIA = -74.078122;
+
+	public final double MAX_LATITUD = 4.836643219999985;
+	public final double MAX_LONGITUD = -73.99132694999997;
+	public final double MIN_LATITUD = 3.819966340000008;
+	public final double MIN_LONGITUD = -74.39470032000003;
 
 	public final String RUTA_EXPORTAR = "./data/grafo.json";
 	// --------------------------------------------------------------------------
@@ -106,6 +116,7 @@ public class Modelo {
 	private Lista<EstacionPolicia> estaciones;
 	private Mapa mapa;
 	private String ejemploFecha;
+	Node<Lista<Esquina>>[] sectores;
 
 	// --------------------------------------------------------------------------
 	// Metodos
@@ -124,10 +135,20 @@ public class Modelo {
 		}
 	}
 
-	public int darVertices() {
+	/**
+	 * Retorna el numero de vertices en el grafo
+	 * 
+	 * @return numero de esquinas
+	 */
+	public int darNumVertices() {
 		return grafo.V();
 	}
 
+	/**
+	 * retorna el numero de aristas que tiene el grafo
+	 * 
+	 * @return numero de enlaces
+	 */
 	public int darAristas() {
 		return grafo.E();
 	}
@@ -152,92 +173,12 @@ public class Modelo {
 		return heap.darNumElmentos();
 	}
 
-	/**
-	 * Crea un nuevo grafo a partir de los archivos especificados en las rutas
-	 * de vertices y arcos
-	 * 
-	 * @throws Exception
-	 *             si los archivos no estan en formato esperado o si occurre
-	 *             algun error en lectura
-	 */
-	public void crearGrafo() throws Exception {
-		cargarNodos();
-		cargarArcos();
-	}
+	public void cargaDatosProyecto() throws Exception {
+		Esquina esquina =cargarDatosGrafoVertices();
+		Comparendo comparendo = cargarDatos();
+		Edges edge = cargarDatosGrafoEdges();
+		EstacionPolicia estacion = cargarPolicias();
 
-	/**
-	 * Crea los vertices del grafo a partir del archivo de vertices
-	 * 
-	 * @throws Exception
-	 *             si los archivos no estan en formato esperado o si occurre
-	 *             algun error en lectura
-	 */
-	public void cargarNodos() throws Exception {
-		try {
-			BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_VERTICES)));
-			String v = bf.readLine();
-
-			while (v != null || v != "") {
-				if (v == null)
-					break;
-				String[] vertice = v.split(",");
-				Esquina nueva = new Esquina(Integer.parseInt(vertice[0]), Double.parseDouble(vertice[2]),
-						Double.parseDouble(vertice[1]));
-				grafo.addVertex(Integer.parseInt(vertice[0]), nueva);
-				v = bf.readLine();
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new Exception("Error, El archivo de vertices no se encuentra en formato esperado");
-		} catch (NumberFormatException e) {
-			throw new Exception("Error, el archivo de vertices no se encuentra en formato esperado");
-		} catch (FileNotFoundException e) {
-			throw new Exception("Archivo no encontrado");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("Ocurrio un error cargando los vertices, favor vuelva a intentarlo");
-
-		}
-	}
-
-	/**
-	 * Crea los enlaces entre los nodos del grafo a partir del archiv de arcos
-	 * 
-	 * @throws Exception
-	 *             si los archivos no estan en formato esperado o si occurre
-	 *             algun error en lectura
-	 */
-	public void cargarArcos() throws Exception {
-		try {
-			BufferedReader bf = new BufferedReader(new FileReader(new File(RUTA_ARCOS)));
-			String v = bf.readLine();
-			v = bf.readLine();
-			v = bf.readLine();
-			v = bf.readLine();
-
-			while (v != null) {
-				String[] vertice = v.split(" ");
-				int origen = Integer.parseInt(vertice[0]);
-
-				for (int i = 1; i < vertice.length; i++) {
-					Esquina esqOrigen = grafo.getInfoVertex(origen);
-					Esquina esqDestino = grafo.getInfoVertex(Integer.parseInt(vertice[i]));
-
-					if (esqOrigen != null && esqDestino != null) {
-						double costo = DistanciaHaversiana.distance(esqOrigen.darLatitud(), esqOrigen.darLongitud(),
-								esqDestino.darLatitud(), esqDestino.darLongitud());
-						grafo.addEdge(origen, esqDestino.darId(), costo);
-					}
-				}
-				v = bf.readLine();
-			}
-		} catch (FileNotFoundException e) {
-			throw new Exception("Archivo no encontrado");
-		} catch (IOException e) {
-			throw new Exception("Error de lectura");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("Ocurrio un error cargando los arcos, favor vuelva a intentarlo");
-		}
 	}
 
 	/**
@@ -257,30 +198,21 @@ public class Modelo {
 			reader = new JsonReader(new FileReader(ar));
 			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
 			JsonArray e2 = elem.get("features").getAsJsonArray();
+			int i = 0;
 
 			int maxId = -1;
 			Comparendo maximo = null;
-			SimpleDateFormat parser = new SimpleDateFormat(FORMATO_DOCUMENTO);
+
+			sectores = particionar();
 
 			for (JsonElement e : e2) {
 				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
 
-				String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();
-				Date FECHA_HORA = parser.parse(s);
-
-				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETECCION")
-						.getAsString();
 				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHICULO")
 						.getAsString();
 				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVICIO")
 						.getAsString();
 				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION")
-						.getAsString();
-				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRACCION")
-						.getAsString();
-				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD")
-						.getAsString();
-				String MUNICIPIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("MUNICIPIO")
 						.getAsString();
 				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates")
 						.getAsJsonArray().get(0).getAsDouble();
@@ -288,29 +220,36 @@ public class Modelo {
 				double latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates")
 						.getAsJsonArray().get(1).getAsDouble();
 
-				c = new Comparendo(OBJECTID, FECHA_HORA, DES_INFRAC, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION,
-						LOCALIDAD, MUNICIPIO, longitud, latitud, null);
-				agregarMaxHeap(c);
+				c = new Comparendo(OBJECTID, null, null, null, CLASE_VEHI, TIPO_SERVI, INFRACCION, null, null, longitud,
+						latitud, null);
+				Esquina masCerca = darMasCercana(latitud, longitud);
+				masCerca.agregarComparendo(c);
 				if (OBJECTID > maxId) {
 					maxId = OBJECTID;
 					maximo = c;
 				}
 			}
-			ejemploFecha = c.darfecha() + "";
 			return maximo;
-		} catch (FileNotFoundException | ParseException e) {
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	// ---------------------------------------------------------------------
-	public void cargarDatosGrafo() throws Exception {
+	/**
+	 * Carga el grafo a partir del archivo geoJson
+	 * 
+	 * @throws Exception
+	 */
+	public Esquina cargarDatosGrafoVertices() throws Exception {
 		grafo = new Graph<>(71283);
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
 		// Datos propia adecuada para resolver el requerimiento
 		JsonReader reader;
+		Esquina maxima = null;
+		double idEsquinaMax = 0;
 		Esquina c = null;
 		try {
 			File ar = new File(RUTA_EXPORTAR);
@@ -322,46 +261,70 @@ public class Modelo {
 				double longit = e.getAsJsonObject().get("longitud").getAsDouble();
 				double lat = e.getAsJsonObject().get("latitud").getAsDouble();
 				int id = e.getAsJsonObject().get("ID").getAsInt();
-
 				c = new Esquina(id, lat, longit);
+				if (id > idEsquinaMax) {
+					idEsquinaMax = id;
+					maxima = c;
+				}
 				grafo.addVertex(id, c);
 			}
-			JsonArray arcos = elem.get("Arcos").getAsJsonArray();
-			int i = 0;
-			for (JsonElement e : arcos) {
-				double cost = e.getAsJsonObject().get("Costo").getAsDouble();
-				int id = e.getAsJsonObject().get("ID").getAsInt();
-				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
-				grafo.addEdge(id, ajunta, cost);
-
-			}
-			Iterator<Edges> lista = grafo.darArcos().iterator();
-			while (lista.hasNext()) {
-				Edges actual = lista.next();
-			}
+			return maxima;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	public Edges cargarDatosGrafoEdges() {
+		try {
+			JsonReader reader;
+			File ar = new File(RUTA_EXPORTAR);
+			reader = new JsonReader(new FileReader(ar));
+			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
+			int idArcoMaximo = 0;
+			Edges edgeMaxima = null;
+			JsonArray arcos = elem.get("Arcos").getAsJsonArray();
+			for (JsonElement e : arcos) {
+				double cost = e.getAsJsonObject().get("Costo").getAsDouble();
+				int id = e.getAsJsonObject().get("ID").getAsInt();
+				int ajunta = e.getAsJsonObject().get("ajunta").getAsInt();
+				int cost2 = grafo.getInfoVertex(id).darLista().darTamaño()
+						+ grafo.getInfoVertex(ajunta).darLista().darTamaño();
+				grafo.addEdge(id, ajunta, cost, cost2);
+				if (id > idArcoMaximo) {
+					idArcoMaximo = id;
+					edgeMaxima = new Edges<Integer>(id, ajunta, cost, cost2);
+				}
+				return edgeMaxima;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	// ----------------------------------------------------------------------
 
-	public Lista<EstacionPolicia> cargarPolicias() {
+	/**
+	 * carga las estaciones de policia del archivo geojson
+	 * 
+	 * @return
+	 */
+	public EstacionPolicia cargarPolicias() {
 		// solucion publicada en la pagina del curso
 		// TODO Cambiar la clase del contenedor de datos por la Estructura de
 		// Datos propia adecuada para resolver el requerimiento
 		JsonReader reader;
 		EstacionPolicia c = null;
 		try {
+			EstacionPolicia maxima = null;
 			File ar = new File(RUTA_POLICIA);
 			reader = new JsonReader(new FileReader(ar));
 			JsonObject elem = JsonParser.parseReader(reader).getAsJsonObject();
 			JsonArray e2 = elem.get("features").getAsJsonArray();
 
 			int maxId = -1;
-			Comparendo maximo = null;
-			SimpleDateFormat parser = new SimpleDateFormat(FORMATO_DOCUMENTO);
 
 			for (JsonElement e : e2) {
 				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
@@ -383,14 +346,20 @@ public class Modelo {
 				c = new EstacionPolicia(OBJECTID, EPODESCRIP, EPODIR_SITIO, EPOSERVICIO, EPOHORARIO, EPOLATITUD,
 						EPOLONGITU, EPOTELEFON, EPOIULOCAL);
 				estaciones.agregarAlFinal(c);
+				darMasCercana(EPOLATITUD, EPOLONGITU).agregarEstacion(c);
+				if(OBJECTID > maxId)
+				{
+					maxId = OBJECTID;
+					maxima = c;
+				}
+				return maxima;
 			}
 			System.out.println("Si se cargan las estaciones: Total= " + estaciones.darTamaño());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return estaciones;
+		return null;
 	}
-
 
 	// ______________________________________________________
 
@@ -847,15 +816,90 @@ public class Modelo {
 
 	public void dibujarMapa() throws Exception {
 		mapa = new Mapa("prueba");
-		cargarDatosGrafo();
+		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
 		mapa.pintarGrafo(grafo);
 	}
 
 	public void dibujarEstacionesMapa() throws Exception {
 		mapa = new Mapa("policia");
-		cargarDatosGrafo();
+		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
 		cargarPolicias();
 		mapa.dibujarEstaciones(estaciones);
 		mapa.pintarGrafo(grafo);
 	}
+
+	/**
+	 * Indica si el parametro esta en el intervalo [limInf,limSup)
+	 * 
+	 * @param parametro
+	 *            parametro a evaluar
+	 * @param limInf
+	 *            limite inferior (inclusivo)
+	 * @param limSup
+	 *            limite superior (exclusivo)
+	 * @return true si esta entre los limites, false de lo contrario
+	 */
+	public boolean isBetween(double parametro, double limInf, double limSup) {
+		if (parametro >= limInf && parametro < limSup)
+			return true;
+		return false;
+	}
+
+	public Node<Lista<Esquina>>[] particionar() {
+		Node<Lista<Esquina>>[] arreglo = new Node[676];
+		Iterator<Vertex> it = grafo.darVertices().iterator();
+		while (it.hasNext()) {
+			Esquina actual = (Esquina) it.next().darInfo();
+			int llave = darIndice(actual.darLatitud(), actual.darLongitud());
+			if (arreglo[llave] == null)
+				arreglo[llave] = new Node<Lista<Esquina>>((new Lista()));
+			arreglo[llave].darElemento().agregarAlFinal(actual);
+		}
+		return arreglo;
+	}
+
+	public int darIndice(double lat, double longit) {
+		int llaveLat = (int) ((lat - MIN_LATITUD) * 50);
+		if (llaveLat < 25)
+			llaveLat = 0;
+		else
+			llaveLat -= 25;
+		int llaveLong = (int) ((MAX_LONGITUD - longit) * 80);
+		if (llaveLong > 24)
+			llaveLong = 25;
+		return (llaveLat * 26 + llaveLong);
+	}
+
+	public Esquina darMasCercana(double lat, double longit) {
+		int llave = darIndice(lat, longit);
+
+		if (llave == 329 || llave == 483)
+			llave--;
+		else if (llave == 484)
+			llave -= 2;
+		else if (llave == 331 || llave == 511)
+			llave -= 3;
+		else if (llave == 362)
+			llave += 2;
+		if (sectores[llave] == null) {
+			System.out.println("no hay nada en " + lat + "," + longit + " indice;" + llave);
+			return new Esquina(-1, -1, -1);
+		}
+		Iterator<Esquina> it = sectores[llave].darElemento().iterator();
+		double distMin = Double.POSITIVE_INFINITY;
+		Esquina minima = null;
+		Esquina act = null;
+		while (it.hasNext()) {
+			act = it.next();
+			double distAct = DistanciaHaversiana.distance(lat, longit, act.darLatitud(), act.darLongitud());
+			if (distAct < distMin) {
+				minima = act;
+				distMin = distAct;
+			}
+		}
+		return minima;
+	}
+
 }

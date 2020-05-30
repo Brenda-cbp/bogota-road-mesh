@@ -82,8 +82,8 @@ public class Graph<V, K extends Comparable<K>> {
 	 * @throws Exception
 	 *             si algun identificador es null
 	 */
-	public void addEdge(K idVertexIni, K idVertexFin, double cost) throws Exception {
-		if (adj.agregarEnlace(idVertexIni, idVertexFin, cost))
+	public void addEdge(K idVertexIni, K idVertexFin, double cost,int costo2) throws Exception {
+		if (adj.agregarEnlace(idVertexIni, idVertexFin, cost,costo2))
 			E++;
 		return;
 	}
