@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import model.logic.Comparendo;
 import model.logic.DistanciaHaversiana;
+import model.logic.Esquina;
 import model.logic.EstacionPolicia;
 import model.logic.Modelo;
 
@@ -144,7 +145,7 @@ public class Vertex<V, K extends Comparable<K>> implements Comparable<Vertex<V,K
 	public double darDistTo() {
 		return distTo;
 	}
-	public static class ComparatorDistTo implements Comparator<Vertex>{
+	public static class ComparatorDistTo implements Comparator<Vertex<Esquina,Integer>>{
 		public int compare(Vertex o1, Vertex o2) {
 			double d1 = o1.darDistTo();
 			double d2 = o2.darDistTo();;
