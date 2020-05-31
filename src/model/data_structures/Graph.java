@@ -1,10 +1,12 @@
 package model.data_structures;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 //import com.sun.javafx.geom.Edge;
 
 import model.data_structures.TablaHashChaining.IteradorTabla;
+import model.logic.Comparendo;
 
 // tomado de https://algs4.cs.princeton.edu/41graph/Graph.java.html
 /**
@@ -34,8 +36,11 @@ public class Graph<V, K extends Comparable<K>> {
 	private Adyacencias<K, K> edgeTo;
 
 	/**
-	 * Construye un nuevo grafo con capacidad para V vertices
-	 * 
+	 * Cola de prioridad
+	 */
+	 private MinHeapCP2<Vertex> minheap;
+	 /**
+	 * capacidad para V vertices
 	 * @param n
 	 *            cantidad de vertices en el grafo
 	 * @throws Exception
@@ -332,5 +337,51 @@ public class Graph<V, K extends Comparable<K>> {
 	public Lista<Vertex> darVertices(){
 		return adj.darValores();
 	}
+	
+	/**
+	 * Para obtener el camino con menor costo
+	 * @param vertice
+	 * @param costo Dice a que costo se refiere para hacer el relax  
+	 * Es true cuando se refiere al costo de la distancia haversiana.
+	 * Es false cuando se refiete al costo por totalidad de comparendos.
+	 */
+	public void algorithmDijkstra(K vertice, boolean costo) {
+		edgeTo= new Adyacencias<>(this.V()); 
+		
+		minheap = new MinHeapCP2<>();
+		adj.get(vertice).cambiarDistTo(0.0);
+		
+		Comparator<Vertex> comp = new  Vertex.ComparatorDistTo();
+		minheap.agregar(adj.get(vertice), comp);	
+		//adj.get(vertice).darDistTo()
+		if(costo) {
+			while(!minheap.esVacia()) {
+				relaxDistancia();
+			}
+		}
+		else {
+			while(!minheap.esVacia()) {
+				Iterator<Edges> it = adj.get(vertice).darAdyacentes().iterator();
+				while(it.hasNext()) 
+					relaxNumComparendos(vertice, it.next());
+			}
+		}
+			
+	}
+	public void relaxDistancia() {
 
+	}
+	public void relaxNumComparendos(K llave, Edges arco) throws Exception {
+		 Vertex VertexIncial= adj.get((K) arco.darOrigen());
+		 Vertex vertexFinal = adj.get((K) arco.darDestino());
+		if(VertexIncial.darDistTo()> vertexFinal.darDistTo()+ arco.darcosto2()) {
+			VertexIncial.cambiarDistTo(vertexFinal.darDistTo()+ arco.darcosto2());
+			edgeTo.agregarVertice(llave, arco );
+		//cola de prioridad
+			if(minheap.contains(llave))
+				minheap.sacarMin(adj.get((K) arco.darDestino()));
+			else minheap.agregar(arco.darDestino(), adj.get(arco.darDestino()).darDistTo());
+		
+		}
+	}
 }

@@ -25,8 +25,8 @@ public class View {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("1. Escribir Json");
 		System.out.println("2. Dibujar mapa conforme al JSON");
-		System.out.println("3. Cargar grafo desde el JSON");
-		System.out.println("4. Cargar Estaciones policia");
+		System.out.println("3. Obtener el camino de costo mínimo entre dos ubicaciones geograficas por numero de comparendos");
+		System.out.println("4. Determinar la red de comunicaciones que soporte la instalacion de cámaras de video en los M puntos en los que hay más comparendos");
 		System.out.println("5. Colocar las estaciones de policia en el mapa");
 		try {
 			rta= Integer.parseInt(bf.readLine());

@@ -40,11 +40,11 @@ public class Controller {
 	 * se deje de correr el programa
 	 */
 	public void correrPrograma() {
-		
+
 		Esquina vertice = null;
-		
+
 		try {
-			 vertice = modelo.cargarDatosGrafoVertices();
+			vertice = modelo.cargarDatosGrafoVertices();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -57,13 +57,13 @@ public class Controller {
 		view.imprimir("Se cargo el grafo a partir de los txt");
 		view.imprimir("Aristas totales:" + modelo.darAristas() + " Vertices totales:  " + modelo.darNumVertices());
 		view.imprimir("Esquina con mayor id:");
-		view.imprimir("ID: " + vertice.darId() + " Coordenadas: (" + vertice.darLatitud() + "," + vertice.darLongitud() ); 
+		view.imprimir("ID: " + vertice.darId() + " Coordenadas: (" + vertice.darLatitud() + "," + vertice.darLongitud() +")"); 
 		view.imprimir("Enlace con mayor id:");
 		view.imprimir("ID:" + edge.darOrigen() + " Destino:" + edge.darDestino() + " Longitud = " + edge.darCosto() + " Costo comparendos = " + edge.darcosto2());
 		view.imprimir("Estacion con mayor ID:");
 		view.imprimir(policia);
-		
-		
+
+
 		view.imprimir("LOS REQUERIMIENTOS INICIALES SE REALIZAN JUNTO A LA CARGA DE DATOS");
 		view.imprimir("NO SE IMPRIME NADA EN CONSOLA SOBRE ESTO PUES NO SE SOLICITO");
 		view.imprimir("EL LISTADO DE LAS OPCIONES ES DEL TALLER PASADO");
@@ -82,13 +82,22 @@ public class Controller {
 
 			}
 			if (opcion == 3) {
-				try {
-					modelo.cargaDatosProyecto();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+				
+				int latitud1 = Integer.parseInt(view.pedir("latitud del punto inicial"));
+				int longitud1 =  Integer.parseInt(view.pedir("longitud del punto inicial"));
+				int latitud2 = Integer.parseInt(view.pedir("latitud del punto final"));
+				int longitud2=  Integer.parseInt(view.pedir("longitud del punto final"));
+				
+				if (modelo.rectificarPuntoEstaEnBogota(latitud1, longitud1)) {
+					if (modelo.rectificarPuntoEstaEnBogota(latitud2, longitud2))
+						modelo.darCaminoCostoMinimoPorNumeroDeComparendos();
+					else {
+						view.imprimir("Hubo un error con las coordenadas del punto final. Por favor vuelva a intentarlo");
+						view.printMenu();}
+				}else {
+					view.imprimir("Hubo un error con las coordenadas del punto inicial. Por favor vuelva a intentarlo");
+					view.printMenu();}
+			} 	
 			if (opcion == 4) {
 				EstacionPolicia ejemplo =modelo.cargarPolicias();
 				view.imprimir("Ejemplo Estacion:");
@@ -108,3 +117,4 @@ public class Controller {
 		}
 	}
 }
+

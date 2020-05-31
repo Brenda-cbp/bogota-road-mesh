@@ -3,15 +3,16 @@ package model.data_structures;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class MaxHeapCP<T extends Comparable<T>> implements Iterable<T>
-{
+import model.data_structures.MaxHeapCP.IteradorHeap;
 
+public class MinHeapCP2<T extends Comparable<T>> 
+{
 	private ArregloDinamico<T> arreglo;
 
 	/**
 	 * Método construcctor del Heap
 	 */
-	public MaxHeapCP()
+	public MinHeapCP2()
 	{
 		arreglo = new ArregloDinamico<>(100);
 	}
@@ -39,7 +40,7 @@ public class MaxHeapCP<T extends Comparable<T>> implements Iterable<T>
 
 	public void swim(int n, Comparator<T> comp)
 	{
-		while (n > 1 && comparar(n / 2, n, comp) < 0)
+		while (n > 1 && comparar(n / 2, n, comp) > 0)
 		{
 			arreglo.exchange(n, n / 2);
 			n = n / 2;
@@ -52,9 +53,9 @@ public class MaxHeapCP<T extends Comparable<T>> implements Iterable<T>
 		while (2 * k <= N)
 		{
 			int j = 2 * k;
-			if (j < N && comparar(j, j + 1, comp) < 0)
+			if (j < N && comparar(j, j + 1, comp) >0)
 				j++;
-			if (comparar(k, j, comp) >= 0)
+			if (comparar(k, j, comp) <= 0)
 				break;
 			arreglo.exchange(k, j);
 			k = j;
@@ -94,7 +95,6 @@ public class MaxHeapCP<T extends Comparable<T>> implements Iterable<T>
 		return arreglo.darElemento(i);
 	}
 
-	@Override
 	public Iterator<T> iterator()
 	{
 		return new IteradorHeap();

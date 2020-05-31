@@ -40,6 +40,7 @@ import model.data_structures.HashNode;
 import model.data_structures.Lista;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
+import model.data_structures.MinHeapCP2;
 import model.data_structures.Node;
 import model.data_structures.TablaHashChaining;
 import model.data_structures.Vertex;
@@ -58,13 +59,14 @@ public class Modelo {
 	/**
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_small_50000_sorted.geojson";
+	//public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_small_50000_sorted.geojson";
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 
 	public final String RUTA_VERTICES = "./data/bogota_vertices.txt";
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
-	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson";
+	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson.json";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -129,7 +131,8 @@ public class Modelo {
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
 		estaciones = new Lista<EstacionPolicia>();
-		try {
+	//	MinHeapCP2<Integer> min =new MinHeapCP2<Integer>();
+			try {
 			grafo = new Graph<>(71283);
 		} catch (Exception e) {
 		}
@@ -901,5 +904,19 @@ public class Modelo {
 		}
 		return minima;
 	}
+	/**
+	 * Segun la latitud y longitud del punto ingresado 
+	 * dice si está dentro de los límites de la ciudad (bogotá)
+	 * @param latitud
+	 * @param longitud
+	 * @return true si pertece false de lo contrario 
+	 */
+	public boolean rectificarPuntoEstaEnBogota(int latitud, int longitud) {
+		return (latitud <= MAX_LATITUD && latitud >= MIN_LATITUD && longitud <= MAX_LONGITUD && longitud >= MIN_LONGITUD ); 
+	}
+	public void darCaminoCostoMinimoPorNumeroDeComparendos() {
+		
+	}
+	
 
 }

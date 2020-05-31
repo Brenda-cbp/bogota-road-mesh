@@ -1,10 +1,15 @@
 package model.data_structures;
 
-import model.logic.EstacionPolicia;
+import java.util.Comparator;
 
-public class Vertex<V, K extends Comparable<K>>
+import model.logic.Comparendo;
+import model.logic.DistanciaHaversiana;
+import model.logic.EstacionPolicia;
+import model.logic.Modelo;
+
+public class Vertex<V, K extends Comparable<K>> implements Comparable<Vertex<V,K>>
 {
-	
+
 	/**
 	 * La informacion del vertice
 	 */
@@ -26,9 +31,11 @@ public class Vertex<V, K extends Comparable<K>>
 	 * Indica la componente conexa a la cual pertenece el nodo
 	 */
 	private int idCompConexa;
-	
+	/**
+	 * DistTo distancia- costo acumulado para llegar al vertice 
+	 */
+	private double distTo;
 
-	
 	/**
 	 * Constructor del vertice
 	 * @param info
@@ -41,6 +48,7 @@ public class Vertex<V, K extends Comparable<K>>
 		checked = false;
 		adyacentes = new Lista<>();
 		idCompConexa = -1;
+		distTo= Double.POSITIVE_INFINITY;
 
 	}
 	/**
@@ -121,5 +129,40 @@ public class Vertex<V, K extends Comparable<K>>
 	public void cambiarIdComponenteConexa(int id)
 	{
 		idCompConexa = id;
+	}
+	/**
+	 * Cambia la distancia, costo acumulado del vértice 
+	 * @param nuevaDistTo
+	 */
+	public void cambiarDistTo(double nuevaDistTo) {
+		distTo=nuevaDistTo;
+	}
+	/**
+	 * Cambia la distancia, costo acumulado del vértice 
+	 * @return
+	 */
+	public double darDistTo() {
+		return distTo;
+	}
+	public static class ComparatorDistTo implements Comparator<Vertex>{
+		public int compare(Vertex o1, Vertex o2) {
+			double d1 = o1.darDistTo();
+			double d2 = o2.darDistTo();;
+			if(d1 > d2)
+				return -1;
+			if(d2 > d1)
+				return 1;
+			return 0;
+		}
+	}
+	@Override
+	public int compareTo(Vertex o) {
+		double d1 = darDistTo();
+		double d2 = o.darDistTo();;
+		if(d1 > d2)
+			return -1;
+		if(d2 > d1)
+			return 1;
+		return 0;
 	}
 }

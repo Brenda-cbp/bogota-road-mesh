@@ -13,10 +13,12 @@ public class Edges<K extends Comparable <K>> {
 	 */
 	private K destino;
 	/**
-	 * Costo del enlace
+	 * Costo del enlace por distancia haversiana 
 	 */
-	private double costo;
-	
+	private double costo; 
+	/**
+	 * Costo por total de comparendos 
+	 */
 	private int costo2;
 
 	/**
@@ -32,11 +34,9 @@ public class Edges<K extends Comparable <K>> {
 	public Edges(K orig, K dest, double cost, int costo2) {
 		origen = orig;
 		destino = dest;
-		costo = cost;
-		this.costo2 = costo2;
+		costo = cost;//distancia haversiana
+		this.costo2 = costo2; //total de comparendos
 	}
-
-	
 	
 	/**
 	 * Retorna el costo del enlace
