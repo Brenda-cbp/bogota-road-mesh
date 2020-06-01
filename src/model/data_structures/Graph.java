@@ -370,21 +370,13 @@ public class Graph<V, K extends Comparable<K>> {
 	 * Es false cuando se refiete al costo por totalidad de comparendos.
 	 * @throws Exception 
 	 */
-	public void algorithmDijkstra(K vertice) throws Exception {
-		edgeTo= new Adyacencias<>(this.V()); 
-
-		minheap = new MinHeapCP2<>();
-		adj.get(vertice).cambiarDistTo(0.0);
-
-		Comparator<Vertex<Esquina, Integer>> comp = new  Vertex.ComparatorDistTo();
-		minheap.agregar(adj.get(vertice), comp);	
-
-
-		while(!minheap.esVacia()) {
-			Iterator<Edges> it = adj.get(vertice).darAdyacentes().iterator();
-			while(it.hasNext()) 
-				relaxNumComparendos(vertice, it.next());
+	public Edges[] darCaminoCortoNumComparendos(K llave) throws Exception {
+		try {
+		return new Dijkstra2((Graph<Esquina, Integer> )this, (int) llave).darEdgeTo();}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
 	}
 	/**
 	 * Retorna una lista con los caminos mas cortos desde la llave hacia los demas vertices
@@ -400,8 +392,6 @@ public class Graph<V, K extends Comparable<K>> {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	public void relaxDistancia() {
 	}
 	public void relaxNumComparendos(K llave, Edges arco) throws Exception {
 		Vertex VertexIncial= adj.get((K) arco.darOrigen());

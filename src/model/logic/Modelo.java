@@ -66,7 +66,7 @@ public class Modelo {
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
-	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson";
+	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson.json";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -924,8 +924,32 @@ public class Modelo {
 	public boolean rectificarPuntoEstaEnBogota(double latitud, double longitud) {
 		return (latitud <= MAX_LATITUD && latitud >= MIN_LATITUD && longitud <= MAX_LONGITUD && longitud >= MIN_LONGITUD ); 
 	}
-	public void darCaminoCostoMinimoPorNumeroDeComparendos(double latitud, double longitud) {
-
+	public Lista<Esquina> darCaminoCostoMinimoPorNumeroDeComparendos(double latitud1, double longitud1, double latitud2, double longitud2) throws Exception {
+		Esquina inicio = darMasCercana(latitud1, longitud1);
+		Esquina fin = darMasCercana(latitud2, longitud2);
+		Edges[] camino =grafo.darCaminosMasCortoDesde(inicio.darId());
+		Lista rta = new Lista<Esquina>();
+		Edges actual = camino[fin.darId()];
+		
+		int totalCosto=0;
+		double minima = Double.POSITIVE_INFINITY;
+		
+		while(actual != null )
+		{
+			rta.agregarAlComienzo(grafo.darVertice((Integer) actual.darOrigen()).darInfo());
+			totalCosto += actual.darCosto();//sumatoria de distancias haversianas
+			if(actual.darcosto2() < minima)
+				minima = actual.darCosto();
+			actual = camino[(int) actual.darOrigen()];
+		}
+		
+		rta.agregarAlFinal(fin);
+		rta.agregarAlComienzo(new Esquina(0, minima, totalCosto));
+		
+		Mapa map = new Mapa("Camino mas corto por numero de comparendos");
+		cargarDatosGrafoVertices();
+		map.dibujarCamino(rta);
+		return rta;
 	}
 	/**
 	 * Dibuja el camino mas corto entre dos puntos y...

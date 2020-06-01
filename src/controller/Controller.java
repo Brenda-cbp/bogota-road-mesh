@@ -54,7 +54,7 @@ public class Controller {
 		EstacionPolicia policia =modelo.cargarPolicias();
 		view.imprimir("Comparendo Con mayor ID");
 		view.imprimir(comparendo);
-		
+
 		//----------------------
 		view.imprimir("Se cargo el grafo a partir de los txt");
 		view.imprimir("Aristas totales:" + modelo.darAristas() + " Vertices totales:  " + modelo.darNumVertices());
@@ -84,45 +84,56 @@ public class Controller {
 
 			}
 			else if (opcion == 3) {
-
-				int latitud1 = Integer.parseInt(view.pedir("latitud del punto inicial"));
-				int longitud1 =  Integer.parseInt(view.pedir("longitud del punto inicial"));
-				int latitud2 = Integer.parseInt(view.pedir("latitud del punto final"));
-				int longitud2=  Integer.parseInt(view.pedir("longitud del punto final"));
-
-				if (modelo.rectificarPuntoEstaEnBogota(latitud1, longitud1)) {
-					if (modelo.rectificarPuntoEstaEnBogota(latitud2, longitud2))
-						System.out.println();
-						//	modelo.darCaminoCostoMinimoPorNumeroDeComparendos();
-					else {
-						view.imprimir("Hubo un error con las coordenadas del punto final. Por favor vuelva a intentarlo");
-						view.printMenu();}
-				}else {
-					view.imprimir("Hubo un error con las coordenadas del punto inicial. Por favor vuelva a intentarlo");
-					view.printMenu();}
-			} 	
-			else if (opcion == 4) {
 				try
 				{
-				double lat1 = Double.parseDouble(view.pedir("Latitud Inicio:"));
-				double long1 = Double.parseDouble(view.pedir("Longitud Inicio:"));
-				double lat2 = Double.parseDouble(view.pedir("Latitud Final:"));
-				double long2 = Double.parseDouble(view.pedir("Longitud Final:"));
-				 Lista<Esquina> es =modelo.darCaminoMasCorto(lat1, long1, lat2, long2);
-				 System.out.println("" + es.darTamaño());
+					double lat1 = Double.parseDouble(view.pedir("Latitud Inicio:"));
+					double long1 = Double.parseDouble(view.pedir("Longitud Inicio:"));
+					double lat2 = Double.parseDouble(view.pedir("Latitud Final:"));
+					double long2 = Double.parseDouble(view.pedir("Longitud Final:"));
+					Lista<Esquina> es =modelo.darCaminoMasCorto(lat1, long1, lat2, long2);
+					System.out.println("" + es.darTamaño());
 				}
 				catch(Exception e)
 				{
 					e.printStackTrace();
 				}
+
+			} 	
+			else if (opcion == 4) {
+
 			}
 			if (opcion == 5) {
-				try {
-					modelo.dibujarEstacionesMapa();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+
+				double latitud1 = Double.parseDouble(view.pedir("latitud del punto inicial"));
+				double longitud1 =  Double.parseDouble(view.pedir("longitud del punto inicial"));
+				double latitud2 = Double.parseDouble(view.pedir("latitud del punto final"));
+				double longitud2=  Double.parseDouble(view.pedir("longitud del punto final"));
+
+				if (modelo.rectificarPuntoEstaEnBogota(latitud1, longitud1)) {
+					if (modelo.rectificarPuntoEstaEnBogota(latitud2, longitud2))
+					{	System.out.println();
+					try {
+						Lista<Esquina>rta = modelo.darCaminoCostoMinimoPorNumeroDeComparendos(latitud1, longitud1, latitud2, longitud2);
+						view.imprimir("El total de vértices por los que se debe pasar son "+ (rta.darTamaño()-1));
+						view.imprimir("El costo minimo para llegar al destino es "+ rta.darElementoPosicion(0).darLatitud());
+						view.imprimir("La distancia total para llegar al destino es "+ rta.darElementoPosicion(0).darLongitud());
+						view.imprimir("Los vértices que se deben recorrer para llegar al destino son:");
+						for (int i =1; i<rta.darTamaño();i++) {
+							view.imprimir(rta.darElementoPosicion(i).toString());
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					}else {
+						view.imprimir("Hubo un error con las coordenadas del punto final. Por favor vuelva a intentarlo");
+						view.printMenu();}
+				}else {
+					view.imprimir("Hubo un error con las coordenadas del punto inicial. Por favor vuelva a intentarlo");
+					view.printMenu();}
+
 			}
 			if(opcion == 6)
 			{
