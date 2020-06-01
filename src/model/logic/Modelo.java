@@ -991,9 +991,22 @@ public class Modelo {
 		lista.agregarAlComienzo(new Esquina(0, minima, total));
 		return lista;
 	}
-	public void darMST()
+	public void darCaminoMasGraves(int m) throws Exception
 	{
-	
+		Edges[] edges = grafo.darMST(); 
+		Iterator<Comparendo> comparendos = darMayorGravedad(m).iterator();
+		Lista<Esquina> esquinas = new Lista<>();
+		
+		while(comparendos.hasNext())
+		{
+			Comparendo actual = comparendos.next();
+			esquinas.agregarAlFinal(darMasCercana(actual.darLatitud(), actual.darLongitud()));
+		}
+	}
+	public void darCaminoMasCortoPolicias(int m)
+	{
+		Iterator<Comparendo> comparendos = darMayorGravedad(m).iterator();
+		
 	}
 
 }
