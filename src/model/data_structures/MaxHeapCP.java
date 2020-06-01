@@ -67,8 +67,8 @@ public class MaxHeapCP<T extends Comparable<T>> implements Iterable<T>
 			return null;
 		T max = arreglo.darElemento(1);
 		arreglo.exchange(1, arreglo.darTamano() - 1);
-		sink(1, comp);
 		arreglo.eliminarPosicion(arreglo.darTamano());
+		sink(1, comp);
 		return max;
 	}
 	private T darMaximo()

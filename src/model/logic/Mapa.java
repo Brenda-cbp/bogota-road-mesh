@@ -121,4 +121,29 @@ public class Mapa extends MapView {
 			// #7F00FF
 		}
 	}
+	public void dibujarCamino(Lista<Esquina> esquinas) {
+		map.setCenter(new LatLng(esquinas.darElementoPosicion(0).darLatitud(), esquinas.darElementoPosicion(0).darLongitud()));
+		Iterator<Esquina> it = esquinas.iterator();
+		LatLng[] arcs = new LatLng[esquinas.darTamaño()];
+		int i = 0;
+		while (it.hasNext()) {
+			Esquina actual = it.next();
+			LatLng punto = new LatLng(actual.darLatitud(), actual.darLongitud());
+			Circle vertice1 = new Circle(map);
+			vertice1.setCenter(punto);
+			vertice1.setRadius(12);
+			CircleOptions co1 = new CircleOptions();
+			co1.setFillColor("#FF0000");
+			co1.setFillOpacity(0.90); // Si está muy feo, cambiar.
+			vertice1.setOptions(co1);
+			vertice1.setVisible(true);
+			arcs[i] = punto;
+			i++;
+			// "#8407B6"
+			// #7F00FF
+		}
+		Polygon w = new Polygon(map);
+		w.setPath(arcs);
+		w.setVisible(true);
+	}
 }

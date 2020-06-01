@@ -68,8 +68,8 @@ public class MinHeapCP2<T extends Comparable<T>>
 			return null;
 		T max = arreglo.darElemento(1);
 		arreglo.exchange(1, arreglo.darTamano() - 1);
-		sink(1, comp);
 		arreglo.eliminarPosicion(arreglo.darTamano());
+		sink(1, comp);
 		return max;
 	}
 	private T darMin()

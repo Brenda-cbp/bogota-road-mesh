@@ -66,7 +66,7 @@ public class Modelo {
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
-	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson.json";
+	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -131,8 +131,8 @@ public class Modelo {
 		comparendos = new Lista<>();
 		heap = new MaxHeapCP<>();
 		estaciones = new Lista<EstacionPolicia>();
-	//	MinHeapCP2<Integer> min =new MinHeapCP2<Integer>();
-			try {
+		//	MinHeapCP2<Integer> min =new MinHeapCP2<Integer>();
+		try {
 			grafo = new Graph<>(71283);
 		} catch (Exception e) {
 		}
@@ -279,6 +279,17 @@ public class Modelo {
 		return null;
 	}
 
+	public void cc() throws Exception
+	{
+		System.out.println(grafo.cc() + "");
+		Iterator<Integer> it = grafo.getCC(1).iterator();
+		int i = 0;
+		while(it.hasNext() && i < 6)
+		{
+			Esquina actual = grafo.getInfoVertex(it.next());
+			System.out.println(actual.darLatitud() + "," + actual.darLongitud());
+		}
+	}
 	public Edges cargarDatosGrafoEdges() {
 		try {
 			JsonReader reader;
@@ -355,9 +366,8 @@ public class Modelo {
 					maxId = OBJECTID;
 					maxima = c;
 				}
-				return maxima;
 			}
-			System.out.println("Si se cargan las estaciones: Total= " + estaciones.darTamaño());
+			return maxima;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -523,7 +533,7 @@ public class Modelo {
 		while (comparendos.hasNext()) {
 			Comparendo c = comparendos.next();
 			rta.agregar("" + c.darNumeroMes() + "-" + c.darInicialSemana() + c.darInicialSemana() + c.darInicialSemana()
-					+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
+			+ c.darInicialSemana() + "-" + c.darNombreMes(c.darNumeroMes()), c);
 		}
 		return rta;
 	}
@@ -754,7 +764,7 @@ public class Modelo {
 				max = comparendosEnEspera;
 
 			rta.agregarAlFinal("" + fecha1.getYear() + "/" + fecha1.getMonthValue() + "/" + fecha1.getDayOfMonth()
-					+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
+			+ "--" + comparendosProcesados + "--" + comparendosEnEspera);
 			fecha1 = fecha1.plusHours(24);
 			fecha2 = fecha2.plusHours(24);
 		}
@@ -913,10 +923,51 @@ public class Modelo {
 	 */
 	public boolean rectificarPuntoEstaEnBogota(double latitud, double longitud) {
 		return (latitud <= MAX_LATITUD && latitud >= MIN_LATITUD && longitud <= MAX_LONGITUD && longitud >= MIN_LONGITUD ); 
-}
-	public void darCaminoCostoMinimoPorNumeroDeComparendos(double latitud, double longitud)) {
-		if ()
 	}
-	
+	public void darCaminoCostoMinimoPorNumeroDeComparendos(double latitud, double longitud) {
+
+	}
+	/**
+	 * Dibuja el camino mas corto entre dos puntos y...
+	 * Retorna una lista que contiene: Como PRIMER ELEMENTO una esquina ficticia con:
+	 * 			 latitud = trayecto masCorto del camino 
+	 * 			 longitud = longitud total del camino
+	 *  En el resto, las esquinas por las que pasa el camino mas corto entre las coordenadas especificadas (en orden)
+	 * @param lat1 latitud correspondiente a las coordenadas de inicio
+	 * @param long1 longitud correspondiente a las coordenadas de inicio
+	 * @param lat2 latitud correspondiente a las coordenadas de llegada
+	 * @param long2 longitud correspondiente a las coordenadas de de llegada
+	 * @return camino
+	 * @throws Exception Si alguna de las coordenadas no se encuentra en bogota.
+	 */
+	public Lista<Esquina> darCaminoMasCorto(double lat1, double long1, double lat2, double long2) throws Exception
+	{
+		if(!rectificarPuntoEstaEnBogota(lat1, long1) || ! rectificarPuntoEstaEnBogota(lat2, long2))
+			throw new Exception("Coordenadas ingresadas no se encuentran dentro del rango permitido");
+		Esquina inicio = darMasCercana(lat1, long1);
+		Esquina fin = darMasCercana(lat2, long2);
+		Edges[] camino =grafo.darCaminosMasCortoDesde(inicio.darId());
+		Lista<Esquina> lista = new Lista<>();
+		Edges actual = camino[fin.darId()];
+		double minima = Double.POSITIVE_INFINITY;
+		int total = 0;
+		if(fin != inicio)
+			lista.agregarAlFinal(fin);
+		while(actual != null )
+		{
+			System.out.println(" 111");
+			lista.agregarAlComienzo(grafo.darVertice((Integer) actual.darOrigen()).darInfo());
+			total += actual.darCosto();
+			if(actual.darCosto() < minima)
+				minima = actual.darCosto();
+			actual = camino[(int) actual.darOrigen()];
+		}	
+		Mapa map = new Mapa("camino");
+		cargarDatosGrafoVertices();
+		map.dibujarCamino(lista);
+		lista.agregarAlComienzo(new Esquina(0, minima, total));
+		return lista;
+	}
+
 
 }

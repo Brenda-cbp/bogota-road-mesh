@@ -109,6 +109,9 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return null;
 	}
+	public Vertex<V,K> darVertice(K idVertex) {
+			return adj.get(idVertex);
+	}
 	/**
 	 * Retorna un iterador con los arcos del vertice 
 	 * 
@@ -229,6 +232,25 @@ public class Graph<V, K extends Comparable<K>> {
 			Lista<K> respuesta = new Lista<>();
 			while (it.hasNext()) {
 				respuesta.agregarAlFinal((K) it.next().darDestino());
+			}
+			return respuesta;
+		}
+		return null;
+	}
+
+	/**
+	 * Retorna una lista con los enlaces de los nodos adyacentes al vertice dado
+	 * 
+	 * @param idVertex
+	 *            llave del vertice dado
+	 * @return lista iterable con enlaces de los adyacentes al vertice
+	 */
+	public Lista<Edges<K>> adjEnlaces(K idVertex) {
+		if (idVertex != null && adj.get(idVertex) != null) {
+			Iterator<Edges> it = adj.get(idVertex).darAdyacentes().iterator();
+			Lista<Edges<K>> respuesta = new Lista<>();
+			while (it.hasNext()) {
+				respuesta.agregarAlFinal(it.next());
 			}
 			return respuesta;
 		}
@@ -364,9 +386,22 @@ public class Graph<V, K extends Comparable<K>> {
 				relaxNumComparendos(vertice, it.next());
 		}
 	}
-
+	/**
+	 * Retorna una lista con los caminos mas cortos desde la llave hacia los demas vertices
+	 * @param llave del vertice de referenica
+	 * @return un arreglo con tantas posiciones como vertices en el grafo, la posicion i-esima del arreglo guarda el enlace que conecta al
+	 * nodo i-esimo con el nodo anterior a el en el camino mas corto desde la llave hacia el nodo.
+	 */
+	public Edges[] darCaminosMasCortoDesde(K llave)
+	{
+		try {
+			return new Dijkstra((Graph<Esquina, Integer>) this,(int)llave).darEdgeTo();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public void relaxDistancia() {
-
 	}
 	public void relaxNumComparendos(K llave, Edges arco) throws Exception {
 		Vertex VertexIncial= adj.get((K) arco.darOrigen());

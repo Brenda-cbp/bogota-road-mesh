@@ -54,6 +54,8 @@ public class Controller {
 		EstacionPolicia policia =modelo.cargarPolicias();
 		view.imprimir("Comparendo Con mayor ID");
 		view.imprimir(comparendo);
+		
+		//----------------------
 		view.imprimir("Se cargo el grafo a partir de los txt");
 		view.imprimir("Aristas totales:" + modelo.darAristas() + " Vertices totales:  " + modelo.darNumVertices());
 		view.imprimir("Esquina con mayor id:");
@@ -72,7 +74,7 @@ public class Controller {
 			if (opcion == 1) {
 				modelo.generarJson();
 			}
-			if (opcion == 2) {
+			else if (opcion == 2) {
 				try {
 					modelo.dibujarMapa();
 				} catch (Exception e) {
@@ -81,16 +83,17 @@ public class Controller {
 				}
 
 			}
-			if (opcion == 3) {
-				
+			else if (opcion == 3) {
+
 				int latitud1 = Integer.parseInt(view.pedir("latitud del punto inicial"));
 				int longitud1 =  Integer.parseInt(view.pedir("longitud del punto inicial"));
 				int latitud2 = Integer.parseInt(view.pedir("latitud del punto final"));
 				int longitud2=  Integer.parseInt(view.pedir("longitud del punto final"));
-				
+
 				if (modelo.rectificarPuntoEstaEnBogota(latitud1, longitud1)) {
 					if (modelo.rectificarPuntoEstaEnBogota(latitud2, longitud2))
-						modelo.darCaminoCostoMinimoPorNumeroDeComparendos();
+						System.out.println();
+						//	modelo.darCaminoCostoMinimoPorNumeroDeComparendos();
 					else {
 						view.imprimir("Hubo un error con las coordenadas del punto final. Por favor vuelva a intentarlo");
 						view.printMenu();}
@@ -98,12 +101,20 @@ public class Controller {
 					view.imprimir("Hubo un error con las coordenadas del punto inicial. Por favor vuelva a intentarlo");
 					view.printMenu();}
 			} 	
-			if (opcion == 4) {
-				EstacionPolicia ejemplo =modelo.cargarPolicias();
-				view.imprimir("Ejemplo Estacion:");
-				view.imprimir(ejemplo);
-				view.imprimir("De cada estacion se decidio cargar su respectiva: Descripcion, latitud, longitud, telefono,direccion,horario, iuLocal, servicio, id");
-
+			else if (opcion == 4) {
+				try
+				{
+				double lat1 = Double.parseDouble(view.pedir("Latitud Inicio:"));
+				double long1 = Double.parseDouble(view.pedir("Longitud Inicio:"));
+				double lat2 = Double.parseDouble(view.pedir("Latitud Final:"));
+				double long2 = Double.parseDouble(view.pedir("Longitud Final:"));
+				 Lista<Esquina> es =modelo.darCaminoMasCorto(lat1, long1, lat2, long2);
+				 System.out.println("" + es.darTamaño());
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 			if (opcion == 5) {
 				try {
@@ -113,8 +124,16 @@ public class Controller {
 					e.printStackTrace();
 				}
 			}
+			if(opcion == 6)
+			{
+				try {
+					modelo.cc();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
 		}
 	}
 }
-
