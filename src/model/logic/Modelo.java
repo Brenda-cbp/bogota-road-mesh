@@ -282,7 +282,7 @@ public class Modelo {
 	public void cc() throws Exception
 	{
 		System.out.println(grafo.cc() + "");
-		Iterator<Integer> it = grafo.getCC(1).iterator();
+		Iterator<Integer> it = grafo.getCC(20).iterator();
 		int i = 0;
 		while(it.hasNext() && i < 6)
 		{
@@ -955,7 +955,6 @@ public class Modelo {
 			lista.agregarAlFinal(fin);
 		while(actual != null )
 		{
-			System.out.println(" 111");
 			lista.agregarAlComienzo(grafo.darVertice((Integer) actual.darOrigen()).darInfo());
 			total += actual.darCosto();
 			if(actual.darCosto() < minima)

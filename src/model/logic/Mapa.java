@@ -131,7 +131,7 @@ public class Mapa extends MapView {
 			LatLng punto = new LatLng(actual.darLatitud(), actual.darLongitud());
 			Circle vertice1 = new Circle(map);
 			vertice1.setCenter(punto);
-			vertice1.setRadius(12);
+			vertice1.setRadius(4);
 			CircleOptions co1 = new CircleOptions();
 			co1.setFillColor("#FF0000");
 			co1.setFillOpacity(0.90); // Si está muy feo, cambiar.

@@ -33,7 +33,6 @@ public class Dijkstra
 	{
 		for(Edges e : G.adjEnlaces(v))
 		{
-			System.out.println("yahoo");
 			int w = (int) e.darDestino();
 			if (distTo[w] > distTo[v] + e.darCosto())
 			{
