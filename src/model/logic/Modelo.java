@@ -310,8 +310,8 @@ public class Modelo {
 					idArcoMaximo = id;
 					edgeMaxima = new Edges<Integer>(id, ajunta, cost, cost2);
 				}
-				return edgeMaxima;
 			}
+			return edgeMaxima;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
