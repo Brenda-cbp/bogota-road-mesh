@@ -62,7 +62,7 @@ public class MinHeapCP2<T extends Comparable<T>>
 		}
 	}
 
-	public T sacarMax(Comparator<T> comp)
+	public T sacarMin (Comparator<T> comp)
 	{
 		if(esVacia())
 			return null;
@@ -72,9 +72,14 @@ public class MinHeapCP2<T extends Comparable<T>>
 		arreglo.eliminarPosicion(arreglo.darTamano());
 		return max;
 	}
-	private T darMaximo()
+	private T darMin()
 	{
 		return arreglo.darElemento(1);
+	}
+	public boolean contains(T elemento) {
+		if (arreglo.buscar(elemento)!=null)
+			return true;
+		return false;
 	}
 	public int comparar(int i, int j, Comparator<T> comp)
 	{

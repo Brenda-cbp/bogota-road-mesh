@@ -911,11 +911,11 @@ public class Modelo {
 	 * @param longitud
 	 * @return true si pertece false de lo contrario 
 	 */
-	public boolean rectificarPuntoEstaEnBogota(int latitud, int longitud) {
+	public boolean rectificarPuntoEstaEnBogota(double latitud, double longitud) {
 		return (latitud <= MAX_LATITUD && latitud >= MIN_LATITUD && longitud <= MAX_LONGITUD && longitud >= MIN_LONGITUD ); 
-	}
-	public void darCaminoCostoMinimoPorNumeroDeComparendos() {
-		
+}
+	public void darCaminoCostoMinimoPorNumeroDeComparendos(double latitud, double longitud)) {
+		if ()
 	}
 	
 

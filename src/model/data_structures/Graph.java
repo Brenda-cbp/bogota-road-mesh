@@ -40,8 +40,8 @@ public class Graph<V, K extends Comparable<K>> {
 	/**
 	 * Cola de prioridad
 	 */
-	 private MinHeapCP2<Vertex<Esquina,Integer>> minheap;
-	 /**00
+	private MinHeapCP2<Vertex<Esquina,Integer>> minheap;
+	/**00
 	 * capacidad para V vertices
 	 * @param n
 	 *            cantidad de vertices en el grafo
@@ -339,7 +339,7 @@ public class Graph<V, K extends Comparable<K>> {
 	public Lista<Vertex> darVertices(){
 		return adj.darValores();
 	}
-	
+
 	/**
 	 * Para obtener el camino con menor costo
 	 * @param vertice
@@ -348,44 +348,38 @@ public class Graph<V, K extends Comparable<K>> {
 	 * Es false cuando se refiete al costo por totalidad de comparendos.
 	 * @throws Exception 
 	 */
-	public void algorithmDijkstra(K vertice, boolean costo) throws Exception {
+	public void algorithmDijkstra(K vertice) throws Exception {
 		edgeTo= new Adyacencias<>(this.V()); 
-		
+
 		minheap = new MinHeapCP2<>();
 		adj.get(vertice).cambiarDistTo(0.0);
-		
+
 		Comparator<Vertex<Esquina, Integer>> comp = new  Vertex.ComparatorDistTo();
 		minheap.agregar(adj.get(vertice), comp);	
-		//adj.get(vertice).darDistTo()
-		if(costo) {
-			while(!minheap.esVacia()) {
-				relaxDistancia();
-			}
+
+
+		while(!minheap.esVacia()) {
+			Iterator<Edges> it = adj.get(vertice).darAdyacentes().iterator();
+			while(it.hasNext()) 
+				relaxNumComparendos(vertice, it.next());
 		}
-		else {
-			while(!minheap.esVacia()) {
-				Iterator<Edges> it = adj.get(vertice).darAdyacentes().iterator();
-				while(it.hasNext()) 
-					relaxNumComparendos(vertice, it.next());
-			}
-		}
-			
 	}
+
 	public void relaxDistancia() {
 
 	}
 	public void relaxNumComparendos(K llave, Edges arco) throws Exception {
-		 Vertex VertexIncial= adj.get((K) arco.darOrigen());
-		 Vertex vertexFinal = adj.get((K) arco.darDestino());
+		Vertex VertexIncial= adj.get((K) arco.darOrigen());
+		Vertex vertexFinal = adj.get((K) arco.darDestino());
 		if(VertexIncial.darDistTo()> vertexFinal.darDistTo()+ arco.darcosto2()) {
 			VertexIncial.cambiarDistTo(vertexFinal.darDistTo()+ arco.darcosto2());
 			edgeTo2.agregarVertice(llave, arco );
-		//cola de prioridad
+			//cola de prioridad
 			Comparator<Vertex<Esquina, Integer>> comp = new  Vertex.ComparatorDistTo();
 			if(minheap.contains(adj.get(llave)))
 				minheap.sacarMin(comp);
 			else minheap.agregar(adj.get((K) arco.darDestino()), comp);
-		
+
 		}
 	}
 }
