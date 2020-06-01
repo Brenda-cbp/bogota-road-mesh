@@ -73,4 +73,10 @@ public class Edges<K extends Comparable <K>> {
 	{
 		return costo2;
 	}
+	public K other(K llave)
+	{
+		if(llave.equals(origen))
+			return destino;
+		return origen;
+	}
 }

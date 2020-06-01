@@ -72,18 +72,6 @@ public class Controller {
 		while (true) {
 			int opcion = view.printMenu();
 			if (opcion == 1) {
-				modelo.generarJson();
-			}
-			else if (opcion == 2) {
-				try {
-					modelo.dibujarMapa();
-				} catch (Exception e) {
-					view.imprimir("Error, Trate cargar el Json primero (opcion2)");
-					e.printStackTrace();
-				}
-
-			}
-			else if (opcion == 3) {
 				try
 				{
 					double lat1 = Double.parseDouble(view.pedir("Latitud Inicio:"));
@@ -97,6 +85,18 @@ public class Controller {
 				{
 					e.printStackTrace();
 				}
+
+			}
+			else if (opcion == 2) {
+				try {
+					modelo.dibujarMapa();
+				} catch (Exception e) {
+					view.imprimir("Error, Trate cargar el Json primero (opcion2)");
+					e.printStackTrace();
+				}
+
+			}
+			else if (opcion == 3) {
 
 			} 	
 			else if (opcion == 4) {

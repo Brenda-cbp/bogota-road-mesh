@@ -110,7 +110,7 @@ public class Graph<V, K extends Comparable<K>> {
 		return null;
 	}
 	public Vertex<V,K> darVertice(K idVertex) {
-			return adj.get(idVertex);
+		return adj.get(idVertex);
 	}
 	/**
 	 * Retorna un iterador con los arcos del vertice 
@@ -372,7 +372,7 @@ public class Graph<V, K extends Comparable<K>> {
 	 */
 	public Edges[] darCaminoCortoNumComparendos(K llave) throws Exception {
 		try {
-		return new Dijkstra2((Graph<Esquina, Integer> )this, (int) llave).darEdgeTo();}
+			return new Dijkstra2((Graph<Esquina, Integer> )this, (int) llave).darEdgeTo();}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -406,5 +406,17 @@ public class Graph<V, K extends Comparable<K>> {
 			else minheap.agregar(adj.get((K) arco.darDestino()), comp);
 
 		}
+	}
+	public Edges[] darMST() 
+	{
+		try
+		{
+			return new PrimMST((Graph<Esquina, Integer>) this).darMST();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

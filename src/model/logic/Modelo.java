@@ -66,7 +66,7 @@ public class Modelo {
 
 	public final String RUTA_ARCOS = "./data/bogota_arcos.txt";
 
-	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson.json";
+	public final String RUTA_POLICIA = "./data/estacionpolicia.geojson";
 	/**
 	 * Mensaje que indica al usuario que no se encontro un comparendo con los
 	 * requerimientos solicitados
@@ -282,7 +282,7 @@ public class Modelo {
 	public void cc() throws Exception
 	{
 		System.out.println(grafo.cc() + "");
-		Iterator<Integer> it = grafo.getCC(20).iterator();
+		Iterator<Integer> it = grafo.getCC(100).iterator();
 		int i = 0;
 		while(it.hasNext() && i < 6)
 		{
@@ -944,11 +944,11 @@ public class Modelo {
 		}
 		
 		rta.agregarAlFinal(fin);
-		rta.agregarAlComienzo(new Esquina(0, minima, totalCosto));
 		
 		Mapa map = new Mapa("Camino mas corto por numero de comparendos");
 		cargarDatosGrafoVertices();
 		map.dibujarCamino(rta);
+		rta.agregarAlComienzo(new Esquina(0, minima, totalCosto));
 		return rta;
 	}
 	/**
@@ -991,6 +991,9 @@ public class Modelo {
 		lista.agregarAlComienzo(new Esquina(0, minima, total));
 		return lista;
 	}
-
+	public void darMST()
+	{
+	
+	}
 
 }
