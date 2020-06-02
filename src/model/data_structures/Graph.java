@@ -36,7 +36,7 @@ public class Graph<V, K extends Comparable<K>> {
 	 */
 	private Adyacencias<K, K> edgeTo;
 
-	private Adyacencias<Edges, K> edgeTo2;
+	private Edges[] edgeTo2;
 	/**
 	 * Cola de prioridad
 	 */
@@ -394,20 +394,7 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return null;
 	}
-	public void relaxNumComparendos(K llave, Edges arco) throws Exception {
-		Vertex VertexIncial= adj.get((K) arco.darOrigen());
-		Vertex vertexFinal = adj.get((K) arco.darDestino());
-		if(VertexIncial.darDistTo()> vertexFinal.darDistTo()+ arco.darcosto2()) {
-			VertexIncial.cambiarDistTo(vertexFinal.darDistTo()+ arco.darcosto2());
-			edgeTo2.agregarVertice(llave, arco );
-			//cola de prioridad
-			Comparator<Vertex<Esquina, Integer>> comp = new  Vertex.ComparatorDistTo();
-			if(minheap.contains(adj.get(llave)))
-				minheap.sacarMin(comp);
-			else minheap.agregar(adj.get((K) arco.darDestino()), comp);
-
-		}
-	}
+	
 	public Edges[] darMST() 
 	{
 		try
@@ -420,4 +407,30 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return null;
 	}
+	public void dfsAlgoritmoSacarImportantes(K llave) throws Exception {
+		adj.get(llave).check();
+		//adj.get(llave).cambiarIdComponenteConexa(count);
+		
+		for (K adyacente : (Iterable<K>) adj(llave))
+			
+			if (!adj.get(adyacente).isChecked()) {
+				if(adj.get(adyacente).darInfo()=="")//si es grave
+				{
+					edgeTo2[edgeTo2.length]= (Edges) adyacente; 
+				}
+				else {
+					pendienteAgregar[pendienteagregar.length]= (Edges) adyacente;
+				}
+				dfsAlgoritmo(adyacente);
+			}
+
+	}
+	public Edges[] darEdgeTo(){
+		return edgeTo2;	}
+}
+
+
+
+
+
 }
