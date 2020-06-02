@@ -139,7 +139,12 @@ public class Controller {
 
 			}
 			else if (opcion == 4) {
-
+				try {
+					modelo.darCaminoMasComp(Integer.parseInt(view.pedir("numero de esquinas buscadas")));
+				} catch (Exception e) {
+					view.imprimir("Error, Trate cargar el Json primero (opcion2)");
+					e.printStackTrace();
+				}
 			}
 			else if (opcion == 5) {
 				try{
