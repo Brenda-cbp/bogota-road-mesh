@@ -47,5 +47,13 @@ public class Dijkstra
 	{
 		return edgeTo;
 	}
+	public double[] darDistTo()
+	{
+		return distTo;
+	}
+	public double distTo(int s)
+	{
+		return distTo[s];
+	}
 }
 

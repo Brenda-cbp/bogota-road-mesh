@@ -86,6 +86,7 @@ public class Controller {
 					e.printStackTrace();
 				}
 
+				
 			}
 			else if (opcion == 2) {
 				try {
@@ -144,7 +145,16 @@ public class Controller {
 					e.printStackTrace();
 				}
 			}
-
+			if(opcion == 7)
+			{
+				try{
+					modelo.darCaminosMasCortosPolicia(Integer.parseInt(view.pedir("m")));
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

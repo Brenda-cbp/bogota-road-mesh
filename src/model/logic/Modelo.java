@@ -34,6 +34,7 @@ import com.google.gson.stream.JsonReader;
 import edu.princeton.cs.introcs.StdRandom;
 import model.data_structures.ArbolRojoNegro;
 import model.data_structures.ArregloDinamico;
+import model.data_structures.Dijkstra;
 import model.data_structures.Edges;
 import model.data_structures.Graph;
 import model.data_structures.HashNode;
@@ -59,8 +60,9 @@ public class Modelo {
 	/**
 	 * Ruta en la que se encuentra el archivo con los comparendos
 	 */
-	//public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_small_50000_sorted.geojson";
-	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C_small_50000_sorted.geojson";
+
+	//public final String RUTA = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 
 	public final String RUTA_VERTICES = "./data/bogota_vertices.txt";
 
@@ -930,10 +932,10 @@ public class Modelo {
 		Edges[] camino =grafo.darCaminosMasCortoDesde(inicio.darId());
 		Lista rta = new Lista<Esquina>();
 		Edges actual = camino[fin.darId()];
-		
+
 		int totalCosto=0;
 		double minima = Double.POSITIVE_INFINITY;
-		
+
 		while(actual != null )
 		{
 			rta.agregarAlComienzo(grafo.darVertice((Integer) actual.darOrigen()).darInfo());
@@ -942,9 +944,9 @@ public class Modelo {
 				minima = actual.darCosto();
 			actual = camino[(int) actual.darOrigen()];
 		}
-		
+
 		rta.agregarAlFinal(fin);
-		
+
 		Mapa map = new Mapa("Camino mas corto por numero de comparendos");
 		cargarDatosGrafoVertices();
 		map.dibujarCamino(rta);
@@ -996,17 +998,61 @@ public class Modelo {
 		Edges[] edges = grafo.darMST(); 
 		Iterator<Comparendo> comparendos = darMayorGravedad(m).iterator();
 		Lista<Esquina> esquinas = new Lista<>();
-		
+
 		while(comparendos.hasNext())
 		{
 			Comparendo actual = comparendos.next();
 			esquinas.agregarAlFinal(darMasCercana(actual.darLatitud(), actual.darLongitud()));
 		}
 	}
-	public void darCaminoMasCortoPolicias(int m)
+	public Lista<Dijkstra> dardijkstraPolicias() throws Exception
 	{
-		Iterator<Comparendo> comparendos = darMayorGravedad(m).iterator();
-		
+		Lista<Dijkstra> dijkstra = new Lista<>();
+		Iterator<EstacionPolicia> it = estaciones.iterator();
+		while(it.hasNext())
+		{
+			EstacionPolicia actual = it.next();
+			dijkstra.agregarAlFinal(new Dijkstra(grafo,darMasCercana(actual.getEPOLATITUD(), actual.getEPOLONGITU()).darId()));
+		}
+		return dijkstra;
 	}
+	public void darCaminosMasCortosPolicia(int m) throws Exception
+	{
+		Lista<Comparendo> it = darMayorGravedad(m);
+		Lista<Dijkstra> lista = dardijkstraPolicias();
+		it.reiniciarActual();
+		for(int j = 0; j < lista.darTamaño(); j++)
+		{
+			Comparendo comparendo = it.darElementoActual();
+			int actual = darMasCercana(comparendo.darLatitud(), comparendo.darLongitud()).darId();
+			int i = 0;
+			Iterator<Dijkstra> dij = lista.iterator();
+			int iMinimo = 0;
+			double distMinima = Double.POSITIVE_INFINITY;
+			while(dij.hasNext())
+			{
+				double act = dij.next().distTo(actual);
+				if(act < distMinima)
+					iMinimo = i;
+				i++;
+			}
+			darCamino(lista.darElementoPosicion(iMinimo).darEdgeTo(),comparendo );
+			it.avanzarActual();
+		}
 
+	}
+	public void darCamino(Edges[] edges, Comparendo v) throws Exception
+	{
+		int indice = darMasCercana(v.darLatitud(), v.darLongitud()).darId();
+		Lista<Esquina> lista = new Lista<>();
+		Edges actual = edges[indice];
+		lista.agregarAlFinal(grafo.getInfoVertex(indice));
+		while(actual != null)
+		{
+			lista.agregarAlComienzo(grafo.getInfoVertex((Integer) actual.darOrigen()));
+		}
+		Mapa map = new Mapa("camino");
+		cargarDatosGrafoVertices();
+		map.dibujarCamino(lista);
+	}
 }
