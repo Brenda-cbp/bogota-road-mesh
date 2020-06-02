@@ -45,6 +45,7 @@ import model.data_structures.MinHeapCP2;
 import model.data_structures.Node;
 import model.data_structures.TablaHashChaining;
 import model.data_structures.Vertex;
+import model.logic.Esquina.ComparatorEsquina;
 //import sun.font.LayoutPathImpl;
 //import sun.util.resources.LocaleData;
 
@@ -405,6 +406,22 @@ public class Modelo {
 			rta.agregarAlFinal(ordenado.sacarMax(compGravedad));
 		}
 		return rta;
+	}
+	public void darVerticesMasComparendos()
+	{
+		ComparatorEsquina compEsquina = new Esquina.ComparatorEsquina();
+		Lista<Esquina > rta = new Lista<>();
+		MaxHeapCP<Esquina> ordenado = ordenaCantidad();
+	}
+
+	private MaxHeapCP<Esquina> ordenaCantidad() {
+		Iterator<Vertex> es = grafo.darVertices().iterator();
+		MaxHeapCP<Esquina> copia = new MaxHeapCP<>();
+		Comparator<Esquina> comp =  new Esquina.ComparatorEsquina();
+		while (es.hasNext()) {
+			copia.agregar((Esquina) es.next().darInfo(), comp);
+		}
+		return copia;
 	}
 
 	/**
@@ -1038,6 +1055,7 @@ public class Modelo {
 		}
 
 	}
+	
 	public void darCamino(Edges[] edges, Comparendo v, Mapa map) throws Exception
 	{
 		int indice = darMasCercana(v.darLatitud(), v.darLongitud()).darId();

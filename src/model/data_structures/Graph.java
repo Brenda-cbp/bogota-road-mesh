@@ -442,6 +442,10 @@ public class Graph<V, K extends Comparable<K>> {
 						importante =  true;
 						System.out.println("tercero");
 					}
+					else
+					{
+						dfsAlgoritmoSacarImportantes(adyacente, respuesta);	
+					}
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package model.logic;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 import model.data_structures.Lista;
@@ -7,7 +8,7 @@ import model.data_structures.Lista;
 /**
  * Clase que representa una esquina en la malla vial
  */
-public class Esquina 
+public class Esquina implements Comparable<Esquina>
 {
 	/**
 	 * Identificador de la esquina
@@ -95,5 +96,26 @@ public class Esquina
 			if(dist>7)
 				System.out.println(dist);
 		}
+	}
+	public static class ComparatorEsquina implements Comparator<Esquina>
+	{
+
+		@Override
+		public int compare(Esquina o1, Esquina o2) {
+			if(o1.darLista().darTamaño() > o2.darLista().darTamaño())
+				return 1;
+			if(o1.darLista().darTamaño() < o2.darLista().darTamaño())
+				return -1 ;
+			return 0;
+		}
+		
+	}
+	@Override
+	public int compareTo(Esquina o) {
+		if(darLista().darTamaño() > o.darLista().darTamaño())
+			return 1;
+		if(darLista().darTamaño() < o.darLista().darTamaño())
+			return -1 ;
+		return 0;
 	}
 }
