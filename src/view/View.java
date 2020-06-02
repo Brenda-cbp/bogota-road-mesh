@@ -23,12 +23,12 @@ public class View {
 		System.out.println();
 		int rta=0;
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("1. Escribir Json");
-		System.out.println("2. Dibujar mapa conforme al JSON");
-		System.out.println("3. Obtener el camino de costo mínimo entre dos ubicaciones geograficas por Distancia haversiana ");
-		System.out.println("4. Determinar la red de comunicaciones que soporte la instalacion de cámaras de video en los M puntos en los están los comparendos con mayor gravedad");
-		System.out.println("5. Obtener el camino de costo mínimo entre dos ubicaciones geograficas por numero de comparendos");
-		System.out.println("6. Determinar la red de comunicaciones que soporte la instalacion de cámaras de video en los M puntos en los que hay más comparendos");
+		System.out.println("1. Obtener el camino de costo mínimo entre dos ubicaciones geograficas por Distancia haversiana ");
+		System.out.println("2. Determinar la red de comunicaciones que soporte la instalacion de cámaras de video en los M puntos en los están los comparendos con mayor gravedad");
+		System.out.println("3. Obtener el camino de costo mínimo entre dos ubicaciones geograficas por numero de Comparendos ");
+		System.out.println("4. Determinar la red de comunicaciones que soporte la instalacion de cámaras de video en los M puntos en los que hay más comparendos");
+		System.out.println("5.Obtener caminos mas cortos entre los comparendos mas graves y la polica");
+		System.out.println();
 
 		try {
 			rta= Integer.parseInt(bf.readLine());

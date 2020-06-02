@@ -79,7 +79,15 @@ public class Controller {
 					double lat2 = Double.parseDouble(view.pedir("Latitud Final:"));
 					double long2 = Double.parseDouble(view.pedir("Longitud Final:"));
 					Lista<Esquina> es =modelo.darCaminoMasCorto(lat1, long1, lat2, long2);
-					System.out.println("" + es.darTamaño());
+					System.out.println("Total vertices en el camino =" + (es.darTamaño() -1));
+					System.out.println("Costo minimo = " + es.darElementoPosicion(0).darLatitud());
+					System.out.println("Costo total = " + es.darElementoPosicion(0).darLongitud());
+					System.out.println("ID de los vertices:");
+					Iterator<Esquina> it = es.iterator();
+					while(it.hasNext())
+					{
+						System.out.println("ID = " + it.next().darId());
+					}
 				}
 				catch(Exception e)
 				{
@@ -97,13 +105,7 @@ public class Controller {
 				}
 
 			}
-			else if (opcion == 3) {
-
-			} 	
-			else if (opcion == 4) {
-
-			}
-			if (opcion == 5) {
+			if (opcion == 3) {
 
 
 				double latitud1 = Double.parseDouble(view.pedir("latitud del punto inicial"));
@@ -136,6 +138,19 @@ public class Controller {
 					view.printMenu();}
 
 			}
+			else if (opcion == 4) {
+
+			}
+			else if (opcion == 5) {
+				try{
+					modelo.darCaminosMasCortosPolicia(Integer.parseInt(view.pedir("m")));
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+
+			} 	
 			if(opcion == 6)
 			{
 				try {
@@ -147,13 +162,7 @@ public class Controller {
 			}
 			if(opcion == 7)
 			{
-				try{
-					modelo.darCaminosMasCortosPolicia(Integer.parseInt(view.pedir("m")));
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
+
 			}
 		}
 	}

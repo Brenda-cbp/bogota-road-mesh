@@ -8,7 +8,7 @@ import model.logic.Esquina;
 //Tomado de las diapositivas de clase disponibles en el curso de sicua
 public class Dijkstra
 {
-	private Edges[] edgeTo;
+	private Edges[] edgeToDijkstra;
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
 	/**
@@ -19,7 +19,7 @@ public class Dijkstra
 	 */
 	public Dijkstra(Graph<Esquina,Integer> G, int s) throws Exception
 	{
-		edgeTo = new Edges[G.V()];
+		edgeToDijkstra = new Edges[G.V()];
 		distTo = new double[G.V()];
 		pq = new IndexMinPQ<Double>(G.V());
 		for (int v = 0; v < G.V(); v++)
@@ -37,7 +37,7 @@ public class Dijkstra
 			if (distTo[w] > distTo[v] + e.darCosto())
 			{
 				distTo[w] = distTo[v] + e.darCosto();
-				edgeTo[w] = e;
+				edgeToDijkstra[w] = e;
 				if (pq.contains(w)) pq.change(w, distTo[w]);
 				else pq.insert(w, distTo[w]);
 			}
@@ -45,7 +45,7 @@ public class Dijkstra
 	}
 	public Edges[] darEdgeTo()
 	{
-		return edgeTo;
+		return edgeToDijkstra;
 	}
 	public double[] darDistTo()
 	{

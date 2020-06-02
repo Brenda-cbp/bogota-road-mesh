@@ -317,6 +317,7 @@ public class Graph<V, K extends Comparable<K>> {
 	public int cc() throws Exception {
 		count = 0;
 		uncheck();
+		edgeTo = new Adyacencias<>(2);
 		Iterator<K> it = darNodos();
 		while (it.hasNext()) {
 			K actual = it.next();

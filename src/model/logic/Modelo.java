@@ -233,6 +233,7 @@ public class Modelo {
 					maxId = OBJECTID;
 					maximo = c;
 				}
+				comparendos.agregarAlFinal(c);
 			}
 			return maximo;
 		} catch (FileNotFoundException e) {
@@ -284,6 +285,7 @@ public class Modelo {
 	public void cc() throws Exception
 	{
 		System.out.println(grafo.cc() + "");
+		System.out.println("numero aristas = " + grafo.E());
 		Iterator<Integer> it = grafo.getCC(100).iterator();
 		int i = 0;
 		while(it.hasNext() && i < 6)
@@ -385,10 +387,11 @@ public class Modelo {
 	 * @param maxheap
 	 */
 	public MaxHeapCP<Comparendo> ordenaGravedad() {
-		Iterator<Comparendo> comparendos = heap.iterator();
+		Iterator<Comparendo> co = comparendos.iterator();
 		MaxHeapCP<Comparendo> copia = new MaxHeapCP<>();
-		while (comparendos.hasNext()) {
-			copia.agregar(comparendos.next(), new Comparendo.ComparatorGravedad());
+		Comparator<Comparendo> comp =  new Comparendo.ComparatorGravedad();
+		while (co.hasNext()) {
+			copia.agregar(co.next(), comp);
 		}
 		return copia;
 
@@ -949,6 +952,7 @@ public class Modelo {
 
 		Mapa map = new Mapa("Camino mas corto por numero de comparendos");
 		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
 		map.dibujarCamino(rta);
 		rta.agregarAlComienzo(new Esquina(0, minima, totalCosto));
 		return rta;
@@ -989,6 +993,7 @@ public class Modelo {
 		}	
 		Mapa map = new Mapa("camino");
 		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
 		map.dibujarCamino(lista);
 		lista.agregarAlComienzo(new Esquina(0, minima, total));
 		return lista;
@@ -1018,12 +1023,14 @@ public class Modelo {
 	}
 	public void darCaminosMasCortosPolicia(int m) throws Exception
 	{
-		Lista<Comparendo> it = darMayorGravedad(m);
+		Iterator<Comparendo> it = darMayorGravedad(m).iterator();
 		Lista<Dijkstra> lista = dardijkstraPolicias();
-		it.reiniciarActual();
-		for(int j = 0; j < lista.darTamaño(); j++)
+		Mapa map = new Mapa("camino");
+		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
+		while(it.hasNext())
 		{
-			Comparendo comparendo = it.darElementoActual();
+			Comparendo comparendo = it.next();
 			int actual = darMasCercana(comparendo.darLatitud(), comparendo.darLongitud()).darId();
 			int i = 0;
 			Iterator<Dijkstra> dij = lista.iterator();
@@ -1033,15 +1040,18 @@ public class Modelo {
 			{
 				double act = dij.next().distTo(actual);
 				if(act < distMinima)
+				{
 					iMinimo = i;
+					distMinima = act;
+				}
 				i++;
+				System.out.println("inidice " + i);
 			}
-			darCamino(lista.darElementoPosicion(iMinimo).darEdgeTo(),comparendo );
-			it.avanzarActual();
+			darCamino(lista.darElementoPosicion(iMinimo).darEdgeTo(),comparendo, map );
 		}
 
 	}
-	public void darCamino(Edges[] edges, Comparendo v) throws Exception
+	public void darCamino(Edges[] edges, Comparendo v, Mapa map) throws Exception
 	{
 		int indice = darMasCercana(v.darLatitud(), v.darLongitud()).darId();
 		Lista<Esquina> lista = new Lista<>();
@@ -1050,9 +1060,8 @@ public class Modelo {
 		while(actual != null)
 		{
 			lista.agregarAlComienzo(grafo.getInfoVertex((Integer) actual.darOrigen()));
+			System.out.println(".");
 		}
-		Mapa map = new Mapa("camino");
-		cargarDatosGrafoVertices();
 		map.dibujarCamino(lista);
 	}
 }
