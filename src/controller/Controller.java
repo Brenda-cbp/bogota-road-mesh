@@ -98,7 +98,7 @@ public class Controller {
 			}
 			else if (opcion == 2) {
 				try {
-					modelo.dibujarMapa();
+					modelo.darCaminoMasGraves(Integer.parseInt(view.pedir("numero de comparendos buscados")));
 				} catch (Exception e) {
 					view.imprimir("Error, Trate cargar el Json primero (opcion2)");
 					e.printStackTrace();

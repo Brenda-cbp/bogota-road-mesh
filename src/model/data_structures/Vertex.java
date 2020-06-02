@@ -36,6 +36,8 @@ public class Vertex<V, K extends Comparable<K>> implements Comparable<Vertex<V,K
 	 * DistTo distancia- costo acumulado para llegar al vertice 
 	 */
 	private double distTo;
+	
+	private boolean marca2;
 
 	/**
 	 * Constructor del vertice
@@ -144,6 +146,19 @@ public class Vertex<V, K extends Comparable<K>> implements Comparable<Vertex<V,K
 	 */
 	public double darDistTo() {
 		return distTo;
+	}
+	
+	public boolean tieneMarca2()
+	{
+		return marca2;
+	}
+	public void desmarcar2()
+	{
+		marca2 = false;
+	}
+	public void marcar2()
+	{
+		marca2 = true;
 	}
 	public static class ComparatorDistTo implements Comparator<Vertex<Esquina,Integer>>{
 		public int compare(Vertex o1, Vertex o2) {

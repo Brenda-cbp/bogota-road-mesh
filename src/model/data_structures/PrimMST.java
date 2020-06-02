@@ -16,7 +16,7 @@ public class PrimMST
 	 * @param G el grafo para el cual se calcula el MST
 	 * @throws Exception no deberia lanzar excepcion
 	 */
-	public PrimMST(Graph<Esquina,Integer> G) throws Exception
+	public PrimMST(Graph<Esquina,Integer> G, int s) throws Exception
 	{
 		edgeTo = new Edges[G.V()];
 		distTo = new double[G.V()];
@@ -25,7 +25,7 @@ public class PrimMST
 			distTo[v] = Double.POSITIVE_INFINITY;
 		pq = new IndexMinPQ<Double>(G.V());
 		distTo[0] = 0.0;
-		pq.insert(0, 0.0); 
+		pq.insert(s, 0.0); 
 		while (!pq.isEmpty())
 			visit(G, pq.delMin()); 
 	}

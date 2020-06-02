@@ -27,6 +27,7 @@ public class Esquina
 	
 	private Lista<EstacionPolicia> estacionesPolicia;
 	
+	private boolean importante;
 	
 	/**
 	 * Crea una nueva esquina con la informacion dada
@@ -41,6 +42,7 @@ public class Esquina
 		longitud = longit;
 		comparendos = new Lista<>();
 		estacionesPolicia = new Lista<>();
+		importante = false;
 	}
 	
 	public boolean tieneEstacion()
@@ -74,6 +76,14 @@ public class Esquina
 	public Lista<Comparendo> darLista()
 	{
 		return comparendos;
+	}
+	public boolean esImportante()
+	{
+		return importante;
+	}
+	public void marcarImportante(boolean importante)
+	{
+		this.importante = importante;
 	}
 	public void imprimirMasdistancia()
 	{

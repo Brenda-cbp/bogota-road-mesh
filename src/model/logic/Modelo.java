@@ -998,18 +998,6 @@ public class Modelo {
 		lista.agregarAlComienzo(new Esquina(0, minima, total));
 		return lista;
 	}
-	public void darCaminoMasGraves(int m) throws Exception
-	{
-		Edges[] edges = grafo.darMST(); 
-		Iterator<Comparendo> comparendos = darMayorGravedad(m).iterator();
-		Lista<Esquina> esquinas = new Lista<>();
-
-		while(comparendos.hasNext())
-		{
-			Comparendo actual = comparendos.next();
-			esquinas.agregarAlFinal(darMasCercana(actual.darLatitud(), actual.darLongitud()));
-		}
-	}
 	public Lista<Dijkstra> dardijkstraPolicias() throws Exception
 	{
 		Lista<Dijkstra> dijkstra = new Lista<>();
@@ -1045,7 +1033,6 @@ public class Modelo {
 					distMinima = act;
 				}
 				i++;
-				System.out.println("inidice " + i);
 			}
 			darCamino(lista.darElementoPosicion(iMinimo).darEdgeTo(),comparendo, map );
 		}
@@ -1060,26 +1047,29 @@ public class Modelo {
 		while(actual != null)
 		{
 			lista.agregarAlComienzo(grafo.getInfoVertex((Integer) actual.darOrigen()));
-			System.out.println(".");
 		}
 		map.dibujarCamino(lista);
 	}
-	public void darCaminoMasGraves(int m) throws Exception
+	public Lista<Edges> darCaminoMasGraves(int m) throws Exception
 	{
-		Edges[] edges = grafo.darMST(); 
-		Iterator<Comparendo> comparendos = darMayorGravedad(m).iterator();
+		grafo.cc();
+		Lista<Comparendo> lista = darMayorGravedad(m);
+		Iterator<Comparendo> comparendos = lista.iterator();
+		lista = null;
 		Lista<Esquina> esquinas = new Lista<>();
-
-		Graph grafoMst = new Graph<Esquina, Integer>(edges.length*2);
-
 		while(comparendos.hasNext())
 		{
 			Comparendo actual = comparendos.next();
 			esquinas.agregarAlFinal(darMasCercana(actual.darLatitud(), actual.darLongitud()));
-			actual.cambiarEsImportante();
+			grafo.darVertice(darMasCercana(actual.darLatitud(), actual.darLongitud()).darId()).marcar2();
+			
 		}
-		for (int i =0; i< edges.length; i++) {
+		Edges[] edges = grafo.darMST(esquinas.darElementoPosicion(0).darId()); 
+		Graph grafoMst = new Graph<Esquina, Integer>(edges.length*2);
 
+
+		for (int i =0; i< edges.length; i++) {
+			if(edges[i] == null) continue;
 			int llaveorigen=(int) edges[i].darOrigen();
 			int llavefin = (int) edges[i].darDestino();
 			grafoMst.addVertex(llaveorigen, grafo.getInfoVertex(llaveorigen));
@@ -1087,11 +1077,27 @@ public class Modelo {
 			grafoMst.addEdge(llaveorigen, llavefin, edges[i].darCosto(), edges[i].darcosto2());
 		}
 
-		Edges[] rta = darEdgesImportantes(grafoMst, esquinas.darElementoPosicion(0).darId());
-
+		Lista<Edges> rta = darEdgesImportantes(grafoMst, esquinas.darElementoPosicion(0).darId());
+		pintarImportantes(rta);
+		return rta;
 	}
-	public Edges[] darEdgesImportantes(Graph<Esquina, Integer> e, int llaveComparendoGrave ) throws Exception {
-		e.dfsAlgoritmoSacarImportantes(llaveComparendoGrave);
-		return e.darEdgeTo();
+	public Lista<Edges> darEdgesImportantes(Graph<Esquina, Integer> e, int llaveComparendoGrave ) throws Exception {
+		return e.dfsAlgoritmoSacarImportantes(llaveComparendoGrave);
+	}
+	public void pintarImportantes(Lista<Edges> rta) throws Exception
+	{
+		Iterator<Edges> it = rta.iterator();
+		Mapa map = new Mapa("camino");
+		cargarDatosGrafoVertices();
+		cargarDatosGrafoEdges();
+		Lista<Esquina> esquinas = new Lista<>();
+		if(rta.darTamaño() == 0)
+			System.out.println("vacia");
+		esquinas.agregarAlFinal(grafo.getInfoVertex((Integer) rta.darElementoPosicion(0).darOrigen()));
+		while(it.hasNext())
+		{
+			esquinas.agregarAlFinal(grafo.getInfoVertex((Integer) it.next().darDestino()));
+		}
+		map.dibujarCamino(esquinas);
 	}
 }

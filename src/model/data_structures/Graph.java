@@ -394,12 +394,12 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return null;
 	}
-	
-	public Edges[] darMST() 
+
+	public Edges[] darMST(K s) 
 	{
 		try
 		{
-			return new PrimMST((Graph<Esquina, Integer>) this).darMST();
+			return new PrimMST((Graph<Esquina, Integer>) this, (int) s).darMST();
 		}
 		catch(Exception e)
 		{
@@ -407,30 +407,49 @@ public class Graph<V, K extends Comparable<K>> {
 		}
 		return null;
 	}
-	public void dfsAlgoritmoSacarImportantes(K llave) throws Exception {
+	public Lista<Edges> dfsAlgoritmoSacarImportantes(K llave) throws Exception
+	{
+		uncheck();
+		Lista<Edges> respuesta = new Lista<>();
+		 dfsAlgoritmoSacarImportantes(llave,respuesta);
+		 return respuesta;
+	}
+	public boolean dfsAlgoritmoSacarImportantes(K llave,Lista<Edges> respuesta) throws Exception
+	{
 		adj.get(llave).check();
 		//adj.get(llave).cambiarIdComponenteConexa(count);
-		
-		for (K adyacente : (Iterable<K>) adj(llave))
-			
-			if (!adj.get(adyacente).isChecked()) {
-				if(adj.get(adyacente).darInfo()=="")//si es grave
+		Iterator<Edges> it = getArcosVertex(llave);
+		boolean importante = false;
+		while(it.hasNext())
+		{
+			Edges arco = it.next();
+			K adyacente = (K) arco.darDestino();
+			if (!adj.get(adyacente).isChecked()) 
+			{
+				System.out.println("primeor");
+				if(adj.get(adyacente).tieneMarca2())
 				{
-					edgeTo2[edgeTo2.length]= (Edges) adyacente; 
+					respuesta.agregarAlFinal(arco); 
+					dfsAlgoritmoSacarImportantes(adyacente,respuesta);
+					importante = true;
+					System.out.println("segundo");
 				}
-				else {
-					pendienteAgregar[pendienteagregar.length]= (Edges) adyacente;
+				else 
+				{
+					if(dfsAlgoritmoSacarImportantes(adyacente, respuesta))
+					{
+						respuesta.agregarAlFinal(arco); 
+						importante =  true;
+						System.out.println("tercero");
+					}
 				}
-				dfsAlgoritmo(adyacente);
 			}
-
+		}
+		return importante;
 	}
-	public Edges[] darEdgeTo(){
+
+	public Edges[] darEdgeTo2(){
 		return edgeTo2;	}
-}
-
-
-
 
 
 }
