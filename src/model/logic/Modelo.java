@@ -1064,4 +1064,34 @@ public class Modelo {
 		}
 		map.dibujarCamino(lista);
 	}
+	public void darCaminoMasGraves(int m) throws Exception
+	{
+		Edges[] edges = grafo.darMST(); 
+		Iterator<Comparendo> comparendos = darMayorGravedad(m).iterator();
+		Lista<Esquina> esquinas = new Lista<>();
+
+		Graph grafoMst = new Graph<Esquina, Integer>(edges.length*2);
+
+		while(comparendos.hasNext())
+		{
+			Comparendo actual = comparendos.next();
+			esquinas.agregarAlFinal(darMasCercana(actual.darLatitud(), actual.darLongitud()));
+			actual.cambiarEsImportante();
+		}
+		for (int i =0; i< edges.length; i++) {
+
+			int llaveorigen=(int) edges[i].darOrigen();
+			int llavefin = (int) edges[i].darDestino();
+			grafoMst.addVertex(llaveorigen, grafo.getInfoVertex(llaveorigen));
+			grafoMst.addVertex(llavefin, grafo.getInfoVertex(llavefin ));
+			grafoMst.addEdge(llaveorigen, llavefin, edges[i].darCosto(), edges[i].darcosto2());
+		}
+
+		Edges[] rta = darEdgesImportantes(grafoMst, esquinas.darElementoPosicion(0).darId());
+
+	}
+	public Edges[] darEdgesImportantes(Graph<Esquina, Integer> e, int llaveComparendoGrave ) throws Exception {
+		e.dfsAlgoritmoSacarImportantes(llaveComparendoGrave);
+		return e.darEdgeTo();
+	}
 }
