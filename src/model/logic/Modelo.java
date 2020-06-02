@@ -407,11 +407,15 @@ public class Modelo {
 		}
 		return rta;
 	}
-	public void darVerticesMasComparendos()
+	public Lista<Esquina> darVerticesMasComparendos(int cantidad)
 	{
 		ComparatorEsquina compEsquina = new Esquina.ComparatorEsquina();
 		Lista<Esquina > rta = new Lista<>();
 		MaxHeapCP<Esquina> ordenado = ordenaCantidad();
+		for (int i = 0; i < cantidad; i++) {
+			rta.agregarAlFinal(ordenado.sacarMax(compEsquina));
+		}
+		return rta;
 	}
 
 	private MaxHeapCP<Esquina> ordenaCantidad() {
@@ -1096,6 +1100,32 @@ public class Modelo {
 		}
 
 		Lista<Edges> rta = darEdgesImportantes(grafoMst, esquinas.darElementoPosicion(0).darId());
+		pintarImportantes(rta);
+		return rta;
+	}
+	public Lista<Edges> darCaminoMasComp(int m) throws Exception
+	{
+		grafo.cc();
+		Lista<Esquina> lista = darVerticesMasComparendos(m);
+		Iterator<Esquina> estuina = lista.iterator();
+		while(estuina.hasNext())
+		{
+			grafo.darVertice(estuina.next().darId()).marcar2();
+		}
+		Edges[] edges = grafo.darMST(lista.darElementoPosicion(0).darId()); 
+		Graph grafoMst = new Graph<Esquina, Integer>(edges.length*2);
+
+
+		for (int i =0; i< edges.length; i++) {
+			if(edges[i] == null) continue;
+			int llaveorigen=(int) edges[i].darOrigen();
+			int llavefin = (int) edges[i].darDestino();
+			grafoMst.addVertex(llaveorigen, grafo.getInfoVertex(llaveorigen));
+			grafoMst.addVertex(llavefin, grafo.getInfoVertex(llavefin ));
+			grafoMst.addEdge(llaveorigen, llavefin, edges[i].darCosto(), edges[i].darcosto2());
+		}
+
+		Lista<Edges> rta = darEdgesImportantes(grafoMst, lista.darElementoPosicion(0).darId());
 		pintarImportantes(rta);
 		return rta;
 	}
