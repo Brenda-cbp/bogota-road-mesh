@@ -56,7 +56,7 @@ public class Controller {
 		view.imprimir(comparendo);
 
 		//----------------------
-		view.imprimir("Se cargo el grafo a partir de los txt");
+		view.imprimir("Se cargo el grafo a partir del JSON");
 		view.imprimir("Aristas totales:" + modelo.darAristas() + " Vertices totales:  " + modelo.darNumVertices());
 		view.imprimir("Esquina con mayor id:");
 		view.imprimir("ID: " + vertice.darId() + " Coordenadas: (" + vertice.darLatitud() + "," + vertice.darLongitud() +")"); 
@@ -65,10 +65,6 @@ public class Controller {
 		view.imprimir("Estacion con mayor ID:");
 		view.imprimir(policia);
 
-
-		view.imprimir("LOS REQUERIMIENTOS INICIALES SE REALIZAN JUNTO A LA CARGA DE DATOS");
-		view.imprimir("NO SE IMPRIME NADA EN CONSOLA SOBRE ESTO PUES NO SE SOLICITO");
-		view.imprimir("EL LISTADO DE LAS OPCIONES ES DEL TALLER PASADO");
 		while (true) {
 			int opcion = view.printMenu();
 			if (opcion == 1) {
@@ -149,6 +145,7 @@ public class Controller {
 			else if (opcion == 5) {
 				try{
 					modelo.darCaminosMasCortosPolicia(Integer.parseInt(view.pedir("m")));
+					
 				}
 				catch(Exception e)
 				{
